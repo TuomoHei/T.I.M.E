@@ -2,5 +2,5 @@
 Repository for T.I.M.E. -mobile game project
 
 ## Branches
-master
-exp - for experimenting only
+* master
+* exp - for experimentation purposes only

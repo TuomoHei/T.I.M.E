@@ -7,4 +7,4 @@ Repository for T.I.M.E. -mobile game project
 
 
 
-###### *Please keep repository clean. If there is old files THAT ARE NOT USED ANYMORE, delete them.*
+###### *'maintenance.sh' should keep repository clean. But if you see old files THAT ARE NOT USED ANYMORE, delete them.*

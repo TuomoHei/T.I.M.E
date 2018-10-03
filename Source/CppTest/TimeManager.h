@@ -11,9 +11,13 @@ class CPPTEST_API ATimeManager : public AActor
 {
 	GENERATED_BODY()
 	
-public:	
-
-
+public:
+	enum RechargeState
+	{
+		ENPTY,
+		RECHARGING,
+		FULL
+	};
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -37,6 +41,8 @@ private:
 	float CurrentTime;
 
 	static ATimeManager* Instance;
+	RechargeState State;
+
 private:
 	// Sets default values for this actor's properties
 	// private constructor

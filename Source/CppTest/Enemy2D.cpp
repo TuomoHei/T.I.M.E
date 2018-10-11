@@ -8,20 +8,12 @@ AEnemy2D::AEnemy2D()
 	PrimaryActorTick.bCanEverTick = true;
 
 
+
+
 	if (!RootComponent)
 	{
 		C_rootBox = CreateDefaultSubobject<UBoxComponent>(TEXT("EnemyRoot"));
 		RootComponent = C_rootBox;
-	}
-	UStaticMeshComponent *C_enemyMesh;
-
-	C_enemyMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Enemymesh"));
-	C_enemyMesh->SetupAttachment(RootComponent);
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> EnemymeshAsset(TEXT("/Game/Cube.Cube"));
-	if (EnemymeshAsset.Succeeded())
-	{
-		C_enemyMesh->SetStaticMesh(EnemymeshAsset.Object);
-		C_enemyMesh->SetWorldScale3D(FVector(0.8f));
 	}
 
 	walkSpeed = 20.0f;
@@ -66,21 +58,28 @@ void AEnemy2D::Movement(float moveValue, float Deltatime)
 	FVector b = GetWorld()->GetFirstPlayerController()->GetPawn()->GetActorLocation();
 	FVector temp = b - GetActorLocation();
 	temp.Normalize();
+	ADemoGameBase::Debugger(10, GetActorLocation().X, FString("CurrentX : "));
+	ADemoGameBase::Debugger(100, FVector::Distance(GetActorLocation(), b), FString("Distance "));
 
+	///Distance checker
 	if (FMath::Abs(FVector::Distance(GetActorLocation(), b)) > maxDistance)
 	{
 		if (state != CB_walking) state = CB_walking;
-
-		if (state == CB_walking)
-		{
-			newLoc.Y += temp.Y * Deltatime * moveValue;
-			SetActorLocation(newLoc);
-		}
 	}
 	else
 	{
 		if (state != CB_fighting) state = CB_fighting;
+	}
+
+	if (state == CB_walking)
+	{
+		newLoc.X += temp.X * Deltatime * moveValue;
+		SetActorLocation(newLoc);
+	}
+	else
+	{
 		///combat logic here
+
 	}
 }
 

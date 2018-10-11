@@ -8,6 +8,7 @@
 #include "Enemy2D.h"
 #include "Player2D.h"
 #include <functional>
+#include "Runtime/Engine/Classes/Camera/PlayerCameraManager.h"
 #include <list>
 #include "Engine.h"
 #include "DemoGameBase.generated.h"
@@ -31,6 +32,12 @@ private:
 	void Tick(float DeltaSeconds) override;
 	const float timerValue = 5.0f;
 	int id;
+
+	TSubclassOf<class AEnemy2D> EnemyPrefab;
+
+	UPROPERTY(EditAnywhere, Category = "EnemySpawn")
+		AActor *enemy;
+
 
 	UPROPERTY(VisibleAnywhere, Category = "EnemySpawn")
 		float timer = 6;

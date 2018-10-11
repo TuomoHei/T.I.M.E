@@ -11,6 +11,8 @@
 #include "DemoGameBase.h"
 #include "Enemy2D.generated.h"
 
+///Longest include is very path specific so if your unreal engine is located in other drive -> error
+
 UCLASS()
 class CPPTEST_API AEnemy2D : public APawn
 {
@@ -20,12 +22,11 @@ public:
 	// Sets default values for this pawn's properties
 	AEnemy2D();
 	~AEnemy2D();
-
 	//takes care of actions that need to happen upon players death
 	void PlayerDeath();
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
+	
 	bool bGameEnd;
 
 	// Called to bind functionality to input

@@ -7,6 +7,16 @@ ADemoGameBase::ADemoGameBase()
 	PrimaryActorTick.bCanEverTick = true;
 	timer = timerValue;
 	id = 0;
+
+	static ConstructorHelpers::FObjectFinder<UBlueprint> ItemBlueprint(TEXT("Blueprint'/Game/Blueprints/MyEnemy2D.MyEnemy2D'"));
+	if (ItemBlueprint.Object) 
+	{
+		EnemyPrefab = (UClass*)ItemBlueprint.Object->GeneratedClass;
+	}
+	else
+	{
+		Debugger(1000, 0, FString("Error loading enemy"));
+	}
 }
 
 void ADemoGameBase::StartPlay()
@@ -31,7 +41,8 @@ void ADemoGameBase::StartPlay()
 
 	for (TActorIterator<AStaticMeshActor> ActorItr(GetWorld()); ActorItr; ++ActorItr)
 	{
-		if (ActorItr->GetName() == "EnemySpawn")
+		Debugger(100, 0, ActorItr->GetName());
+		if (ActorItr->GetName() == FString("EnemySpawn"))
 		{
 			EnemySpawns.Add(ActorItr->GetActorLocation());
 		}
@@ -67,7 +78,7 @@ void ADemoGameBase::Tick(float DeltaSeconds)
 	Super::Tick(DeltaSeconds);
 	timer -= DeltaSeconds;
 
-	Debugger(5, timer, FString("Timer :"));
+	///Debugger(30, timer, FString("SpawnTimer :"));
 
 	if (EnemySpawns.Num() > 0)
 	{
@@ -87,7 +98,7 @@ void ADemoGameBase::SpawnEnemy()
 	tempid.AppendInt(id);
 	tempid += FString("Enemy");
 	SpawnInfo.Name = FName(*tempid);
-	AEnemy2D * temp = GetWorld()->SpawnActor<AEnemy2D>(AEnemy2D::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator, SpawnInfo);
+	AEnemy2D *temp = GetWorld()->SpawnActor<AEnemy2D>(EnemyPrefab.Get(), FVector::ZeroVector, FRotator::ZeroRotator, SpawnInfo);
 	temp->SetActorLocation(EnemySpawns[0]);
 	Debugger(1, 0, FString("Spawning "));
 	id++;
@@ -115,8 +126,11 @@ void ADemoGameBase::OnPlayerDeath()
 {
 	TArray<AActor*> temp;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AEnemy2D::StaticClass(), temp);
-
+	
+	int i = 0;
 	for (int i = 0; i < temp.Num(); i++)
 	{
+		AEnemy2D *enemy = Cast<AEnemy2D>(temp[i]);
+		enemy->PlayerDeath();
 	}
 }

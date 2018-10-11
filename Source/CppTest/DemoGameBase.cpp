@@ -8,7 +8,7 @@ ADemoGameBase::ADemoGameBase()
 	timer = timerValue;
 	id = 0;
 
-	static ConstructorHelpers::FObjectFinder<UBlueprint> ItemBlueprint(TEXT("Blueprint'/Game/Blueprints/MyEnemy2D.MyEnemy2D'"));
+	static ConstructorHelpers::FObjectFinder<UBlueprint> ItemBlueprint(TEXT("Blueprint'/Game/Blueprints/BP_Enemy2D.BP_Enemy2D'"));
 	if (ItemBlueprint.Object) 
 	{
 		EnemyPrefab = (UClass*)ItemBlueprint.Object->GeneratedClass;

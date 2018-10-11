@@ -20,6 +20,7 @@ class CPPTEST_API ADemoGameBase : public AGameModeBase
 
 public:
 	static void Debugger(int level, int disp, FString message);
+	void OnPlayerDeath();
 
 private:
 
@@ -28,7 +29,6 @@ private:
 	void CheckLevel();
 	void EndLevel();
 	void SpawnEnemy();
-	void OnPlayerDeath();
 	void Tick(float DeltaSeconds) override;
 	const float timerValue = 5.0f;
 	int id;

@@ -12,8 +12,7 @@ AEnemySpawner::AEnemySpawner()
 	LeftEnd(-200),
 	Interval(5.0f)
 {
-	// Entry Enemy blueprints 
-	static ConstructorHelpers::FObjectFinder<UClass> FoundEnemyBP(TEXT("/Game/Blueprints/Enemy2D_BP.Enemy2D_BP_C"));
+	static ConstructorHelpers::FObjectFinder<UClass> FoundEnemyBP(TEXT("/Game/Enemy2D_BP.Enemy2D_BP_C"));
 	Enemy = FoundEnemyBP.Object;
 
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
@@ -28,6 +27,7 @@ void AEnemySpawner::BeginPlay()
 	Params.bNoFail = false;
 
 	Super::BeginPlay();
+	
 }
 
 // Called every frame
@@ -55,16 +55,4 @@ void AEnemySpawner::SpawnTimer(float DeltaTime)
 	}
 }
 
-void AEnemySpawner::Spawn()
-{
-	FVector SpawnPoint;
-	//SpawnPoint.X = rand() % int(RightEnd - LeftEnd) + LeftEnd;
-	//SpawnPoint.Y = 0;
-	//SpawnPoint.Z = 50;
-
-	SpawnPoint = this->GetActorLocation();
-
-	UWorld* World = GetWorld();
-	World->SpawnActor<AEnemy2D>(Enemy, SpawnPoint, FRotator::ZeroRotator);
-}
-
+void AEnemySpawner::Spawn(

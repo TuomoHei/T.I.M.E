@@ -30,6 +30,12 @@ public:
 	static ATimeManager* GetInstance(UObject* WorldContextObject);
 	void StartSlow();
 	void StopSlow();
+
+	UFUNCTION(BlueprintCallable, Category = "TimeManager")
+		void SetSlow(bool isEnabled) { bIsSlow = isEnabled; }
+	UFUNCTION(BlueprintCallable, Category = "TimeManager")
+		bool GetSlow() { return bIsSlow; }
+
 private:
 	UPROPERTY(EditAnywhere)
 		float TimeLimit;
@@ -37,7 +43,8 @@ private:
 		float SlowRate;
 	UPROPERTY(EditAnyWhere)
 		float DefaultRate;
-	bool bIsSlow;
+	UPROPERTY(EditAnywhere, Category = "TimeManager")
+		bool bIsSlow;
 	float CurrentTime;
 
 	static ATimeManager* Instance;

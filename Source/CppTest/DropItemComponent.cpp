@@ -17,7 +17,7 @@ UDropItemComponent::UDropItemComponent()
 	PrimaryComponentTick.bCanEverTick = true;
 	
 	// Entry Item blueprints 
-	static ConstructorHelpers::FObjectFinder<UClass> FoundItemBP(TEXT("/Game/Blueprints/Item2_BP.Item2_BP_C"));
+	static ConstructorHelpers::FObjectFinder<UClass> FoundItemBP(TEXT("/Game/Blueprints/Weapon_BP.Weapon_BP_C"));
 	ItemBP = FoundItemBP.Object;
 }
 

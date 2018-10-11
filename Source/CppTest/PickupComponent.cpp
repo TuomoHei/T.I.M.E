@@ -49,5 +49,7 @@ void UPickupComponent::Pickup(AActor* targetObj)
 void UPickupComponent::DisEquip(AActor* targetObj)
 {
 	targetObj->DetachRootComponentFromParent();
+
+	targetObj->Destroy();
 }
 

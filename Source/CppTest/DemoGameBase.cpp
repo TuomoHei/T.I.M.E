@@ -25,6 +25,7 @@ void ADemoGameBase::StartPlay()
 
 	//Contains iterators that populate lists declared in header
 #pragma region Listpopulators
+
 	TArray<AActor*> FoundPlayers;
 	currentLevelIndex = 0;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), APlayer2D::StaticClass(), FoundPlayers);
@@ -93,6 +94,8 @@ void ADemoGameBase::Tick(float DeltaSeconds)
 void ADemoGameBase::SpawnEnemy()
 {
 	if (id >= 1000) id = 0;
+
+	if (EnemyPrefab) return;
 	FActorSpawnParameters SpawnInfo;
 	FString tempid;
 	tempid.AppendInt(id);

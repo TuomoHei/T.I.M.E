@@ -22,6 +22,7 @@ ADemoGameBase::ADemoGameBase()
 	static ConstructorHelpers::FObjectFinder<UBlueprint> ItemBlueprint(TEXT("Blueprint'/Game/Blueprints/BP_Enemy2D.BP_Enemy2D'"));
 	if (ItemBlueprint.Object) 
 	{
+		Debugger(2400, 0, FString("Found object"));
 		EnemyPrefab = (UClass*)ItemBlueprint.Object->GeneratedClass;
 	}
 }
@@ -47,14 +48,15 @@ void ADemoGameBase::StartPlay()
 	}
 
 
-	for (TActorIterator<AStaticMeshActor> ActorItr(GetWorld()); ActorItr; ++ActorItr)
+	for (TActorIterator<AActor> ActorItr(GetWorld()); ActorItr; ++ActorItr)
 	{
-		Debugger(100, 0, ActorItr->GetName());
-		if (ActorItr->GetName() == FString("EnemySpawn"))
+		if (ActorItr->Tags.Contains("EnemySpawn"))
 		{
 			EnemySpawns.Add(ActorItr->GetActorLocation());
 		}
 	}
+
+	Debugger(125, EnemySpawns.Num(), FString("AAA"));
 
 #pragma endregion
 
@@ -102,7 +104,11 @@ void ADemoGameBase::SpawnEnemy()
 {
 	if (id >= 1000) id = 0;
 
-	if (EnemyPrefab) return;
+	if (!EnemyPrefab)
+	{
+		Debugger(1000, 0, FString("ERROR"));
+		return;
+	}
 	FActorSpawnParameters SpawnInfo;
 	FString tempid;
 	tempid.AppendInt(id);

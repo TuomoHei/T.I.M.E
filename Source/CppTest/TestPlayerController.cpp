@@ -29,14 +29,13 @@ void ATestPlayerController::Touched(ETouchIndex::Type FingerIndex, FVector locat
 	if (GetHitResultUnderFingerByChannel(FingerIndex, ETraceTypeQuery::TraceTypeQuery1, false, hit))
 	{
 		FVector temp;
-		ADemoGameBase::Debugger(125, (int)hit.ImpactPoint.X, FString("Hitpoint X value"));
+		ADemoGameBase::Debugger(175, (int)hit.ImpactPoint.X, FString("Hitpoint X value"));
 		temp = hit.ImpactPoint;
 		if (temp != FVector::ZeroVector)
 			HitPos = temp;
 
 
 	}
-	ADemoGameBase::Debugger(125, (int)RegPlayer2D->GetActorLocation().X, FString("Hitpoint X value"));
 
 	//RegPlayer2D->MoveRight(HitPos.X - RegPlayer2D->GetActorLocation().X);
 

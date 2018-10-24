@@ -5,12 +5,6 @@
 #include "DemoGameBase.h"
 #include "Components/InputComponent.h"
 
-
-
-
-
-
-// Sets default values
 APlayer2D::APlayer2D()
 {
 	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
@@ -27,7 +21,6 @@ void APlayer2D::BeginPlay()
 
 	InputComponent = NewObject<UInputComponent>(UInputComponent::StaticClass(), 
 		TEXT("InputComponent"));
-	SetupPlayerInputComponent(InputComponent);
 	PC = Cast<ATestPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
 
 	if (PC)
@@ -43,25 +36,15 @@ void APlayer2D::Tick(float DeltaTime)
 	bool bisCurPressed;
 	if (!PC) return;
 	PC->GetInputTouchState(ETouchIndex::Touch1, PC->newTouchLocation.X, PC->newTouchLocation.Y, bisCurPressed);
+	MovementInput = PC->HitPos;
 
-	if (FVector::Dist(GetActorLocation(), PC->HitPos) != 0)
+	if (FVector::Dist(GetActorLocation() ,MovementInput) >= 75)
 	{
-		FVector2D deltaTouchLocation = PC->newTouchLocation;
-		FVector locationWorld;
-		FVector directionWorld;
-		PC->DeprojectScreenPositionToWorld(deltaTouchLocation.X, deltaTouchLocation.Y, locationWorld, directionWorld);
-
-		deltaTouchLocation *= -1.0f;
-
-		FVector deltaOffset = FVector(deltaTouchLocation.X, 0.0f, 0.0f);
-		ADemoGameBase::Debugger(120, (int)(PC->HitPos.X - GetActorLocation().X), FString("Moving"));
-		MovementInput = (FVector2D)deltaOffset;
-		//Scale our movement input axis values by 100 units per second
-		MovementInput = MovementInput.GetSafeNormal() * 100.0f;
-		FVector NewLocation;
-		NewLocation.X = FMath::Clamp(FVector::Distance(GetActorLocation(), locationWorld), 0.0f, 1.0f) * 20.0f;
-		NewLocation.Y += MovementInput.Y * DeltaTime;
-		SetActorLocation(NewLocation);
+		ADemoGameBase::Debugger(245, (int)FVector::Dist(GetActorLocation(), MovementInput), FString("Distance :"));
+		MovementInput.GetSafeNormal();
+		MovementInput.Y = 0;
+		MovementInput.Z = 0;
+		SetActorLocation(GetActorLocation() - (MovementInput * DeltaTime * 2.0f));
 	}
 }
 

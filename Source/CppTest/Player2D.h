@@ -37,9 +37,10 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	void MoveRight(float axisValue);
+
 private:
 
-	FVector2D MovementInput;
+	FVector MovementInput;
 
 	UPROPERTY(EditAnywhere, Category = "Test")
 		class UBoxComponent *C_PBase;

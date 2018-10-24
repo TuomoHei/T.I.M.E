@@ -104,9 +104,9 @@ void ADemoGameBase::SpawnEnemy()
 {
 	if (id >= 1000) id = 0;
 
-	if (!EnemyPrefab)
+	if (EnemyPrefab)
 	{
-		Debugger(1000, 0, FString("ERROR"));
+		Debugger(1000, 0, FString("Disabled enemy spawning"));
 		return;
 	}
 	FActorSpawnParameters SpawnInfo;

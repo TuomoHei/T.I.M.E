@@ -26,16 +26,22 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	UFUNCTION(BlueprintCallable, Category = "TimeManipulate")
-	void Action(float regainTime);
+	void Action();
 
 private:
+
+	UPROPERTY(EditAnyWhere)
+		float BackSlowWait;
 	float Speed;
 	float OldSpeed;
 	ATimeManager* pTimeManager;
 
 	FVector Position;
 	FVector OldPosition;
+	FTimerHandle TimeHandle;
+	
 private:
-	void ChangeSlow();
 	void ChangeNormal();
+	void ChangeSlow();
+	void CangeForcedSlow();
 };

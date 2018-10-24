@@ -36,6 +36,10 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "TimeManager")
 		bool GetSlow() { return bIsSlow; }
 
+	void SetForceSlow(bool isEnabled) { bForcedSlow = isEnabled; }
+	bool GetForceSlow() { return bForcedSlow; }
+
+
 private:
 	UPROPERTY(EditAnywhere)
 		float TimeLimit;
@@ -47,6 +51,7 @@ private:
 		bool bIsSlow;
 	float CurrentTime;
 
+	bool bForcedSlow;
 	static ATimeManager* Instance;
 	RechargeState State;
 

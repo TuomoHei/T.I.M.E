@@ -29,6 +29,7 @@ void ATimeManager::BeginPlay()
 
 	CurrentTime = TimeLimit;
 	bIsSlow = true;
+	bForcedSlow = false;
 }
 
 // Called every frame
@@ -89,7 +90,8 @@ void ATimeManager::StartSlow()
 void ATimeManager::StopSlow()
 {
 	bIsSlow = false;
+	bForcedSlow = false;
 	CurrentTime = TimeLimit;
 	USlowComponent::SetSpeed(DefaultRate);
-}
 
+}

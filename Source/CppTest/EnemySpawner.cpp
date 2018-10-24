@@ -45,7 +45,7 @@ void AEnemySpawner::SpawnTimer(float DeltaTime)
 		-1,
 		GetWorld()->DeltaTimeSeconds,
 		FColor::Yellow,
-		"EnemySpawner:" + FString::SanitizeFloat(Time) + "/5"
+		"EnemySpawner:" + FString::SanitizeFloat(Time) + "/" + FString::SanitizeFloat(Interval)
 	);
 
 	if (Time >= Interval)

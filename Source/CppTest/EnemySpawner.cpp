@@ -12,14 +12,14 @@ AEnemySpawner::AEnemySpawner()
 	LeftEnd(-200),
 	Interval(5.0f)
 {
-	// Entry Enemy blueprints 
-	static ConstructorHelpers::FObjectFinder<UClass> FoundEnemyBP(TEXT("/Game/Blueprints/Enemy2D_BP.Enemy2D_BP_C"));
-	Enemy = FoundEnemyBP.Object;
-
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
 }
+
+
+
+
+
 
 // Called when the game starts or when spawned
 void AEnemySpawner::BeginPlay()
@@ -33,9 +33,7 @@ void AEnemySpawner::BeginPlay()
 // Called every frame
 void AEnemySpawner::Tick(float DeltaTime)
 {
-	Super::Tick(DeltaTime);
 
-	SpawnTimer(DeltaTime);
 }
 
 void AEnemySpawner::SpawnTimer(float DeltaTime)

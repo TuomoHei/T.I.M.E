@@ -19,13 +19,13 @@ void APlayer2D::BeginPlay()
 {
 	Super::BeginPlay();
 
-	InputComponent = NewObject<UInputComponent>(UInputComponent::StaticClass(), 
-		TEXT("InputComponent"));
 	PC = Cast<ATestPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
 
 	if (PC)
 	{
 		PC->RegisterPlayer2D(this);
+
+		PC->AttachToActor(this, FAttachmentTransformRules::KeepRelativeTransform);
 	}
 }
 
@@ -33,27 +33,38 @@ void APlayer2D::BeginPlay()
 void APlayer2D::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	bool bisCurPressed;
-	if (!PC) return;
-	PC->GetInputTouchState(ETouchIndex::Touch1, PC->newTouchLocation.X, PC->newTouchLocation.Y, bisCurPressed);
-	MovementInput = PC->HitPos;
-
-	if (FVector::Dist(GetActorLocation() ,MovementInput) >= 75)
+	FVector MovementInput = FVector::ZeroVector;
+	if (!PC)
 	{
-		ADemoGameBase::Debugger(245, (int)FVector::Dist(GetActorLocation(), MovementInput), FString("Distance :"));
-		MovementInput.GetSafeNormal();
-		MovementInput.Y = 0;
-		MovementInput.Z = 0;
-		SetActorLocation(GetActorLocation() - (MovementInput * DeltaTime * 2.0f));
+		ADemoGameBase::Debugger(20, 0, FString("Player Controller undefined"));
+		return;
 	}
+
+	if (PC->HitPos != FVector::ZeroVector)
+	{
+		ADemoGameBase::Debugger(255, (int)(GetWorld()->GetFirstPlayerController()->GetPawn()->GetActorLocation() - PC->HitPos).X, FString("Distance : "));
+
+		if (FMath::Abs((GetWorld()->GetFirstPlayerController()->GetPawn()->GetActorLocation() - PC->HitPos).X) > 10)
+		{
+			MovementInput = PC->HitPos - GetActorLocation();
+			MovementInput.Y = 0;
+			MovementInput.Z = 0;
+		}
+		else
+		{
+			MovementInput = FVector::ZeroVector;
+		}
+
+		AddActorWorldOffset(MovementInput * DeltaTime);
+	}
+
+
 }
 
 // Called to bind functionality to input
 void APlayer2D::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
-	//Super::SetupPlayerInputComponent(PlayerInputComponent);
-
-	//InputComponent->BindAxis("MoveRight", this, &APlayer2D::MoveRight);
+	Super::SetupPlayerInputComponent(PlayerInputComponent);
 }
 
 void APlayer2D::MoveRight(float axisValue)
@@ -63,7 +74,6 @@ void APlayer2D::MoveRight(float axisValue)
 
 void APlayer2D::PlayerDeath()
 {
-	ADemoGameBase::Debugger(100, 0, FString("Overlapping"));
 	TArray<AActor*> gamemanager;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ADemoGameBase::StaticClass(), gamemanager);
 	ADemoGameBase *temp = Cast<ADemoGameBase>(temp[0].GetClass());

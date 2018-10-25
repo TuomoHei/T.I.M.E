@@ -23,21 +23,30 @@ void ATestPlayerController::SetupInputComponent()
 void ATestPlayerController::Touched(ETouchIndex::Type FingerIndex, FVector location)
 {
 	FHitResult hit;
-	FVector2D a;
-	
 
-	if (GetHitResultUnderFingerByChannel(FingerIndex, ETraceTypeQuery::TraceTypeQuery1, false, hit))
+
+	if (GetHitResultUnderFingerByChannel(FingerIndex, UEngineTypes::ConvertToTraceType(ECC_Camera), true, hit))
 	{
-		FVector temp;
-		ADemoGameBase::Debugger(175, (int)hit.ImpactPoint.X, FString("Hitpoint X value"));
-		temp = hit.ImpactPoint;
-		if (temp != FVector::ZeroVector)
+		if (hit.Actor.Get()->Tags.Contains(FName("Player")))
+		{
+			FVector temp;
+
+			temp = hit.ImpactPoint;
 			HitPos = temp;
+			DrawDebugPoint(GetWorld(), hit.ImpactPoint, 20, FColor(255, 0, 0), false, 1.0f);
+			ADemoGameBase::Debugger(175, (int)HitPos.X, FString("Hitpoint X value"));
 
-
+		}
 	}
+	//FVector worldLoc;
+	//FVector worldDir;
+	//float x;
+	//float y;
+	//bool b;
 
-	//RegPlayer2D->MoveRight(HitPos.X - RegPlayer2D->GetActorLocation().X);
+	//GetInputTouchState(FingerIndex, x, y, b);
+	//DeprojectScreenPositionToWorld(x, y, worldLoc, worldDir);
+	//HitPos = worldLoc;
 
 }
 
@@ -45,5 +54,3 @@ void ATestPlayerController::RegisterPlayer2D(APlayer2D *actor)
 {
 	RegPlayer2D = actor;
 }
-
-

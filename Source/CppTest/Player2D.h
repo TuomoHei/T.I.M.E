@@ -32,6 +32,10 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	UPROPERTY(EditAnywhere, Category = "Range")
+		float moveRange;
+	UPROPERTY(EditAnywhere, Category = "Range")
+		float pickUpRange;
 
 	class ATestPlayerController *PC;
 	// Called to bind functionality to input
@@ -48,5 +52,7 @@ private:
 		class USpringArmComponent *SpringArm;
 	UPROPERTY(VisibleAnywhere, Category = "Setup")
 		class UCameraComponent *Camera;
+
+
 
 };

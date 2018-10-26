@@ -11,13 +11,9 @@ APlayer2D::APlayer2D()
 
 	PrimaryActorTick.bCanEverTick = true;
 	AutoPossessPlayer = EAutoReceiveInput::Player0;
-	///Create a box to act as base
-	root = Cast<USkeletalMeshComponent>(parentrootComponent);
+	base = CreateDefaultSubobject<UBoxComponent>(TEXT("ASDF"));
+	RootComponent = base;
 
-	if (root)
-	{
-		RootComponent = root;
-	}
 	///Tag if needed
 	Tags.Add("Player");
 }
@@ -99,12 +95,15 @@ void APlayer2D::PlayerPickUp(AActor *targetObj)
 	{
 		UPickupComponent *temp = Cast<UPickupComponent>(targetObj->GetClass());
 		temp->Pickup(targetObj);
-		bHoldingItem = true;
 	}
 }
 
 void APlayer2D::DisEquip(AActor *targetObj)
 {
-	UPickupComponent *temp = Cast<UPickupComponent>(targetObj->GetClass());
-	temp->DisEquip(targetObj);
+	if (targetObj)
+	{
+		UPickupComponent *temp = Cast<UPickupComponent>(targetObj->GetClass());
+		temp->DisEquip(targetObj);
+
+	}
 }

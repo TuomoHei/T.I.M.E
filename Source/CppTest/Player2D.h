@@ -35,10 +35,8 @@ public:
 		float moveRange;
 	UPROPERTY(EditAnywhere, Category = "Range")
 		float pickUpRange;
-	UPROPERTY(EditAnywhere, Category = "Setup")
-		TSubclassOf<class USkeletalMeshComponent> parentrootComponent;
 
-	class USkeletalMeshComponent *root;
+	class UBoxComponent *base;
 
 	class ATestPlayerController *PC;
 

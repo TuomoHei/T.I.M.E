@@ -16,7 +16,7 @@ protected:
 
 	virtual void NativeInitializeAnimation() override;
 
-	APawn * Player;
+	//APawn * Player;
 
 	UPROPERTY(EditAnywhere)
 		class APlayer2D * PlayerClass;	

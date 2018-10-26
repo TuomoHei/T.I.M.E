@@ -3,12 +3,7 @@
 #pragma once
 
 #include "GameFramework/Actor.h"
-#include "Runtime/Engine/Classes/Components/BoxComponent.h"
-#include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
-#include "Runtime/CoreUObject/Public/UObject/ConstructorHelpers.h"
-#include "Runtime/Core/Public/Math/Vector.h"
-#include <functional>
-#include "DemoGameBase.h"
+
 #include "Enemy2D.generated.h"
 
 ///Longest include is very path specific so if your unreal engine is located in other drive -> error
@@ -29,8 +24,6 @@ public:
 	
 	bool bGameEnd;
 
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 protected:
 	enum CombatState

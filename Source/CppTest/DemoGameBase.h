@@ -17,6 +17,7 @@ class CPPTEST_API ADemoGameBase : public AGameModeBase
 public:
 	static void Debugger(int level, int disp, FString message);
 	void OnPlayerDeath();
+	TSubclassOf<class AEnemy2D> EnemyPrefab;
 
 private:
 
@@ -29,7 +30,6 @@ private:
 	const float timerValue = 5.0f;
 	int id;
 
-	TSubclassOf<class AEnemy2D> EnemyPrefab;
 
 	UPROPERTY(EditAnywhere, Category = "EnemySpawn")
 		class AActor *enemy;

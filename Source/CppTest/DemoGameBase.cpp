@@ -115,6 +115,7 @@ void ADemoGameBase::SpawnEnemy()
 	tempid += FString("Enemy");
 	SpawnInfo.Name = FName(*tempid);
 	AEnemy2D *temp = GetWorld()->SpawnActor<AEnemy2D>(EnemyPrefab.Get(), FVector::ZeroVector, FRotator::ZeroRotator, SpawnInfo);
+	temp->Tags.Add(FName("Enemy"));
 	temp->SetActorLocation(EnemySpawns[0]);
 	Debugger(1, 0, FString("Spawning "));
 	id++;

@@ -35,6 +35,11 @@ void ATestPlayerController::Touched(ETouchIndex::Type FingerIndex, FVector locat
 			{
 				hit.GetActor()->Destroy();
 			}
+
+			if (hit.GetActor()->ActorHasTag(FName("PickUp")))
+			{
+				RegPlayer2D->PlayerPickUp(hit.GetActor());
+			}
 		}
 
 		if (FMath::Abs((hit.ImpactPoint - RegPlayer2D->GetActorLocation()).X) >= RegPlayer2D->moveRange) return;

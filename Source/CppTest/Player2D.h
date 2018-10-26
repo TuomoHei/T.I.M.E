@@ -16,13 +16,10 @@ UCLASS()
 class CPPTEST_API APlayer2D : public APawn
 {
 	GENERATED_BODY()
-		///IDLE, MOVEMENT,ATTACK
-
-public:
-	// Sets default values for this pawn's properties
-	APlayer2D();
+		///IDLE, MOVEMENT,ATTACK Animation implementation needed
 
 protected:
+
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	UFUNCTION(BlueprintCallable)
@@ -32,27 +29,28 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	APlayer2D();
+	bool bHoldingItem;
+	void PlayerPickUp(AActor *targetObj);
+	void DisEquip(AActor *targetObj);
+	///Values for pickups and attack ranges
 	UPROPERTY(EditAnywhere, Category = "Range")
 		float moveRange;
 	UPROPERTY(EditAnywhere, Category = "Range")
 		float pickUpRange;
 
 	class ATestPlayerController *PC;
+
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-	void MoveRight(float axisValue);
 
-private:
+	void MoveRight(float axisValue);
 
 	FVector MovementInput;
 
+private:
+
 	UPROPERTY(EditAnywhere, Category = "Test")
 		class UBoxComponent *C_PBase;
-	UPROPERTY(VisibleAnywhere, Category = "Setup")
-		class USpringArmComponent *SpringArm;
-	UPROPERTY(VisibleAnywhere, Category = "Setup")
-		class UCameraComponent *Camera;
-
-
 
 };

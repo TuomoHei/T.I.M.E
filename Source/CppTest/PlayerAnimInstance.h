@@ -14,12 +14,15 @@ class CPPTEST_API UPlayerAnimInstance : public UAnimInstance
 	
 protected:
 
-	APawn * Player;
-
 	virtual void NativeInitializeAnimation() override;
 
+	//APawn * Player;
+
+	UPROPERTY(EditAnywhere)
+		class APlayer2D * PlayerClass;	
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	bool bIsMoving;
+		bool bIsMoving;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		bool bIsAttacking;
@@ -40,9 +43,6 @@ protected:
 		void UpdateAnimationProperties(); // Updates the above properties
 
 public:
-
-	UPROPERTY (EditAnywhere)
-		class APlayer2D * PlayerClass;
 
 	UFUNCTION(BlueprintCallable)
 		void SetAttackAnimID();

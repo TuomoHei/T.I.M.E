@@ -33,12 +33,13 @@ void ATestPlayerController::Touched(ETouchIndex::Type FingerIndex, FVector locat
 		{
 			if (hit.GetActor()->ActorHasTag(FName("Enemy")))
 			{
-				hit.GetActor()->Destroy();
+				hit.GetActor()->Destroy(true,true);
+				return;
 			}
 
 			if (hit.GetActor()->ActorHasTag(FName("PickUp")))
 			{
-				RegPlayer2D->PlayerPickUp(hit.GetActor());
+				///RegPlayer2D->PlayerPickUp(hit.GetActor());
 			}
 		}
 

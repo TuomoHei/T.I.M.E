@@ -4,17 +4,20 @@
 
 #include "CoreMinimal.h"
 #include "Animation/AnimInstance.h"
+#include "Player2D.h"
 #include "PlayerAnimInstance.generated.h"
 
-/**
- * 
- */
 UCLASS()
 class CPPTEST_API UPlayerAnimInstance : public UAnimInstance
 {
 	GENERATED_BODY()
 	
 protected:
+
+	APawn * Player;
+
+	virtual void NativeInitializeAnimation() override;
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	bool bIsMoving;
 
@@ -37,8 +40,11 @@ protected:
 		void UpdateAnimationProperties(); // Updates the above properties
 
 public:
+
+	UPROPERTY (EditAnywhere)
+		class APlayer2D * PlayerClass;
+
 	UFUNCTION(BlueprintCallable)
 		void SetAttackAnimID();
-	
-	
+		
 };

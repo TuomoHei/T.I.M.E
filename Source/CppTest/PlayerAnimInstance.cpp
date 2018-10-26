@@ -20,8 +20,8 @@ void UPlayerAnimInstance::NativeInitializeAnimation()
 		PlayerClass = *Itr;
 	}
 
-	//bIsAlive = true;
-	GLog->Log("Initialized animation instance");
+	bIsAlive = true;	// set player alive
+	GLog->Log("Initialized animation instance AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 }
 
 void UPlayerAnimInstance::UpdateAnimationProperties()

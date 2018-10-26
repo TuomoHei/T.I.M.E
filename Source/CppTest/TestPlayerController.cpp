@@ -1,7 +1,9 @@
 // Fill out your copyright notice in the Description page of Project Settings.
+
 #include "TestPlayerController.h"
 #include "Runtime/Engine/Classes/Engine/LocalPlayer.h"
 #include "Runtime/Engine/Classes/Engine/GameViewportClient.h"
+#include "PickupComponent.h"
 #include "Enemy2D.h"
 #include "DemoGameBase.h"
 
@@ -34,12 +36,19 @@ void ATestPlayerController::Touched(ETouchIndex::Type FingerIndex, FVector locat
 			if (hit.GetActor()->ActorHasTag(FName("Enemy")))
 			{
 				hit.GetActor()->Destroy(true,true);
+
+				if (RegPlayer2D->bHoldingItem)
+				{
+					RegPlayer2D->UnEquip();
+				}
 				return;
 			}
 
 			if (hit.GetActor()->ActorHasTag(FName("PickUp")))
 			{
-				///RegPlayer2D->PlayerPickUp(hit.GetActor());
+				ADemoGameBase::Debugger(550, 0, FString("Pickup detected!"));
+				RegPlayer2D->PickUp(hit.GetActor());
+				return;
 			}
 		}
 

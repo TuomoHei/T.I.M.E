@@ -3,9 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Runtime/Engine/Classes/Components/BoxComponent.h"
-#include "Runtime/Engine/Classes/Camera/CameraComponent.h"
-#include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/Pawn.h"
 #include "Player2D.generated.h"
 
@@ -38,6 +35,10 @@ public:
 		float moveRange;
 	UPROPERTY(EditAnywhere, Category = "Range")
 		float pickUpRange;
+	UPROPERTY(EditAnywhere, Category = "Setup")
+		TSubclassOf<class USkeletalMeshComponent> parentrootComponent;
+
+	class USkeletalMeshComponent *root;
 
 	class ATestPlayerController *PC;
 
@@ -48,9 +49,5 @@ public:
 
 	FVector MovementInput;
 
-private:
-
-	UPROPERTY(EditAnywhere, Category = "Test")
-		class UBoxComponent *C_PBase;
 
 };

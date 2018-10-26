@@ -12,7 +12,13 @@ void UPlayerAnimInstance::NativeInitializeAnimation()
 	Super::NativeInitializeAnimation();
 
 	//Cache pawn
-	Player = TryGetPawnOwner(); // todo: not working
+	//Player = TryGetPawnOwner(); // todo: not working
+
+	// Get player
+	for (TObjectIterator<APlayer2D> Itr; Itr; ++Itr)
+	{		
+		PlayerClass = *Itr;		
+	}
 
 	//bIsAlive = true;
 	GLog->Log("Initialized animation instance");
@@ -47,3 +53,5 @@ void UPlayerAnimInstance::SetAttackAnimID()
 {
 	attackAnimID = rand() % 2;	// Set number to x-1 of x attack animations implemented
 }
+
+

@@ -12,6 +12,7 @@ APlayer2D::APlayer2D()
 	AutoPossessPlayer = EAutoReceiveInput::Player0;
 	C_PBase = CreateDefaultSubobject<UBoxComponent>(TEXT("a"));
 	RootComponent = C_PBase;
+	Tags.Add("Player");
 }
 
 // Called when the game starts or when spawned

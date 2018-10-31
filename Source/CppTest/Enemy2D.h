@@ -23,7 +23,8 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	
 	bool bGameEnd;
-
+	UPROPERTY(EditAnywhere, Category = "Combat")
+		float timerValue;
 
 protected:
 	enum CombatState
@@ -31,17 +32,22 @@ protected:
 		CB_walking, CB_fighting
 	};
 
+	class ATestPlayerController *controller;
+
+	TArray<AActor*> player;
 	CombatState state;
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	UPROPERTY(VisibleAnywhere, Category = "Movement")
+	UPROPERTY(EditAnywhere, Category = "Movement")
 		float walkSpeed;
 	UFUNCTION(Category = "Movement")
 		void Movement(float moveValue, float Deltatime);
-	UPROPERTY(VisibleAnywhere, Category = "Movement")
+	UPROPERTY(EditAnywhere, Category = "Combat")
 		float maxDistance;
+
+	float timer;
 	UPROPERTY(VisibleAnywhere, Category = "Exterior")
 		class UBoxComponent *C_rootBox;
 

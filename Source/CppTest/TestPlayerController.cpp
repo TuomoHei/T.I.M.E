@@ -46,7 +46,6 @@ void ATestPlayerController::Touched(ETouchIndex::Type FingerIndex, FVector locat
 
 			if (hit.GetActor()->ActorHasTag(FName("PickUp")))
 			{
-				ADemoGameBase::Debugger(550, 0, FString("Pickup detected!"));
 				RegPlayer2D->PickUp(hit.GetActor());
 				return;
 			}

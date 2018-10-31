@@ -3,6 +3,7 @@
 #include "Enemy2D.h"
 #include "Runtime/Engine/Classes/Components/BoxComponent.h"
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
+#include "Player2D.h"
 #include "Runtime/CoreUObject/Public/UObject/ConstructorHelpers.h"
 #include "Runtime/Core/Public/Math/Vector.h"
 #include <functional>
@@ -20,6 +21,7 @@ AEnemy2D::AEnemy2D()
 	}
 
 	state = CB_walking;
+	
 
 }
 
@@ -33,6 +35,8 @@ void AEnemy2D::BeginPlay()
 {
 	bGameEnd = false;
 	Super::BeginPlay();
+	UGameplayStatics::GetAllActorsWithTag(GetWorld(), FName("Player"), player);
+	timer = timerValue;
 }
 
 // Called every frame
@@ -51,20 +55,28 @@ void AEnemy2D::Movement(float moveValue, float Deltatime)
 
 	///Maxdistance can be adjusted in editor via blueprint
 
+	if (player.Num() <= 0) return;
+
 	///----ADD overlapping prevention
 	FVector newLoc = GetActorLocation();
-	FVector b = GetWorld()->GetFirstPlayerController()->GetPawn()->GetActorLocation();
+	FVector b = player.Last()->GetActorLocation();
 	FVector temp = b - GetActorLocation();
 	temp.Normalize();
+
+
 
 	///Distance checker
 	if (FMath::Abs(FVector::Distance(GetActorLocation(), b)) > maxDistance)
 	{
 		if (state != CB_walking) state = CB_walking;
+
+		timer = timerValue;
 	}
 	else
 	{
 		if (state != CB_fighting) state = CB_fighting;
+
+		timer -= Deltatime;
 	}
 
 	///take action based on the current state
@@ -72,11 +84,15 @@ void AEnemy2D::Movement(float moveValue, float Deltatime)
 	{
 		newLoc.X += temp.X * Deltatime * moveValue;
 		SetActorLocation(newLoc);
+
 	}
 	else
 	{
-		///combat logic here
-
+		if (timer <= 0.0f)
+		{
+			player.Last()->Destroy();
+			ADemoGameBase::Debugger(676, (int)timer, FString("Destoyriewahgforönbkdrv"));
+		}
 	}
 }
 

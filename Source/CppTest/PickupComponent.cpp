@@ -37,7 +37,6 @@ void UPickupComponent::Pickup(AActor *Player, FVector location, AActor *targetOb
 
 	if (Player && targetObj)
 	{
-		ADemoGameBase::Debugger(560, 0, FString("Detected item, proceeding pickup"));
 		targetObj->AttachToActor(Player, *rules);
 		CheckLocation(Player, location, targetObj);
 	}

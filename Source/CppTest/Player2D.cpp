@@ -4,7 +4,7 @@
 #include "TestPlayerController.h"
 #include "DemoGameBase.h"
 #include "Components/InputComponent.h"
-#include "PickupComponent.h"
+#include "PickUpComponent.h"
 
 APlayer2D::APlayer2D()
 {
@@ -13,7 +13,7 @@ APlayer2D::APlayer2D()
 	AutoPossessPlayer = EAutoReceiveInput::Player0;
 	base = CreateDefaultSubobject<UBoxComponent>(TEXT("ASDF"));
 	RootComponent = base;
-
+	item = nullptr;
 	///Tag if needed
 	Tags.Add("Player");
 }
@@ -39,7 +39,7 @@ void APlayer2D::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	FVector MovementInput = FVector::ZeroVector;
+	MovementInput = FVector::ZeroVector;
 
 	if (!PC)
 	{
@@ -63,10 +63,15 @@ void APlayer2D::Tick(float DeltaTime)
 			MovementInput = FVector::ZeroVector;
 		}
 
+
 		AddActorWorldOffset(MovementInput * DeltaTime);
 	}
 
-
+	if (MovementInput != FVector::ZeroVector)
+	{
+		if (item)
+			Cast<UPickupComponent>(item->GetClass())->CheckLocation(this, MovementInput.GetSafeNormal(), item);
+	}
 }
 
 // Called to bind functionality to input
@@ -85,25 +90,24 @@ void APlayer2D::PlayerDeath()
 {
 	TArray<AActor*> gamemanager;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ADemoGameBase::StaticClass(), gamemanager);
-	ADemoGameBase *temp = Cast<ADemoGameBase>(temp[0].GetClass());
+	ADemoGameBase *temp = nullptr;
+	temp = Cast<ADemoGameBase>(temp[0].GetClass());
 	temp->OnPlayerDeath();
 }
 
-void APlayer2D::PlayerPickUp(AActor *targetObj)
+void APlayer2D::PickUp(AActor *targetObj)
 {
-	if (targetObj)
+	if (!item)
 	{
-		UPickupComponent *temp = Cast<UPickupComponent>(targetObj->GetClass());
-		temp->Pickup(targetObj);
+		item = targetObj;
+		Cast<UPickupComponent>(targetObj->GetClass())->Pickup(this, MovementInput, item);
+		bHoldingItem = true;
 	}
 }
 
-void APlayer2D::DisEquip(AActor *targetObj)
+void APlayer2D::UnEquip()
 {
-	if (targetObj)
-	{
-		UPickupComponent *temp = Cast<UPickupComponent>(targetObj->GetClass());
-		temp->DisEquip(targetObj);
-
-	}
+	Cast<UPickupComponent>(item->GetClass())->DisEquip(item);
+	item = nullptr;
+	bHoldingItem = false;
 }

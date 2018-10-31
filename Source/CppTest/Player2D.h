@@ -28,8 +28,9 @@ public:
 
 	APlayer2D();
 	bool bHoldingItem;
-	void PlayerPickUp(AActor *targetObj);
-	void DisEquip(AActor *targetObj);
+
+	void PickUp(AActor *targetObj);
+	void UnEquip();
 	///Values for pickups and attack ranges
 	UPROPERTY(EditAnywhere, Category = "Range")
 		float moveRange;
@@ -45,7 +46,11 @@ public:
 
 	void MoveRight(float axisValue);
 
-	FVector MovementInput;
+	UPROPERTY()
+		FVector MovementInput;
 
+private:
+
+	class AActor *item;
 
 };

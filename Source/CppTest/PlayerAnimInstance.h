@@ -21,7 +21,7 @@ protected:
 	UPROPERTY(EditAnywhere)
 		class APlayer2D * PlayerClass;	
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		bool bIsMoving;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -30,13 +30,13 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		int32 attackAnimID;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		bool bIsSliding;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		bool bIsCrouching;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		bool bIsAlive;
 	
 	UFUNCTION(BlueprintCallable, Category = "UpdateAnimationProperties")

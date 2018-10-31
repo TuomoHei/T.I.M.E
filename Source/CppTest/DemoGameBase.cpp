@@ -19,7 +19,7 @@ ADemoGameBase::ADemoGameBase()
 	PlayerControllerClass = ATestPlayerController::StaticClass();
 
 
-	static ConstructorHelpers::FObjectFinder<UBlueprint> ItemBlueprint(TEXT("Blueprint'/Game/Blueprints/BP_Enemy2D.BP_Enemy2D'"));
+	static ConstructorHelpers::FObjectFinder<UBlueprint> ItemBlueprint(TEXT("Class'/Game/Blueprints/BP_Enemy2D.BP_Enemy2D'"));
 	if (ItemBlueprint.Object) 
 	{
 		Debugger(2400, 0, FString("Found object"));
@@ -44,7 +44,7 @@ void ADemoGameBase::StartPlay()
 	}
 	else
 	{
-		Debugger(2, 0, FoundPlayers[0]->GetActorLabel());
+		Debugger(2, 0, FoundPlayers[0]->GetName());
 	}
 
 
@@ -109,6 +109,7 @@ void ADemoGameBase::SpawnEnemy()
 		Debugger(1000, 0, FString("Disabled enemy spawning"));
 		return;
 	}
+
 	FActorSpawnParameters SpawnInfo;
 	FString tempid;
 	tempid.AppendInt(id);

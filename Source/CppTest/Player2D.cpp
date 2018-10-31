@@ -90,7 +90,8 @@ void APlayer2D::PlayerDeath()
 {
 	TArray<AActor*> gamemanager;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ADemoGameBase::StaticClass(), gamemanager);
-	ADemoGameBase *temp = Cast<ADemoGameBase>(temp[0].GetClass());
+	ADemoGameBase *temp = nullptr;
+	temp = Cast<ADemoGameBase>(temp[0].GetClass());
 	temp->OnPlayerDeath();
 }
 

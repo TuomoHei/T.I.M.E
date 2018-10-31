@@ -8,7 +8,7 @@
 #include "PickupComponent.generated.h"
 
 
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+UCLASS( )
 class CPPTEST_API UPickupComponent : public UActorComponent
 {
 	GENERATED_BODY()
@@ -23,7 +23,7 @@ protected:
 
 	AActor* m_owner;
 	UPROPERTY(EditAnywhere, Category = "PickUp")
-		FVector Offset;
+		float HeightOffset;
 
 public:	
 	// Called every frame
@@ -32,8 +32,11 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "PickUp")
 		void SetPlayer(AActor* owner) { m_owner = owner; }
 	UFUNCTION(BlueprintCallable, Category = "PickUp")
-		void Pickup(AActor* target);
+		void Pickup(AActor* Player, FVector location, AActor *target);
 	UFUNCTION(BlueprintCallable, Category = "PickUp")
 		void DisEquip(AActor* targetObj);
+
+	void CheckLocation(AActor *Player, FVector loc,AActor *target);
+
 	
 };

@@ -1,13 +1,13 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "PickupComponent.h"
-
+#include "TestPlayerController.h"
+#include "DemoGameBase.h"
 
 // Sets default values for this component's properties
 UPickupComponent::UPickupComponent()
 {
 	PrimaryComponentTick.bCanEverTick = true;
-
 }
 
 
@@ -16,7 +16,7 @@ void UPickupComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	
+
 }
 
 
@@ -27,18 +27,19 @@ void UPickupComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 
 }
 
-void UPickupComponent::Pickup(AActor* targetObj)
+void UPickupComponent::Pickup(AActor *Player, FVector location, AActor *targetObj)
 {
 	EAttachmentRule *erule = new EAttachmentRule();
-
-	FAttachmentTransformRules* rules = new FAttachmentTransformRules(*erule,true);
-	rules->ScaleRule =EAttachmentRule::KeepWorld;
+	FAttachmentTransformRules* rules = new FAttachmentTransformRules(*erule, true);
+	rules->ScaleRule = EAttachmentRule::KeepWorld;
 	rules->LocationRule = EAttachmentRule::KeepWorld;
+	rules->RotationRule = EAttachmentRule::KeepWorld;
 
-	targetObj->AttachToActor(m_owner, *rules);
-
-	FVector ParentPos = m_owner->GetActorTransform().GetLocation();
-	targetObj->SetActorLocation(ParentPos + Offset);
+	if (Player && targetObj)
+	{
+		targetObj->AttachToActor(Player, *rules);
+		CheckLocation(Player, location, targetObj);
+	}
 }
 
 void UPickupComponent::DisEquip(AActor* targetObj)
@@ -46,5 +47,11 @@ void UPickupComponent::DisEquip(AActor* targetObj)
 	targetObj->DetachRootComponentFromParent();
 
 	targetObj->Destroy();
+}
+
+void UPickupComponent::CheckLocation(AActor *Player, FVector location, AActor *targetObj)
+{
+	FVector ParentPos = Player->GetActorTransform().GetLocation();
+	targetObj->SetActorLocation(ParentPos + FVector(0.0f, 0.5f, 0.0f) + location * 20.0f);
 }
 

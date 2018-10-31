@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
-#include "Blueprint/UserWidget.h"
 #include "Player2D.h"
 #include "TestPlayerController.generated.h"
 
@@ -30,8 +29,6 @@ public:
 	void Touched(ETouchIndex::Type, FVector Location);
 	void RegisterPlayer2D(APlayer2D *actor);
 
-
-	class UUserWidget *MyMainMenu;
 
 	virtual void BeginPlay() override;
 	

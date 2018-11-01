@@ -2,9 +2,7 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
-#include "Engine.h"
 #include "DemoGameBase.generated.h"
 
 

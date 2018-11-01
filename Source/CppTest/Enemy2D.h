@@ -2,8 +2,6 @@
 
 #pragma once
 
-#include "GameFramework/Actor.h"
-
 #include "Enemy2D.generated.h"
 
 ///Longest include is very path specific so if your unreal engine is located in other drive -> error
@@ -26,6 +24,9 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Combat")
 		float timerValue;
 
+	UFUNCTION(BlueprintImplementableEvent)
+		void asdf(bool leftside);
+
 protected:
 	enum CombatState
 	{
@@ -36,6 +37,7 @@ protected:
 
 	TArray<AActor*> player;
 	CombatState state;
+	FVector direction;
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -44,6 +46,7 @@ protected:
 		float walkSpeed;
 	UFUNCTION(Category = "Movement")
 		void Movement(float moveValue, float Deltatime);
+
 	UPROPERTY(EditAnywhere, Category = "Combat")
 		float maxDistance;
 

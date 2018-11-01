@@ -3,7 +3,9 @@
 #include "Player2D.h"
 #include "TestPlayerController.h"
 #include "DemoGameBase.h"
+#include "Runtime/Engine/Classes/Components/BoxComponent.h"
 #include "Components/InputComponent.h"
+#include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 #include "PickUpComponent.h"
 
 APlayer2D::APlayer2D()
@@ -12,7 +14,7 @@ APlayer2D::APlayer2D()
 	PrimaryActorTick.bCanEverTick = true;
 	AutoPossessPlayer = EAutoReceiveInput::Player0;
 	base = CreateDefaultSubobject<UBoxComponent>(TEXT("ASDF"));
-	RootComponent = base;
+	RootComponent = Cast<USceneComponent>(base);
 	item = nullptr;
 	///Tag if needed
 	Tags.Add("Player");
@@ -110,4 +112,9 @@ void APlayer2D::UnEquip()
 	Cast<UPickupComponent>(item->GetClass())->DisEquip(item);
 	item = nullptr;
 	bHoldingItem = false;
+}
+
+void APlayer2D::AttackEnemy()
+{
+
 }

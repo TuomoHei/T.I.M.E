@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "DemoGameBase.h"
+#include "EngineUtils.h"
 #include <functional>
 #include "Enemy2D.h"
 #include "Player2D.h"

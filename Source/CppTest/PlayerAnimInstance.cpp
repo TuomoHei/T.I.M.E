@@ -30,10 +30,17 @@ void UPlayerAnimInstance::NativeInitializeAnimation()
 	}
 
 	// Get skeletal mesh
-	skeletalMeshComp = PlayerClass->FindComponentByClass<USkeletalMeshComponent>();
-	if (skeletalMeshComp)
+	if (PlayerClass)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Skeletal Mesh found"));
+		skeletalMeshComp = PlayerClass->FindComponentByClass<USkeletalMeshComponent>();
+		if (skeletalMeshComp)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Skeletal Mesh found"));
+		}
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Player NOT FOUND!"));
 	}
 
 	bIsAlive = true;	// set player alive
@@ -56,12 +63,12 @@ void UPlayerAnimInstance::UpdateAnimationProperties()
 		{
 			bIsMoving = true;
 
-			if (moveX > 0)
+			if (moveX > 0 && skeletalMeshComp)
 			{
 				// Moves right
 				skeletalMeshComp->SetWorldScale3D(FVector(1.0f, 1.0f, 1.0f));
 			}
-			else if (moveX < 0)
+			else if (moveX < 0 && skeletalMeshComp)
 			{
 				// Moves left
 				skeletalMeshComp->SetWorldScale3D(FVector(1.0f, -1.0f, 1.0f));

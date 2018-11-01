@@ -27,14 +27,14 @@ void UTimeManipulator::BeginPlay()
 	Position = GetOwner()->GetActorLocation();
 	OldPosition = Position;
 	pTimeManager = ATimeManager::GetInstance(this);
-
-
 }
 
 
 // Called every frame
 void UTimeManipulator::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
+	if (this->pTimeManager == NULL) return;
+
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	// Compare psosion to before frame to detect speed

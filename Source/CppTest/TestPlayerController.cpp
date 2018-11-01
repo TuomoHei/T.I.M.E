@@ -2,9 +2,10 @@
 
 #include "TestPlayerController.h"
 #include "Runtime/Engine/Classes/Engine/LocalPlayer.h"
-#include "Runtime/Engine/Classes/Engine/GameViewportClient.h"
+#include "Player2D.h"
 #include "PickupComponent.h"
 #include "Enemy2D.h"
+#include "Runtime/Engine/Public/DrawDebugHelpers.h" //for debug
 #include "DemoGameBase.h"
 
 
@@ -46,7 +47,6 @@ void ATestPlayerController::Touched(ETouchIndex::Type FingerIndex, FVector locat
 
 			if (hit.GetActor()->ActorHasTag(FName("PickUp")))
 			{
-				ADemoGameBase::Debugger(550, 0, FString("Pickup detected!"));
 				RegPlayer2D->PickUp(hit.GetActor());
 				return;
 			}

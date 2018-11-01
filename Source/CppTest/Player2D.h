@@ -2,7 +2,6 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
 #include "Player2D.generated.h"
 
@@ -21,6 +20,8 @@ protected:
 	virtual void BeginPlay() override;
 	UFUNCTION(BlueprintCallable)
 		void PlayerDeath();
+
+	void AttackEnemy();
 
 public:
 	// Called every frame

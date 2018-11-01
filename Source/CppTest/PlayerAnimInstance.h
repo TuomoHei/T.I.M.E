@@ -2,9 +2,7 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
 #include "Animation/AnimInstance.h"
-#include "Player2D.h"
 #include "PlayerAnimInstance.generated.h"
 
 UCLASS()
@@ -19,7 +17,10 @@ protected:
 	//APawn * Player;
 
 	UPROPERTY(EditAnywhere)
-		class APlayer2D * PlayerClass;	
+		class APlayer2D* PlayerClass;
+
+	UPROPERTY(EditAnywhere)
+		USkeletalMeshComponent* skeletalMeshComp;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		bool bIsMoving;

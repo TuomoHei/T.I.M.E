@@ -2,9 +2,7 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
-#include "Player2D.h"
 #include "TestPlayerController.generated.h"
 
 

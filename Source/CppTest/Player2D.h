@@ -21,7 +21,7 @@ protected:
 	UFUNCTION(BlueprintCallable)
 		void PlayerDeath();
 
-	void AttackEnemy();
+
 
 public:
 	// Called every frame
@@ -29,14 +29,20 @@ public:
 
 	APlayer2D();
 	bool bHoldingItem;
-
+	float attack;
+	void AttackEnemy(AActor *enemy);
 	void PickUp(AActor *targetObj);
 	void UnEquip();
 	///Values for pickups and attack ranges
-	UPROPERTY(EditAnywhere, Category = "Range")
+	UPROPERTY(EditAnywhere, Category = "Movement")
 		float moveRange;
-	UPROPERTY(EditAnywhere, Category = "Range")
+	UPROPERTY(EditAnywhere, Category = "Movement")
+		float moveSpeed;
+	UPROPERTY(EditAnywhere, Category = "Attack")
 		float pickUpRange;
+
+	UPROPERTY(EditAnywhere, Category = "Attack")
+		float attackTime;
 
 	class UBoxComponent *base;
 
@@ -44,8 +50,6 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
-	void MoveRight(float axisValue);
 
 	UPROPERTY()
 		FVector MovementInput;

@@ -41,33 +41,33 @@ void APlayer2D::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	MovementInput = FVector::ZeroVector;
-
+	attack -= DeltaTime;
+	FVector newLoc = GetActorLocation();
 	if (!PC)
 	{
 		ADemoGameBase::Debugger(20, 0, FString("Player Controller undefined"));
 		return;
 	}
 
+	if (FMath::Abs(PC->HitPos.X - GetActorLocation().X  ) < 20)
+	{
+		MovementInput = FVector::ZeroVector;
+	}
+	else
+	{
+		MovementInput = PC->HitPos - GetActorLocation();
+		MovementInput.Normalize();
+
+	}
+
+
 	///Calculate the distance between click point and players location
 	if (PC->HitPos != FVector::ZeroVector)
 	{
-		ADemoGameBase::Debugger(255, (int)(GetWorld()->GetFirstPlayerController()->GetPawn()->GetActorLocation() - PC->HitPos).X, FString("Distance : "));
-
-		if (FMath::Abs((GetWorld()->GetFirstPlayerController()->GetPawn()->GetActorLocation() - PC->HitPos).X) > 10)
-		{
-			MovementInput = PC->HitPos - GetActorLocation();
-			MovementInput.Y = 0;
-			MovementInput.Z = 0;
-		}
-		else
-		{
-			MovementInput = FVector::ZeroVector;
-		}
-
-
-		AddActorWorldOffset(MovementInput * DeltaTime);
+		newLoc.X += MovementInput.X * DeltaTime * moveSpeed;
+		SetActorLocation(newLoc);
 	}
+
 
 	if (MovementInput != FVector::ZeroVector)
 	{
@@ -82,10 +82,6 @@ void APlayer2D::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 }
 
-void APlayer2D::MoveRight(float axisValue)
-{
-	MovementInput.X = FMath::Clamp<float>(axisValue, -1.0f, 1.0f);
-}
 
 //Calls the gamemodebase method onplayerdeath 
 void APlayer2D::PlayerDeath()
@@ -114,7 +110,12 @@ void APlayer2D::UnEquip()
 	bHoldingItem = false;
 }
 
-void APlayer2D::AttackEnemy()
+void APlayer2D::AttackEnemy(AActor *enemy)
 {
+	if (bHoldingItem)
+	{
+		UnEquip();
+	}
 
+	enemy->Destroy();
 }

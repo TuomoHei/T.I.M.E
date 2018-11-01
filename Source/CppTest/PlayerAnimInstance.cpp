@@ -53,8 +53,6 @@ void UPlayerAnimInstance::UpdateAnimationProperties()
 	if (PlayerClass)
 	{
 		//UE_LOG(LogTemp, Warning, TEXT("INPUT MOVE X:  %f"), PlayerClass->MovementInput.X);
-
-
 		// ** Handle moving **
 
 		float moveX = PlayerClass->MovementInput.X;

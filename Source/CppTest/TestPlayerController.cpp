@@ -36,12 +36,8 @@ void ATestPlayerController::Touched(ETouchIndex::Type FingerIndex, FVector locat
 		{
 			if (hit.GetActor()->ActorHasTag(FName("Enemy")))
 			{
-				hit.GetActor()->Destroy(true,true);
-
-				if (RegPlayer2D->bHoldingItem)
-				{
-					RegPlayer2D->UnEquip();
-				}
+				RegPlayer2D->attack = RegPlayer2D->attackTime;
+				RegPlayer2D->AttackEnemy(hit.GetActor());
 				return;
 			}
 

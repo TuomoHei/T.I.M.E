@@ -2,9 +2,9 @@
 
 #include "PlayerAnimInstance.h"
 #include "Runtime/Engine/Classes/GameFramework/PawnMovementComponent.h"
-#include "Kismet/GameplayStatics.h"	// needed for UGameplayStatics
 #include "GameFramework/Actor.h"
-#include "Gameframework/PlayerController.h"
+//#include "Kismet/GameplayStatics.h"	// needed for UGameplayStatics
+//#include "Gameframework/PlayerController.h"
 #include "Player2D.h"
 #include <stdlib.h>	// Needed for rand
 
@@ -16,6 +16,7 @@ void UPlayerAnimInstance::NativeInitializeAnimation()
 
 	UWorld* GameWorld = this->GetWorld();	
 
+	// Find player
 	for (TActorIterator<APlayer2D> Itr(GameWorld); Itr; ++Itr)
 	{
 		// Filter out objects not contained in the target world.
@@ -28,8 +29,12 @@ void UPlayerAnimInstance::NativeInitializeAnimation()
 		UE_LOG(LogTemp, Warning, TEXT("Found player object named: %s"), *PlayerClass->GetName());
 	}
 
-	//skeletalMeshComp = PlayerClass->FindComponentByClass<USkeletalMeshComponent>();
-	//skeletalMeshComp->GlobalAnimRateScale = 2.0f;
+	// Get skeletal mesh
+	skeletalMeshComp = PlayerClass->FindComponentByClass<USkeletalMeshComponent>();
+	if (skeletalMeshComp)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Skeletal Mesh found"));
+	}
 
 	bIsAlive = true;	// set player alive
 
@@ -42,6 +47,9 @@ void UPlayerAnimInstance::UpdateAnimationProperties()
 	{
 		//UE_LOG(LogTemp, Warning, TEXT("INPUT MOVE X:  %f"), PlayerClass->MovementInput.X);
 
+
+		// ** Handle moving **
+
 		float moveX = PlayerClass->MovementInput.X;
 		
 		if (moveX != 0)
@@ -51,12 +59,12 @@ void UPlayerAnimInstance::UpdateAnimationProperties()
 			if (moveX > 0)
 			{
 				// Moves right
-				
+				skeletalMeshComp->SetWorldScale3D(FVector(1.0f, 1.0f, 1.0f));
 			}
 			else if (moveX < 0)
 			{
 				// Moves left
-
+				skeletalMeshComp->SetWorldScale3D(FVector(1.0f, -1.0f, 1.0f));
 			}
 		}
 		else
@@ -64,6 +72,14 @@ void UPlayerAnimInstance::UpdateAnimationProperties()
 			bIsMoving = false;
 		}
 
+		// ** Attakcing **
+
+		// ** Crouching ** 
+
+		// ** Sliding **
+		
+		// ** Dying **
+		//bIsAlive = PlayerClass-> // isAlive?
 
 	}
 }

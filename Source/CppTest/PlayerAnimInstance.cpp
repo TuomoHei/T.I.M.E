@@ -3,11 +3,11 @@
 #include "PlayerAnimInstance.h"
 #include "Runtime/Engine/Classes/GameFramework/PawnMovementComponent.h"
 #include "GameFramework/Actor.h"
-//#include "Kismet/GameplayStatics.h"	// needed for UGameplayStatics
-//#include "Gameframework/PlayerController.h"
+#include "Kismet/GameplayStatics.h"	// needed for UGameplayStatics
+#include "Gameframework/PlayerController.h"
 #include "Player2D.h"
+#include "EngineUtils.h"
 #include <stdlib.h>	// Needed for rand
-
 #include "DemoGameBase.h"	// debugging
 
 void UPlayerAnimInstance::NativeInitializeAnimation()

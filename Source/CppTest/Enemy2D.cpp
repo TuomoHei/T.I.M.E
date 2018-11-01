@@ -1,12 +1,12 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "Enemy2D.h"
+#include <functional>
 #include "Runtime/Engine/Classes/Components/BoxComponent.h"
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
-#include "Player2D.h"
 #include "Runtime/CoreUObject/Public/UObject/ConstructorHelpers.h"
 #include "Runtime/Core/Public/Math/Vector.h"
-#include <functional>
+#include "Player2D.h"
 #include "DemoGameBase.h"
 
 // Sets default values
@@ -21,8 +21,6 @@ AEnemy2D::AEnemy2D()
 	}
 
 	state = CB_walking;
-	
-
 }
 
 AEnemy2D::~AEnemy2D()
@@ -63,8 +61,6 @@ void AEnemy2D::Movement(float moveValue, float Deltatime)
 	FVector temp = b - GetActorLocation();
 	temp.Normalize();
 
-
-
 	///Distance checker
 	if (FMath::Abs(FVector::Distance(GetActorLocation(), b)) > maxDistance)
 	{
@@ -84,13 +80,16 @@ void AEnemy2D::Movement(float moveValue, float Deltatime)
 	{
 		newLoc.X += temp.X * Deltatime * moveValue;
 		SetActorLocation(newLoc);
-
+		direction = temp;
 	}
 	else
 	{
 		if (timer <= 0.0f)
 		{
-			player.Last()->Destroy();
+			bool side = direction.X > 0 ? true : false;
+			asdf(side);
+
+			//player.Last()->Destroy();
 			ADemoGameBase::Debugger(676, (int)timer, FString("Destoyriewahgforönbkdrv"));
 		}
 	}
@@ -102,3 +101,6 @@ void AEnemy2D::PlayerDeath()
 	bGameEnd = true;
 	ADemoGameBase::Debugger(10, 0, FString("Game stopped for enemy"));
 }
+
+
+

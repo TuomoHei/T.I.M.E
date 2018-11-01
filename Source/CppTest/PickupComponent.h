@@ -2,7 +2,6 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "Engine/Classes/GameFramework/Actor.h"
 #include "PickupComponent.generated.h"

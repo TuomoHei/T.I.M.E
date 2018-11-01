@@ -14,24 +14,7 @@ void UPlayerAnimInstance::NativeInitializeAnimation()
 {
 	Super::NativeInitializeAnimation();
 
-	//Cache pawn
-	//Player = TryGetPawnOwner(); // todo: not working
-
 	UWorld* GameWorld = this->GetWorld();	
-
-	// Get player
-	//for (TObjectIterator<APlayer2D> Itr; Itr; ++Itr)
-	//{
-	//	// Filter out objects not contained in the target world.
-	//	if (Itr->GetWorld() != GameWorld)
-	//	{
-	//		continue;	// skip rest of loop
-	//	}
-
-	//	PlayerClass = *Itr;
-	//	UE_LOG(LogTemp, Warning, TEXT("Found UObject named: %s"), *PlayerClass->GetName());
-	//	//UE_LOG(LogTemp, Warning, TEXT("TEST: %s"), PlayerClass->test);
-	//}
 
 	for (TActorIterator<APlayer2D> Itr(GameWorld); Itr; ++Itr)
 	{
@@ -42,59 +25,46 @@ void UPlayerAnimInstance::NativeInitializeAnimation()
 		}
 
 		PlayerClass = *Itr;
-		UE_LOG(LogTemp, Warning, TEXT("Found UObject named: %s"), *PlayerClass->GetName());
-
-		if (PlayerClass->test == 2)
-		{
-			UE_LOG(LogTemp, Warning, TEXT("TEST = %f"), PlayerClass->test);			
-		}
-
+		UE_LOG(LogTemp, Warning, TEXT("Found player object named: %s"), *PlayerClass->GetName());
 	}
 
+	//skeletalMeshComp = PlayerClass->FindComponentByClass<USkeletalMeshComponent>();
+	//skeletalMeshComp->GlobalAnimRateScale = 2.0f;
+
 	bIsAlive = true;	// set player alive
-	GLog->Log("Initialized animation instance AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+
+	GLog->Log("Initialized animation instance");
 }
 
 void UPlayerAnimInstance::UpdateAnimationProperties()
 {
-	//ADemoGameBase::Debugger(255, (int)PlayerClass->MovementInput.X, FString("Mooove X : "));
-
-	//float xMove = PlayerClass->MovementInput.X;	// TODO make this work!
-	//float xMove = PlayerClass->test;
-	//UE_LOG(LogTemp, Warning, TEXT("INPUT MOVE X:  %f"), xMove);
-	//UE_LOG(LogTemp, Warning, TEXT("INPUT MOVE X:  %f"), PlayerClass->MovementInput.X);
-
-	//PlayerClass->MoveRight(-1.0f);
-
 	if (PlayerClass)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("INPUT MOVE X:  %f"), PlayerClass->MovementInput.X);
+		//UE_LOG(LogTemp, Warning, TEXT("INPUT MOVE X:  %f"), PlayerClass->MovementInput.X);
 
-
-		//bool hasWorld = this->ImplementsGetWorld();
-		//UE_LOG(LogTemp, Warning, TEXT("HAS WORLDDDDDDDDDD =  %s"), hasWorld? TEXT("true") : TEXT("false"));		
-
-		//bIsMoving = PlayerClass->MovementInput.X > 0 ? true : false;
-
-		//if (xMove != 0)
-		//{
-		//	bIsMoving = true;
-		//}
-		//else
-		//{
-		//	bIsMoving = false;
-		//}
+		float moveX = PlayerClass->MovementInput.X;
 		
-		//ADemoGameBase::Debugger(255, (int)PlayerClass->MovementInput.X, FString("Move X : "));
-
-		if (bIsMoving)
+		if (moveX != 0)
 		{
-			//GLog->Log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA Movement INPUT: MOVING");
+			bIsMoving = true;
+
+			if (moveX > 0)
+			{
+				// Moves right
+				
+			}
+			else if (moveX < 0)
+			{
+				// Moves left
+
+			}
 		}
 		else
 		{
-			//GLog->Log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA Movement INPUT: IDLE IDLE IDLE");
+			bIsMoving = false;
 		}
+
+
 	}
 }
 

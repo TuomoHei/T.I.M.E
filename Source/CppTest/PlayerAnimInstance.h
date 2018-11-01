@@ -18,10 +18,10 @@ protected:
 	//APawn * Player;
 
 	UPROPERTY(EditAnywhere)
-		class APlayer2D * PlayerClass;
+		class APlayer2D* PlayerClass;
 
 	UPROPERTY(EditAnywhere)
-		float direction;
+		USkeletalMeshComponent* skeletalMeshComp;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		bool bIsMoving;

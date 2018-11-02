@@ -1,7 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "Enemy2D.h"
-#include <functional>
 #include "Runtime/Engine/Classes/Components/BoxComponent.h"
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 #include "Runtime/CoreUObject/Public/UObject/ConstructorHelpers.h"
@@ -88,7 +87,6 @@ void AEnemy2D::Movement(float moveValue, float Deltatime)
 		{
 			bool side = direction.X > 0 ? true : false;
 			asdf(side);
-
 			ADemoGameBase::Debugger(676, (int)timer, FString("Destoyriewahgforönbkdrv"));
 		}
 	}

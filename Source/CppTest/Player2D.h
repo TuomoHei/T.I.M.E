@@ -18,8 +18,7 @@ protected:
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-	UFUNCTION(BlueprintCallable)
-		void PlayerDeath();
+	class AActor *item;
 
 
 
@@ -27,12 +26,16 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	APlayer2D();
-	bool bHoldingItem;
-	float attack;
+	UFUNCTION(BlueprintCallable)
+		void PlayerDeath();
 	void AttackEnemy(AActor *enemy);
 	void PickUp(AActor *targetObj);
 	void UnEquip();
+	APlayer2D();
+	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	
+	bool bHoldingItem;
+
 	///Values for pickups and attack ranges
 	UPROPERTY(EditAnywhere, Category = "Movement")
 		float moveRange;
@@ -40,7 +43,6 @@ public:
 		float moveSpeed;
 	UPROPERTY(EditAnywhere, Category = "Attack")
 		float pickUpRange;
-
 	UPROPERTY(EditAnywhere, Category = "Attack")
 		float attackTime;
 
@@ -48,14 +50,9 @@ public:
 
 	class ATestPlayerController *PC;
 
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	
 
-	UPROPERTY()
-		FVector MovementInput;
+	FVector MovementInput;
 
-private:
-
-	class AActor *item;
-
+	
 };

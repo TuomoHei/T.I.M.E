@@ -15,8 +15,6 @@ UPickupComponent::UPickupComponent()
 void UPickupComponent::BeginPlay()
 {
 	Super::BeginPlay();
-
-
 }
 
 
@@ -29,15 +27,8 @@ void UPickupComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 
 void UPickupComponent::Pickup(AActor *Player, FVector location, AActor *targetObj)
 {
-	EAttachmentRule *erule = new EAttachmentRule();
-	FAttachmentTransformRules* rules = new FAttachmentTransformRules(*erule, true);
-	rules->ScaleRule = EAttachmentRule::KeepWorld;
-	rules->LocationRule = EAttachmentRule::KeepWorld;
-	rules->RotationRule = EAttachmentRule::KeepWorld;
-
 	if (Player && targetObj)
 	{
-		targetObj->AttachToActor(Player, *rules);
 		CheckLocation(Player, location, targetObj);
 	}
 }
@@ -51,7 +42,15 @@ void UPickupComponent::DisEquip(AActor* targetObj)
 
 void UPickupComponent::CheckLocation(AActor *Player, FVector location, AActor *targetObj)
 {
-	FVector ParentPos = Player->GetActorTransform().GetLocation();
-	targetObj->SetActorLocation(ParentPos + FVector(0.0f, 0.5f, 0.0f) + location * 20.0f);
+	FAttachmentTransformRules a = FAttachmentTransformRules::FAttachmentTransformRules(EAttachmentRule::SnapToTarget, false);
+
+	a.ScaleRule = EAttachmentRule::KeepWorld;
+	a.RotationRule = EAttachmentRule::KeepWorld;
+
+	auto comp = location.X > 0 ? 
+	Player->GetComponentsByTag(UStaticMeshComponent::StaticClass(), FName("Right")) 
+	: Player->GetComponentsByTag(UStaticMeshComponent::StaticClass(), FName("Right"));
+
+	targetObj->AttachToComponent(Cast<USceneComponent>(comp.Last()), a);
 }
 

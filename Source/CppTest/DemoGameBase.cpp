@@ -23,7 +23,6 @@ ADemoGameBase::ADemoGameBase()
 	static ConstructorHelpers::FObjectFinder<UBlueprint> ItemBlueprint(TEXT("Class'/Game/Blueprints/BP_Enemy2D.BP_Enemy2D'"));
 	if (ItemBlueprint.Object) 
 	{
-		Debugger(2400, 0, FString("Found object"));
 		EnemyPrefab = (UClass*)ItemBlueprint.Object->GeneratedClass;
 	}
 }
@@ -43,11 +42,6 @@ void ADemoGameBase::StartPlay()
 		Debugger(5, 0, FString("Error on startingplay / Player "));
 		return;
 	}
-	else
-	{
-		Debugger(2, 0, FoundPlayers[0]->GetName());
-	}
-
 
 	for (TActorIterator<AActor> ActorItr(GetWorld()); ActorItr; ++ActorItr)
 	{
@@ -56,17 +50,6 @@ void ADemoGameBase::StartPlay()
 			EnemySpawns.Add(ActorItr->GetActorLocation());
 		}
 	}
-
-	Debugger(125, EnemySpawns.Num(), FString("AAA"));
-
-#pragma endregion
-
-	//Debug region here (remove when no longer needed)
-#pragma region DEBUG
-
-	//Debugger(3, FoundPlayers.Num(), FString("PlayerCount : "));
-	//Debugger(4, EnemySpawns.Num(), FString("Enemyspawn count : "));
-
 
 #pragma endregion
 

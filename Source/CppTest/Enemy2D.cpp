@@ -89,7 +89,6 @@ void AEnemy2D::Movement(float moveValue, float Deltatime)
 			bool side = direction.X > 0 ? true : false;
 			asdf(side);
 
-			//player.Last()->Destroy();
 			ADemoGameBase::Debugger(676, (int)timer, FString("Destoyriewahgforönbkdrv"));
 		}
 	}

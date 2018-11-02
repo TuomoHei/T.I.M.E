@@ -7,6 +7,8 @@
 #include "Enemy2D.h"
 #include "Runtime/Engine/Public/DrawDebugHelpers.h" //for debug
 #include "DemoGameBase.h"
+#include "Async.h"
+#include "TimerManager.h"
 
 
 void ATestPlayerController::BeginPlay()
@@ -36,8 +38,10 @@ void ATestPlayerController::Touched(ETouchIndex::Type FingerIndex, FVector locat
 		{
 			if (hit.GetActor()->ActorHasTag(FName("Enemy")))
 			{
-				RegPlayer2D->attack = RegPlayer2D->attackTime;
-				RegPlayer2D->AttackEnemy(hit.GetActor());
+				FTimerDelegate a = FTimerDelegate::CreateLambda([=](void) {ADemoGameBase::Debugger(0, 0, FString("Called")); RegPlayer2D->AttackEnemy(hit.GetActor());  });
+				FTimerHandle handle;
+				GetWorldTimerManager().SetTimer(handle,a, RegPlayer2D->attackTime, false);
+
 				return;
 			}
 

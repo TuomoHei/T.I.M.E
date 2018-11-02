@@ -10,22 +10,21 @@
  * 
  */
 
+static uint64 CurrentScore = 0ULL;
+static uint64 SessionHighScore = 0ULL;
+
 UCLASS()
 class CPPTEST_API UScoreManager : public UObject
 {
 	GENERATED_BODY()
 	
 public:
-	void AddPoints(int points);
-	void ResetCurrentScore();
-	uint64 GetSessionHighScore();
-	void EndSession();
+	UScoreManager() {}
+	~UScoreManager() {}
 
-private:
-	UScoreManager();
-	~UScoreManager();
-
-	uint64 CurrentScore;
-	uint64 SessionHighScore;
+	static void AddPoints(int points);
+	static void ResetCurrentScore();
+	static uint64 GetSessionHighScore();
+	static void EndSession();
 
 };

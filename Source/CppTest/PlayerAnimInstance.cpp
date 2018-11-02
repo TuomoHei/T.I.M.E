@@ -8,7 +8,6 @@
 #include "Player2D.h"
 #include "EngineUtils.h"
 #include <stdlib.h>	// Needed for rand
-#include "DemoGameBase.h"	// debugging
 
 void UPlayerAnimInstance::NativeInitializeAnimation()
 {

@@ -106,7 +106,7 @@ void UTimeManipulator::ActivateSlowmotion()
 
 	float realSlowDuration = slowSpeedDuration * slowGameSpeed;	// E.g. 2 seconds in 0.2 x game speed should actually last one fifth of 2 seconds
 
-	GetWorld()->GetTimerManager().SetTimer(SlowTimeHandle, this, &UTimeManipulator::DeactivateSlowmotionPermanent, realSlowDuration, false);
+	GetWorld()->GetTimerManager().SetTimer(SlowTimeHandle, this, &UTimeManipulator::DeactivateSlowmotion, realSlowDuration, false);
 
 	UE_LOG(LogTemp, Warning, TEXT("ActivateSlowmotion()"));
 }
@@ -122,7 +122,7 @@ void UTimeManipulator::DeactivateSlowmotion()
 	UE_LOG(LogTemp, Warning, TEXT("DeactivateSlowmotion()"));
 }
 
-// Deactivate slow motion until slowmo is called again manually
+// Deactivate slow motion until slowmo is called again manually	// Note: currently not used
 void UTimeManipulator::DeactivateSlowmotionPermanent()
 {
 	UGameplayStatics::SetGlobalTimeDilation(GetWorld(), defaultSpeed);

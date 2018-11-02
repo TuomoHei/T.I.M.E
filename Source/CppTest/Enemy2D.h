@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "GameFramework/Pawn.h"
 #include "Enemy2D.generated.h"
 
 UCLASS()

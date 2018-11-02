@@ -40,6 +40,8 @@ void UPickupComponent::DisEquip(AActor* targetObj)
 	targetObj->Destroy();
 }
 
+//Check the weapons location 
+//Note: removes the previous attachment
 void UPickupComponent::CheckLocation(AActor *Player, FVector location, AActor *targetObj)
 {
 	FAttachmentTransformRules a = FAttachmentTransformRules::FAttachmentTransformRules(EAttachmentRule::SnapToTarget, false);
@@ -47,7 +49,7 @@ void UPickupComponent::CheckLocation(AActor *Player, FVector location, AActor *t
 	a.ScaleRule = EAttachmentRule::KeepWorld;
 	a.RotationRule = EAttachmentRule::KeepWorld;
 
-	auto comp = location.X > 0 ? 
+	auto comp =  (Player->GetActorLocation() - location).X > 0 ? 
 	Player->GetComponentsByTag(UStaticMeshComponent::StaticClass(), FName("Right")) 
 	: Player->GetComponentsByTag(UStaticMeshComponent::StaticClass(), FName("Left"));
 

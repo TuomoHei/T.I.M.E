@@ -49,8 +49,9 @@ void UPickupComponent::CheckLocation(AActor *Player, FVector location, AActor *t
 
 	auto comp = location.X > 0 ? 
 	Player->GetComponentsByTag(UStaticMeshComponent::StaticClass(), FName("Right")) 
-	: Player->GetComponentsByTag(UStaticMeshComponent::StaticClass(), FName("Right"));
+	: Player->GetComponentsByTag(UStaticMeshComponent::StaticClass(), FName("Left"));
 
+	if(comp.Num() > 0)
 	targetObj->AttachToComponent(Cast<USceneComponent>(comp.Last()), a);
 }
 

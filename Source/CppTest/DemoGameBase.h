@@ -29,14 +29,11 @@ private:
 	int id;
 
 
-	UPROPERTY(EditAnywhere, Category = "EnemySpawn")
-		class AActor *enemy;
-	UPROPERTY(VisibleAnywhere, Category = "EnemySpawn")
-		float timer = 6;
-	UPROPERTY(VisibleAnywhere, Category = "EnemySpawn")
-		int32 enemyCount;
-	UPROPERTY(VisibleAnywhere, Category = "EnemySpawn")
-		TArray<FVector> EnemySpawns;
+	class AActor *enemy;
+	float timer = 6;
+	int32 enemyCount;
+	TArray<FVector> EnemySpawns;
+
 	UPROPERTY(EditAnywhere, Category = "EnemySpawn")
 		int32 Spawnrate = 5;
 

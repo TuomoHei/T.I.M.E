@@ -99,10 +99,9 @@ void ADemoGameBase::SpawnEnemy()
 	tempid.AppendInt(id);
 	tempid += FString("Enemy");
 	SpawnInfo.Name = FName(*tempid);
-	AEnemy2D *temp = GetWorld()->SpawnActor<AEnemy2D>(EnemyPrefab.Get(), FVector::ZeroVector, FRotator::ZeroRotator, SpawnInfo);
+	AEnemy2D *temp = GetWorld()->SpawnActor<AEnemy2D>(EnemyPrefab.Get(), FVector::ZeroVector, FRotator(0.0f,90.0f,0.0f), SpawnInfo);
 	temp->Tags.Add(FName("Enemy"));
 	temp->SetActorLocation(EnemySpawns[0]);
-	temp->SetActorRotation(FQuat(0.0f, 0.0f, 90.0f, 0.0f));
 	id++;
 }
 

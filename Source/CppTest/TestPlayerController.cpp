@@ -30,37 +30,39 @@ void ATestPlayerController::SetupInputComponent()
 void ATestPlayerController::Touched(ETouchIndex::Type FingerIndex, FVector location)
 {
 	FHitResult hit;
+	GetHitResultUnderFingerByChannel(FingerIndex, UEngineTypes::ConvertToTraceType(ECC_Visibility), true, hit);
 
+	ADemoGameBase::Debugger(272, 0, hit.GetActor()->GetName());
 
-	if (GetHitResultUnderFingerByChannel(FingerIndex, UEngineTypes::ConvertToTraceType(ECC_Camera), true, hit))
-	{
-		if ((hit.ImpactPoint - RegPlayer2D->GetActorLocation()).X <= RegPlayer2D->pickUpRange)
+		if (FMath::Abs((hit.ImpactPoint - RegPlayer2D->GetActorLocation()).X) <= RegPlayer2D->pickUpRange)
 		{
 			if (hit.GetActor()->ActorHasTag(FName("Enemy")))
 			{
 				FTimerDelegate a = FTimerDelegate::CreateLambda([=](void) {ADemoGameBase::Debugger(0, 0, FString("Called")); RegPlayer2D->AttackEnemy(hit.GetActor());  });
 				FTimerHandle handle;
-				GetWorldTimerManager().SetTimer(handle,a, RegPlayer2D->attackTime, false);
+				GetWorldTimerManager().SetTimer(handle, a, RegPlayer2D->attackTime, false);
+				DrawDebugPoint(GetWorld(), hit.ImpactPoint, 25, FColor(0, 255, 0), false, 1.0f);
 
-				return;
 			}
 
 			if (hit.GetActor()->ActorHasTag(FName("PickUp")))
 			{
 				RegPlayer2D->PickUp(hit.GetActor());
-				return;
 			}
 		}
 
-		if (FMath::Abs((hit.ImpactPoint - RegPlayer2D->GetActorLocation()).X) >= RegPlayer2D->moveRange) return;
-
+		if (FMath::Abs((hit.ImpactPoint - RegPlayer2D->GetActorLocation()).X) <= RegPlayer2D->moveRange)
+		{
 			FVector temp;
 
 			temp = hit.ImpactPoint;
 			HitPos = temp;
-			DrawDebugPoint(GetWorld(), hit.ImpactPoint, 20, FColor(255, 0, 0), false, 1.0f);
+			DrawDebugPoint(GetWorld(), hit.ImpactPoint, 10, FColor(255, 0, 0), false, 1.0f);
 			ADemoGameBase::Debugger(175, (int)HitPos.X, FString("Hitpoint X value"));
-	}
+
+		}
+
+	
 }
 
 void ATestPlayerController::RegisterPlayer2D(APlayer2D *actor)

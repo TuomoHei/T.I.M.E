@@ -24,23 +24,50 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-	UFUNCTION(BlueprintCallable, Category = "TimeManipulate")
-	void Action();
+//	UFUNCTION(BlueprintCallable, Category = "TimeManipulate")
+//	void Action();
+//
+//private:
+//
+//	UPROPERTY(EditAnyWhere)
+//		float BackSlowWait;
+//	float Speed;
+//	float OldSpeed;
+//	ATimeManager* pTimeManager;
+//
+//	FVector Position;
+//	FVector OldPosition;
+//	FTimerHandle TimeHandle;
+//	
+//private:
+//	void ChangeNormal();
+//	void ChangeSlow();
+//	void CangeForcedSlow();
 
-private:
+protected:
+	FTimerHandle SlowTimeHandle;
+	void ResetTimerHandle();
 
-	UPROPERTY(EditAnyWhere)
-		float BackSlowWait;
-	float Speed;
-	float OldSpeed;
-	ATimeManager* pTimeManager;
-
-	FVector Position;
-	FVector OldPosition;
-	FTimerHandle TimeHandle;
+	UFUNCTION()
+		void DeactivateSlowmotionPermanent();
 	
-private:
-	void ChangeNormal();
-	void ChangeSlow();
-	void CangeForcedSlow();
+public:
+
+	UPROPERTY(EditAnywhere, Category = "TimeDilation")
+		float slowGameSpeed = 0.2f;
+
+	UPROPERTY(EditAnywhere, Category = "TimeDilation")
+		float defaultSpeed = 1.0f;	// NOTE: this is just for debugging
+
+	UPROPERTY(EditAnywhere, Category = "TimeDilation")
+		float slowSpeedDuration = 2.0f;
+	
+	UPROPERTY(EditAnywhere, Category = "TimeDilation")
+		float defaultSpeedDuration = 0.2f;		
+
+	UFUNCTION()
+		void ActivateSlowmotion();		
+	
+	UFUNCTION()
+		void DeactivateSlowmotion();	
 };

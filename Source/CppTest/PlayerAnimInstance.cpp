@@ -77,7 +77,7 @@ void UPlayerAnimInstance::UpdateAnimationProperties()
 			bIsMoving = false;
 		}
 
-		// ** Attakcing **
+		// ** Attacking **
 
 		// ** Crouching ** 
 

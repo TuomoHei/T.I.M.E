@@ -3,6 +3,7 @@
 #pragma once
 
 #include "GameFramework/Pawn.h"
+#include "TimeManipulator.h"
 #include "Player2D.generated.h"
 
 
@@ -20,7 +21,11 @@ protected:
 	virtual void BeginPlay() override;
 	class AActor *item;
 
+private:
+	UPROPERTY(EditAnywhere)
+		UTimeManipulator* timeManager;
 
+	void GetTimeManipulator();
 
 public:
 	// Called every frame

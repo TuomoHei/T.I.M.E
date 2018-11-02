@@ -140,6 +140,8 @@ void UTimeManipulator::ResetTimerHandle()
 /*// USAGE EXAMPLE
 player.h
 
+void GetTimeManipulator();
+
 UPROPERTY(EditAnywhere)
 	UTimeManipulator* timeManager;
 

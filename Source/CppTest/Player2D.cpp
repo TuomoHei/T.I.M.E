@@ -36,6 +36,8 @@ void APlayer2D::BeginPlay()
 
 		PC->AttachToActor(this, FAttachmentTransformRules::KeepRelativeTransform);
 	}
+
+	GetTimeManipulator();
 }
 
 // Called every frame
@@ -119,6 +121,17 @@ void APlayer2D::AttackEnemy(AActor *enemy)
 		UnEquip();
 	}
 
+	timeManager->DeactivateSlowmotion();
+
 	enemy->Destroy();
+}
+
+void APlayer2D::GetTimeManipulator()
+{
+	timeManager = FindComponentByClass<UTimeManipulator>();
+	if (timeManager)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Time Manipulator found"));
+	}
 }
 

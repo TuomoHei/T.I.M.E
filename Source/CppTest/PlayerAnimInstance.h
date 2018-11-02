@@ -16,7 +16,7 @@ protected:
 
 	//APawn * Player;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY()
 		class APlayer2D* PlayerClass;
 
 	UPROPERTY(EditAnywhere)

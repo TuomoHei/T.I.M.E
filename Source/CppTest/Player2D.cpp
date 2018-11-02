@@ -2,11 +2,13 @@
 
 #include "Player2D.h"
 #include "TestPlayerController.h"
-#include "DemoGameBase.h"
-#include "Runtime/Engine/Classes/Components/BoxComponent.h"
-#include "Components/InputComponent.h"
-#include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 #include "PickUpComponent.h"
+#include "DemoGameBase.h"
+#include "Components/InputComponent.h"
+#include "Runtime/Engine/Classes/Components/BoxComponent.h"
+#include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
+
+
 
 APlayer2D::APlayer2D()
 {
@@ -41,7 +43,6 @@ void APlayer2D::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	attack -= DeltaTime;
 	FVector newLoc = GetActorLocation();
 	if (!PC)
 	{
@@ -49,7 +50,7 @@ void APlayer2D::Tick(float DeltaTime)
 		return;
 	}
 
-	if (FMath::Abs(PC->HitPos.X - GetActorLocation().X  ) < 20)
+	if (FMath::Abs(PC->HitPos.X - GetActorLocation().X) < 20)
 	{
 		MovementInput = FVector::ZeroVector;
 	}
@@ -57,7 +58,6 @@ void APlayer2D::Tick(float DeltaTime)
 	{
 		MovementInput = PC->HitPos - GetActorLocation();
 		MovementInput.Normalize();
-
 	}
 
 
@@ -99,7 +99,6 @@ void APlayer2D::PickUp(AActor *targetObj)
 	{
 		item = targetObj;
 		Cast<UPickupComponent>(targetObj->GetClass())->Pickup(this, MovementInput, item);
-		bHoldingItem = true;
 	}
 }
 
@@ -107,15 +106,19 @@ void APlayer2D::UnEquip()
 {
 	Cast<UPickupComponent>(item->GetClass())->DisEquip(item);
 	item = nullptr;
-	bHoldingItem = false;
 }
+
 
 void APlayer2D::AttackEnemy(AActor *enemy)
 {
-	if (bHoldingItem)
+
+	if (!enemy) return;
+
+	if (item)
 	{
 		UnEquip();
 	}
 
 	enemy->Destroy();
 }
+

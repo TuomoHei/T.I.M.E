@@ -7,6 +7,7 @@
 #include "Runtime/Core/Public/Math/Vector.h"
 #include "Player2D.h"
 #include "DemoGameBase.h"
+#include "ScoreManager.h"
 
 // Sets default values
 AEnemy2D::AEnemy2D()
@@ -99,5 +100,9 @@ void AEnemy2D::PlayerDeath()
 	ADemoGameBase::Debugger(10, 0, FString("Game stopped for enemy"));
 }
 
-
+void AEnemy2D::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	UScoreManager::AddPoints(100);
+	Super::EndPlay(EndPlayReason);
+}
 

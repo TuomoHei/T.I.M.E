@@ -77,6 +77,7 @@ void UPlayerAnimInstance::UpdateAnimationProperties()
 		}
 
 		// ** Attacking **
+		bIsAttacking = PlayerClass->bIsAttacking;
 
 		// ** Crouching ** 
 

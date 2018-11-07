@@ -121,8 +121,9 @@ void APlayer2D::AttackEnemy(AActor *enemy)
 		UnEquip();
 	}
 
-	timeManager->DeactivateSlowmotion();
+	timeManager->DeactivateSlowmotion();	
 
+	bIsAttacking = false;
 	enemy->Destroy();
 }
 

@@ -5,19 +5,19 @@
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 #include "Runtime/CoreUObject/Public/UObject/ConstructorHelpers.h"
 #include "Runtime/Core/Public/Math/Vector.h"
+#include "UObjectGlobals.h"
 #include "Player2D.h"
 #include "DemoGameBase.h"
+#include "ScoreManager.h"
 
 // Sets default values
 AEnemy2D::AEnemy2D()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
-	if (!RootComponent)
-	{
-		C_rootBox = CreateDefaultSubobject<UBoxComponent>(TEXT("EnemyRoot"));
-		RootComponent = C_rootBox;
-	}
+	C_rootBox = CreateDefaultSubobject<UBoxComponent>(TEXT("VITTUUU"));
+
+	RootComponent = C_rootBox;
 
 	state = CB_walking;
 }
@@ -87,7 +87,7 @@ void AEnemy2D::Movement(float moveValue, float Deltatime)
 		{
 			bool side = direction.X > 0 ? true : false;
 			asdf(side);
-			ADemoGameBase::Debugger(676, (int)timer, FString("Destoyriewahgforönbkdrv"));
+			ADemoGameBase::Debugger(676, (int)timer, FString("Destoyrnbkdrv"));
 		}
 	}
 }
@@ -99,5 +99,9 @@ void AEnemy2D::PlayerDeath()
 	ADemoGameBase::Debugger(10, 0, FString("Game stopped for enemy"));
 }
 
-
+void AEnemy2D::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	UScoreManager::AddPoints(100);
+	Super::EndPlay(EndPlayReason);
+}
 

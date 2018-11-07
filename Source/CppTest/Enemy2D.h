@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "GameFramework/Pawn.h"
 #include "Enemy2D.generated.h"
 
 UCLASS()
@@ -43,6 +44,9 @@ protected:
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	// Called when actor is removed
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
 	UPROPERTY(EditAnywhere, Category = "Movement")
 		float walkSpeed;

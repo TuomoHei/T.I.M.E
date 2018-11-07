@@ -28,19 +28,21 @@ public:
 	UFUNCTION(BlueprintImplementableEvent)
 		void asdf(bool leftside);
 
+	FVector direction;
+	void AssignWeapon(class AActor *weapon);
+
 protected:
 	enum CombatState
 	{
 		CB_walking, CB_fighting
 	};
 
-
+	class AActor *item;
 
 	class ATestPlayerController *controller;
 
 	TArray<AActor*> player;
 	CombatState state;
-	FVector direction;
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

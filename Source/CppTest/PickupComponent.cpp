@@ -14,6 +14,7 @@ UPickupComponent::UPickupComponent()
 // Called when the game starts
 void UPickupComponent::BeginPlay()
 {
+	*pickedUp = true;
 	Super::BeginPlay();
 }
 
@@ -27,7 +28,7 @@ void UPickupComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 
 void UPickupComponent::Pickup(AActor *Player, FVector location, AActor *targetObj)
 {
-	if (Player && targetObj)
+	if (Player && targetObj && !Cast<UPickupComponent>(targetObj->GetClass())->pickedUp)
 	{
 		CheckLocation(Player, location, targetObj);
 	}
@@ -37,7 +38,6 @@ void UPickupComponent::DisEquip(AActor* targetObj)
 {
 	targetObj->DetachRootComponentFromParent();
 
-	targetObj->Destroy();
 }
 
 //Check the weapons location 
@@ -49,11 +49,13 @@ void UPickupComponent::CheckLocation(AActor *Player, FVector location, AActor *t
 	a.ScaleRule = EAttachmentRule::KeepWorld;
 	a.RotationRule = EAttachmentRule::KeepWorld;
 
-	auto comp =  (Player->GetActorLocation() - location).X > 0 ? 
-	Player->GetComponentsByTag(UStaticMeshComponent::StaticClass(), FName("Right")) 
-	: Player->GetComponentsByTag(UStaticMeshComponent::StaticClass(), FName("Left"));
+	auto comp = (Player->GetActorLocation() - location).X > 0 ?
+		Player->GetComponentsByTag(UStaticMeshComponent::StaticClass(), FName("Right"))
+		: Player->GetComponentsByTag(UStaticMeshComponent::StaticClass(), FName("Left"));
 
-	if(comp.Num() > 0)
-	targetObj->AttachToComponent(Cast<USceneComponent>(comp.Last()), a);
+	if (comp.Num() > 0)
+	{
+		targetObj->AttachToComponent(Cast<USceneComponent>(comp.Last()), a);
+	}
 }
 

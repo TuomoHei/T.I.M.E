@@ -16,11 +16,16 @@ public:
 	static void Debugger(int level, int disp, FString message);
 	void OnPlayerDeath();
 	TSubclassOf<class AEnemy2D> EnemyPrefab;
+	TSubclassOf<class AItem> PickUpPrefab;
+
 
 private:
 
+	double diceRoll;
+	double cumulative;
 	ADemoGameBase();
 	void StartPlay() override;
+	bool ProbabilityChecker();
 	void CheckLevel();
 	void EndLevel();
 	void SpawnEnemy();
@@ -36,6 +41,8 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = "EnemySpawn")
 		int32 Spawnrate = 5;
+	UPROPERTY(EditAnywhere, Category = "EnemySpawn")
+		double weaponEnemyChance;
 
 	int32 currentLevelIndex;
 	class APlayerController *Controller;

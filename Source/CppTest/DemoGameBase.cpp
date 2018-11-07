@@ -7,8 +7,8 @@
 #include "Player2D.h"
 #include "TestPlayerController.h"
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
-#include <list>
-#include "Player2D.h"
+#include "PickupComponent.h"
+#include "Item.h"
 
 
 ADemoGameBase::ADemoGameBase()
@@ -20,10 +20,15 @@ ADemoGameBase::ADemoGameBase()
 	PlayerControllerClass = ATestPlayerController::StaticClass();
 
 
-	static ConstructorHelpers::FObjectFinder<UBlueprint> ItemBlueprint(TEXT("Class'/Game/Blueprints/BP_Enemy2D.BP_Enemy2D'"));
-	if (ItemBlueprint.Object) 
+	static ConstructorHelpers::FObjectFinder<UBlueprint> EnemyBlueprint(TEXT("Class'/Game/Blueprints/BP_Enemy2D.BP_Enemy2D'"));
+	if (EnemyBlueprint.Object) 
 	{
-		EnemyPrefab = (UClass*)ItemBlueprint.Object->GeneratedClass;
+		EnemyPrefab = (UClass*)EnemyBlueprint.Object->GeneratedClass;
+	}
+	static ConstructorHelpers::FObjectFinder<UBlueprint> ItemBlueprint(TEXT("Class'/Game/Blueprints/BP_Item2.BP_Item2'"));
+	if (ItemBlueprint.Object)
+	{
+		PickUpPrefab = (UClass*)ItemBlueprint.Object->GeneratedClass;
 	}
 }
 
@@ -94,12 +99,26 @@ void ADemoGameBase::SpawnEnemy()
 		return;
 	}
 
+
+
 	FActorSpawnParameters SpawnInfo;
 	FString tempid;
 	tempid.AppendInt(id);
 	tempid += FString("Enemy");
 	SpawnInfo.Name = FName(*tempid);
 	AEnemy2D *temp = GetWorld()->SpawnActor<AEnemy2D>(EnemyPrefab.Get(), FVector::ZeroVector, FRotator(0.0f,90.0f,0.0f), SpawnInfo);
+	
+	if (ProbabilityChecker())
+	{
+		FActorSpawnParameters wSpawnInfo;
+		tempid.Empty();
+		tempid.AppendInt(id);
+		tempid += FString("Weapon");
+		SpawnInfo.Name = FName(*tempid);
+		AItem *wTemp = GetWorld()->SpawnActor<AItem>(PickUpPrefab.Get(), FVector::ZeroVector,FRotator::ZeroRotator, SpawnInfo);
+		temp->AssignWeapon(wTemp);
+
+	}
 	temp->Tags.Add(FName("Enemy"));
 	temp->SetActorLocation(EnemySpawns[0]);
 	id++;
@@ -134,4 +153,21 @@ void ADemoGameBase::OnPlayerDeath()
 		AEnemy2D *enemy = Cast<AEnemy2D>(temp[i]);
 		enemy->PlayerDeath();
 	}
+}
+
+bool ADemoGameBase::ProbabilityChecker()
+{
+	cumulative = 0.0f;
+	diceRoll = (double)FMath::RandRange(0.0f, 100.0f);
+	for (int i = 0; i < 2; i++)
+	{
+		cumulative += weaponEnemyChance;
+
+		if (diceRoll < cumulative)
+		{
+			return true;
+		}
+	}
+
+	return false;
 }

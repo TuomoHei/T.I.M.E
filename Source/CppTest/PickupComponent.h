@@ -23,8 +23,8 @@ protected:
 	AActor* m_owner;
 	UPROPERTY(EditAnywhere, Category = "PickUp")
 		float HeightOffset;
-
 public:	
+	bool *pickedUp;
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 

@@ -119,7 +119,6 @@ void UTimeManipulator::DeactivateSlowmotion()
 	ResetTimerHandle();
 	GetWorld()->GetTimerManager().SetTimer(SlowTimeHandle, this, &UTimeManipulator::ActivateSlowmotion, defaultSpeedDuration, false);
 
-	UE_LOG(LogTemp, Warning, TEXT("DeactivateSlowmotion()"));
 }
 
 // Deactivate slow motion until slowmo is called again manually	// Note: currently not used
@@ -127,7 +126,6 @@ void UTimeManipulator::DeactivateSlowmotionPermanent()
 {
 	UGameplayStatics::SetGlobalTimeDilation(GetWorld(), defaultSpeed);
 
-	UE_LOG(LogTemp, Warning, TEXT("DeactivateSlowmotionPermanent()"));
 }
 
 void UTimeManipulator::ResetTimerHandle()

@@ -73,6 +73,7 @@ void APlayer2D::Tick(float DeltaTime)
 
 	if (MovementInput != FVector::ZeroVector)
 	{
+		timeManager->DeactivateSlowmotion();
 		if (item)
 			Cast<UPickupComponent>(item->GetClass())->CheckLocation(this, MovementInput.GetSafeNormal(), item);
 	}

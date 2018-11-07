@@ -8,6 +8,7 @@
 #include "UObjectGlobals.h"
 #include "Player2D.h"
 #include "DemoGameBase.h"
+#include "PickupComponent.h"
 #include "ScoreManager.h"
 
 // Sets default values
@@ -15,7 +16,7 @@ AEnemy2D::AEnemy2D()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
-	C_rootBox = CreateDefaultSubobject<UBoxComponent>(TEXT("VITTUUU"));
+	C_rootBox = CreateDefaultSubobject<UBoxComponent>(TEXT("Lers"));
 
 	RootComponent = C_rootBox;
 
@@ -52,7 +53,11 @@ void AEnemy2D::Movement(float moveValue, float Deltatime)
 
 	///Maxdistance can be adjusted in editor via blueprint
 
-	if (player.Num() <= 0) return;
+	if (player.Num() <= 0)
+	{
+		ADemoGameBase::Debugger(888, 0, FString("Didnt find player"));
+		return;
+	}
 
 	///----ADD overlapping prevention
 	FVector newLoc = GetActorLocation();
@@ -87,8 +92,15 @@ void AEnemy2D::Movement(float moveValue, float Deltatime)
 		{
 			bool side = direction.X > 0 ? true : false;
 			asdf(side);
+			direction = FVector::ZeroVector;
 			ADemoGameBase::Debugger(676, (int)timer, FString("Destoyrnbkdrv"));
 		}
+	}
+
+	if (direction != FVector::ZeroVector)
+	{
+		if (item)
+			Cast<UPickupComponent>(item->GetClass())->CheckLocation(this, direction.GetSafeNormal(), item);
 	}
 }
 
@@ -101,7 +113,18 @@ void AEnemy2D::PlayerDeath()
 
 void AEnemy2D::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
+	Cast<UPickupComponent>(item->GetClass())->DisEquip(item);
 	UScoreManager::AddPoints(100);
 	Super::EndPlay(EndPlayReason);
+}
+
+void AEnemy2D::AssignWeapon(AActor *weapon)
+{
+	if (!item)
+	{
+		item = weapon;
+		Cast<UPickupComponent>(item->GetClass())->CheckLocation(this, direction.GetSafeNormal(), item);
+	}
+
 }
 

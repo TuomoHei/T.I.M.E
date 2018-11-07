@@ -29,40 +29,47 @@ void ATestPlayerController::SetupInputComponent()
 
 void ATestPlayerController::Touched(ETouchIndex::Type FingerIndex, FVector location)
 {
-	FHitResult hit;
-	GetHitResultUnderFingerByChannel(FingerIndex, UEngineTypes::ConvertToTraceType(ECC_Visibility), true, hit);
+	FHitResult *hit = new FHitResult();
+	GetHitResultUnderFingerByChannel(FingerIndex, UEngineTypes::ConvertToTraceType(ECC_Visibility), true, *hit);
 
-	ADemoGameBase::Debugger(272, 0, hit.GetActor()->GetName());
+	if (!hit) return;
 
-		if (FMath::Abs((hit.ImpactPoint - RegPlayer2D->GetActorLocation()).X) <= RegPlayer2D->pickUpRange)
+
+		if (FMath::Abs((hit->ImpactPoint - RegPlayer2D->GetActorLocation()).X) <= RegPlayer2D->pickUpRange)
 		{
-			if (hit.GetActor()->ActorHasTag(FName("Enemy")))
+			if (hit->GetActor()->ActorHasTag(FName("Enemy")))
 			{
-				FTimerDelegate a = FTimerDelegate::CreateLambda([=](void) {ADemoGameBase::Debugger(0, 0, FString("Called")); RegPlayer2D->AttackEnemy(hit.GetActor());  });
+				///Delegate for the timer (Attacktime can be assigned via player BP
+				FTimerDelegate a = FTimerDelegate::CreateLambda([=](void) 
+				{
+					ADemoGameBase::Debugger(0, 0, FString("Called"));
+					RegPlayer2D->AttackEnemy(hit->GetActor());  
+				});
+
 				FTimerHandle handle;
 				GetWorldTimerManager().SetTimer(handle, a, RegPlayer2D->attackTime, false);
 				RegPlayer2D->bIsAttacking = true;
-				DrawDebugPoint(GetWorld(), hit.ImpactPoint, 25, FColor(0, 255, 0), false, 1.0f);
+				DrawDebugPoint(GetWorld(), hit->ImpactPoint, 25, FColor(0, 255, 0), false, 1.0f);
+
 
 			}
 
-			if (hit.GetActor()->ActorHasTag(FName("PickUp")))
+			if (hit->GetActor()->ActorHasTag(FName("PickUp")))
 			{
-				RegPlayer2D->PickUp(hit.GetActor());
+				RegPlayer2D->PickUp(hit->GetActor());
 			}
 		}
 
-		if (FMath::Abs((hit.ImpactPoint - RegPlayer2D->GetActorLocation()).X) <= RegPlayer2D->moveRange)
+		if (FMath::Abs((hit->ImpactPoint - RegPlayer2D->GetActorLocation()).X) <= RegPlayer2D->moveRange)
 		{
-			FVector temp;
 
-			temp = hit.ImpactPoint;
+			FVector temp;
+			temp = hit->ImpactPoint;
 			HitPos = temp;
-			DrawDebugPoint(GetWorld(), hit.ImpactPoint, 10, FColor(255, 0, 0), false, 1.0f);
+			DrawDebugPoint(GetWorld(), hit->ImpactPoint, 10, FColor(255, 0, 0), false, 1.0f);
 			ADemoGameBase::Debugger(175, (int)HitPos.X, FString("Hitpoint X value"));
 
 		}
-
 	
 }
 

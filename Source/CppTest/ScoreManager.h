@@ -2,9 +2,8 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
-#include "UObject/NoExportTypes.h"
-#include "Runtime/Engine/Public/Tickable.h"
+//#include "CoreMinimal.h"
+//#include "UObject/NoExportTypes.h"
 #include "ScoreManager.generated.h"
 
 /**
@@ -16,7 +15,7 @@ static uint64 SessionHighScore = 0ULL;
 static float MultiplierTimer;
 static const float MultiplierTimerAddition = 5.0f;
 static int ScoreMultiplier;
-static bool IsPaused;
+static bool bIsPaused;
 
 UCLASS()
 class CPPTEST_API UScoreManager : public UObject, public FTickableGameObject
@@ -27,14 +26,17 @@ public:
 	UScoreManager();
 	~UScoreManager() {}
 
-	void Tick(float DeltaTime) override;
-	bool IsTickableInEditor() const override;
-	bool IsTickableWhenPaused() const override;
-	TStatId GetStatId() const override;
-
+	static bool Paused();
+	static bool Paused(bool bPaused);
 	static void AddPoints(int points);
 	static void ResetCurrentScore();
 	static uint64 GetSessionHighScore();
 	static void EndSession();
+
+private:
+	void Tick(float DeltaTime) override;
+	//bool IsTickableInEditor() const override;
+	//bool IsTickableWhenPaused() const override;
+	TStatId GetStatId() const override;
 
 };

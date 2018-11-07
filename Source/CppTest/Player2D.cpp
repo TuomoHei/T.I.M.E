@@ -73,6 +73,7 @@ void APlayer2D::Tick(float DeltaTime)
 
 	if (MovementInput != FVector::ZeroVector)
 	{
+		timeManager->DeactivateSlowmotion();
 		if (item)
 			Cast<UPickupComponent>(item->GetClass())->CheckLocation(this, MovementInput.GetSafeNormal(), item);
 	}
@@ -121,8 +122,9 @@ void APlayer2D::AttackEnemy(AActor *enemy)
 		UnEquip();
 	}
 
-	timeManager->DeactivateSlowmotion();
+	timeManager->DeactivateSlowmotion();	
 
+	bIsAttacking = false;
 	enemy->Destroy();
 }
 

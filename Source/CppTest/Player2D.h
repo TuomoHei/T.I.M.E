@@ -40,6 +40,8 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	
 	bool bHoldingItem;
+	UPROPERTY(VisibleAnywhere)
+	bool bIsAttacking;
 
 	///Values for pickups and attack ranges
 	UPROPERTY(EditAnywhere, Category = "Movement")

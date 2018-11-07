@@ -3,17 +3,29 @@
 #include "ScoreManager.h"
 #include <EngineGlobals.h>
 #include <Runtime/Engine/Classes/Engine/Engine.h>
+#include "Runtime/Engine/Public/Tickable.h"
 
 UScoreManager::UScoreManager()
 {
 	MultiplierTimer = 0.0f;
 	ScoreMultiplier = 1;
-	IsPaused = false;
+	bIsPaused = false;
+}
+
+bool UScoreManager::Paused()
+{
+	return bIsPaused;
+}
+
+bool UScoreManager::Paused(bool bPaused)
+{
+	bIsPaused = bPaused;
+	return bIsPaused;
 }
 
 void UScoreManager::Tick(float DeltaTime)
 {
-	if (!IsPaused && MultiplierTimer > 0.0f)
+	if (!bIsPaused && MultiplierTimer > 0.0f)
 	{
 		MultiplierTimer -= DeltaTime;
 
@@ -35,15 +47,18 @@ void UScoreManager::Tick(float DeltaTime)
 	GEngine->AddOnScreenDebugMessage(1337, 5.0f, FColor::White, FString::Printf(TEXT("Current time: %f"), MultiplierTimer));
 }
 
-bool UScoreManager::IsTickableInEditor() const
-{
-	return false;
-}
+//IsTickableWhenPaused doesn't work,
+//so no need to implement it
 
-bool UScoreManager::IsTickableWhenPaused() const
-{
-	return false;
-}
+//bool UScoreManager::IsTickableInEditor() const
+//{
+//	return false;
+//}
+
+//bool UScoreManager::IsTickableWhenPaused() const
+//{
+//	return false;
+//}
 
 TStatId UScoreManager::GetStatId() const
 {

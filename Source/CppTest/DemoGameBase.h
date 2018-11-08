@@ -6,7 +6,6 @@
 #include "DemoGameBase.generated.h"
 
 
-
 UCLASS()
 class CPPTEST_API ADemoGameBase : public AGameModeBase
 {
@@ -17,8 +16,7 @@ public:
 	void OnPlayerDeath();
 	TSubclassOf<class AEnemy2D> EnemyPrefab;
 	TSubclassOf<class AItem> PickUpPrefab;
-
-
+	
 private:
 
 	double diceRoll;
@@ -46,4 +44,6 @@ private:
 
 	int32 currentLevelIndex;
 	class APlayerController *Controller;
+
+	
 };

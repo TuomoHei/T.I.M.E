@@ -14,7 +14,7 @@
 ADemoGameBase::ADemoGameBase()
 {
 	PrimaryActorTick.bCanEverTick = true;
-	timer = timerValue;
+	timer = (float)Spawnrate; //timer = timerValue;
 	id = 0;
 
 	PlayerControllerClass = ATestPlayerController::StaticClass();
@@ -75,7 +75,7 @@ void ADemoGameBase::CheckLevel()
 void ADemoGameBase::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
-	timer -= DeltaSeconds;
+	timer -= DeltaSeconds*5;
 
 	///Debugger(30, timer, FString("SpawnTimer :"));
 
@@ -117,10 +117,12 @@ void ADemoGameBase::SpawnEnemy()
 		SpawnInfo.Name = FName(*tempid);
 		AItem *wTemp = GetWorld()->SpawnActor<AItem>(PickUpPrefab.Get(), FVector::ZeroVector,FRotator::ZeroRotator, SpawnInfo);
 		temp->AssignWeapon(wTemp);
-
+		
 	}
 	temp->Tags.Add(FName("Enemy"));
-	temp->SetActorLocation(EnemySpawns[0]);
+	int32 spawnPoint = rand() % (EnemySpawns.Num());
+	UE_LOG(LogTemp, Warning, TEXT("Spawn point chosen %d"), spawnPoint);
+	temp->SetActorLocation(EnemySpawns[spawnPoint]);
 	id++;
 }
 
@@ -171,3 +173,22 @@ bool ADemoGameBase::ProbabilityChecker()
 
 	return false;
 }
+
+//FVector ADemoGameBase::RandomizeSpawnPoint()
+//{
+//	EnemySpawns.Num()
+//
+//	int dice = rand() % 2;
+//	//FVector spawnLoc;
+//
+//	//if (dice == 0)
+//	//{
+//	//	spawnLoc = leftSpawnPoint;
+//	//}
+//	//else
+//	//{
+//	//	spawnLoc = rightSpawnPoint;
+//	//}
+//
+//	return spawnLoc;
+//}

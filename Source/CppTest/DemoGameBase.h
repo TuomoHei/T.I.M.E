@@ -3,6 +3,8 @@
 #pragma once
 
 #include "GameFramework/GameModeBase.h"
+#include "Enemy2D.h"
+#include "Player2D.h"
 #include "DemoGameBase.generated.h"
 
 
@@ -45,5 +47,9 @@ private:
 	int32 currentLevelIndex;
 	class APlayerController *Controller;
 
-	
+	UPROPERTY()
+		TArray<AEnemy2D*> enemies;
+
+	UPROPERTY()
+		APlayer2D* Player;
 };

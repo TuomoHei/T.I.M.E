@@ -64,6 +64,19 @@ void ADemoGameBase::StartPlay()
 
 	Controller->SetInputMode(Inputmode);
 	currentLevelIndex++;
+
+	// Find player
+	UWorld* GameWorld = this->GetWorld();
+	for (TActorIterator<APlayer2D> Itr(GameWorld); Itr; ++Itr)
+	{
+		// Filter out objects not contained in the target world.
+		if (Itr->GetWorld() != GameWorld)
+		{
+			continue;
+		}
+
+		Player = *Itr;
+	}
 }
 
 void ADemoGameBase::CheckLevel()
@@ -85,6 +98,43 @@ void ADemoGameBase::Tick(float DeltaSeconds)
 		{
 			SpawnEnemy();
 			timer = timerValue;
+		}
+	}
+
+	int32 enemyCount = enemies.Num();
+	float playerPosX = Player->GetActorLocation().X;
+
+	for (int32 i = 0; i < enemyCount; i++)
+	{
+		float enemyPosX = enemies[i]->GetActorLocation().X;
+		//UE_LOG(LogTemp, Warning, TEXT("LOcATIION:  %f"), enemyLoc);
+		bool bShouldwait = false;
+
+		for (int32 j = 0; j < enemyCount; j++)
+		{
+			float otherEnemyPosX = enemies[j]->GetActorLocation().X;
+
+			// if not comparing to self
+			if (otherEnemyPosX != enemyPosX)
+			{
+				// if both are on same side of player and
+				if ((enemyPosX > playerPosX && otherEnemyPosX > playerPosX) || (enemyPosX < playerPosX && otherEnemyPosX < playerPosX))
+				{
+					// if enemy is further to player than other enemy (we do not need to stop enemy that is in front of compared enemy)
+					if (FMath::Abs((playerPosX - enemyPosX)) > FMath::Abs((playerPosX - otherEnemyPosX)))
+					{
+						// if valid enemies are less than 60cm apart 
+						if (FMath::Abs(otherEnemyPosX - enemyPosX) < 60)
+						{
+							bShouldwait = true;
+							//UE_LOG(LogTemp, Warning, TEXT("Waiting...."));
+							//break;
+						}
+					}
+				}
+			}
+
+			enemies[i]->bIsWaiting = bShouldwait;
 		}
 	}
 }
@@ -123,6 +173,7 @@ void ADemoGameBase::SpawnEnemy()
 	int32 spawnPoint = rand() % (EnemySpawns.Num());
 	UE_LOG(LogTemp, Warning, TEXT("Spawn point chosen %d"), spawnPoint);
 	temp->SetActorLocation(EnemySpawns[spawnPoint]);
+	enemies.Add(temp);
 	id++;
 }
 

@@ -31,6 +31,9 @@ public:
 	FVector direction;
 	void AssignWeapon(class AActor *weapon);
 
+	UPROPERTY()
+		bool bIsWaiting = false;
+
 protected:
 	enum CombatState
 	{

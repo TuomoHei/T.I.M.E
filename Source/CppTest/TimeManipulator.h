@@ -70,4 +70,11 @@ public:
 	
 	UFUNCTION()
 		void DeactivateSlowmotion();	
+
+	UFUNCTION(BlueprintCallable, Category = "TimeManager")
+		bool GetSlow() { return bIsSlow; }
+
+private:
+	bool bIsSlow;
+
 };

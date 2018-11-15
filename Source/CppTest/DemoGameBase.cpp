@@ -173,22 +173,3 @@ bool ADemoGameBase::ProbabilityChecker()
 
 	return false;
 }
-
-//FVector ADemoGameBase::RandomizeSpawnPoint()
-//{
-//	EnemySpawns.Num()
-//
-//	int dice = rand() % 2;
-//	//FVector spawnLoc;
-//
-//	//if (dice == 0)
-//	//{
-//	//	spawnLoc = leftSpawnPoint;
-//	//}
-//	//else
-//	//{
-//	//	spawnLoc = rightSpawnPoint;
-//	//}
-//
-//	return spawnLoc;
-//}

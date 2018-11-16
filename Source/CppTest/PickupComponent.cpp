@@ -3,6 +3,7 @@
 #include "PickupComponent.h"
 #include "TestPlayerController.h"
 #include "DemoGameBase.h"
+#include "Item.h"
 
 // Sets default values for this component's properties
 UPickupComponent::UPickupComponent()
@@ -45,8 +46,12 @@ void UPickupComponent::CheckLocation(AActor *Player, FVector location, AActor *t
 {
 	FAttachmentTransformRules a = FAttachmentTransformRules::FAttachmentTransformRules(EAttachmentRule::SnapToTarget, false);
 
+	AItem *offset = Cast<AItem>(targetObj);
+
 	a.ScaleRule = EAttachmentRule::KeepWorld;
 	a.RotationRule = EAttachmentRule::KeepWorld;
+	//a.LocationRule = EAttachmentRule::SnapToTarget;
+
 
 	auto comp = (Player->GetActorLocation() - location).X > 0 ?
 		Player->GetComponentsByTag(UStaticMeshComponent::StaticClass(), FName("Right"))
@@ -55,6 +60,12 @@ void UPickupComponent::CheckLocation(AActor *Player, FVector location, AActor *t
 	if (comp.Num() > 0)
 	{
 		targetObj->AttachToComponent(Cast<USceneComponent>(comp.Last()), a);
+	}
+
+	if (offset != nullptr)
+	{
+		targetObj->SetActorRelativeLocation(offset->ItemOffset.GetLocation());
+		targetObj->SetActorRelativeRotation(offset->ItemOffset.GetRotation());
 	}
 }
 

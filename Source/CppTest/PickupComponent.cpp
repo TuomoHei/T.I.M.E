@@ -28,16 +28,15 @@ void UPickupComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 
 void UPickupComponent::Pickup(AActor *Player, FVector location, AActor *targetObj)
 {
-	if (Player && targetObj )
-	{
+	if (Player && targetObj)	{
 		CheckLocation(Player, location, targetObj);
 	}
 }
 
 void UPickupComponent::DisEquip(AActor* targetObj)
 {
-	targetObj->DetachRootComponentFromParent();
-
+	FDetachmentTransformRules a(FDetachmentTransformRules::KeepWorldTransform); 
+	targetObj->DetachFromActor(a);
 }
 
 //Check the weapons location 

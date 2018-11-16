@@ -11,23 +11,31 @@ class CPPTEST_API AItem : public APawn
 	GENERATED_BODY()
 
 public:
-	// Sets default values for this pawn's properties
+
 	AItem();
+	UFUNCTION(BlueprintCallable)
+	void Physics(float deltatime);
+	UFUNCTION(BlueprintCallable)
+		void Bounce(float deltatime);
 
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
-	// Default transform offset position when picked up
+	///Calls blueprint function attack
+	UFUNCTION(BlueprintImplementableEvent)
+		void UseWeapon();
 	UPROPERTY(EditAnywhere, Category="Variables")
 		FTransform ItemOffset;
+
+protected:
+
+	UPROPERTY(BlueprintReadWrite)
+		float shoottime;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ranged")
+		float firerate;
+	UPROPERTY(EditAnywhere, Category = "CustomPhysics")
+		float weight;
+	UPROPERTY(EditAnywhere, Category = "CustomPhysics")
+		float groundLevel;
+
+	// Default transform offset position when picked up
 
 	FTransform GetOffset() { return ItemOffset; }
 };

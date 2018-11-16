@@ -3,11 +3,10 @@
 #include "TestPlayerController.h"
 #include "Runtime/Engine/Classes/Engine/LocalPlayer.h"
 #include "Player2D.h"
-#include "PickupComponent.h"
 #include "Enemy2D.h"
 #include "Runtime/Engine/Public/DrawDebugHelpers.h" //for debug
 #include "DemoGameBase.h"
-#include "Async.h"
+#include "Item.h"
 #include "TimerManager.h"
 
 
@@ -39,7 +38,12 @@ void ATestPlayerController::Touched(ETouchIndex::Type FingerIndex, FVector locat
 		{
 			if (hit->GetActor()->ActorHasTag(FName("Enemy")))
 			{
-				FTimerDelegate a = FTimerDelegate::CreateLambda([=](void) {ADemoGameBase::Debugger(0, 0, FString("Called")); RegPlayer2D->AttackEnemy(hit->GetActor()); });
+				///Delegate for the timer (Attacktime can be assigned via player BP
+				FTimerDelegate a = FTimerDelegate::CreateLambda([=](void) 
+				{
+					RegPlayer2D->AttackEnemy(hit->GetActor());  
+				});		
+				
 				FTimerHandle handle;
 				GetWorldTimerManager().SetTimer(handle, a, RegPlayer2D->attackTime, false);
 				DrawDebugPoint(GetWorld(), hit->ImpactPoint, 25, FColor(0, 255, 0), false, 1.0f);
@@ -48,19 +52,15 @@ void ATestPlayerController::Touched(ETouchIndex::Type FingerIndex, FVector locat
 
 			if (hit->GetActor()->ActorHasTag(FName("PickUp")))
 			{
+				if(!hit->GetActor()->GetAttachParentActor())
 				RegPlayer2D->PickUp(hit->GetActor());
 			}
 		}
 
 		if (FMath::Abs((hit->ImpactPoint - RegPlayer2D->GetActorLocation()).X) <= RegPlayer2D->moveRange)
 		{
-			FVector temp;
-
-			temp = hit->ImpactPoint;
-			HitPos = temp;
+			HitPos = hit->ImpactPoint;
 			DrawDebugPoint(GetWorld(), hit->ImpactPoint, 10, FColor(255, 0, 0), false, 1.0f);
-			ADemoGameBase::Debugger(175, (int)HitPos.X, FString("Hitpoint X value"));
-
 		}
 
 	

@@ -7,7 +7,7 @@
 #include "PickupComponent.generated.h"
 
 
-UCLASS( )
+UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class CPPTEST_API UPickupComponent : public UActorComponent
 {
 	GENERATED_BODY()
@@ -15,16 +15,6 @@ class CPPTEST_API UPickupComponent : public UActorComponent
 public:	
 	// Sets default values for this component's properties
 	UPickupComponent();
-
-protected:
-	// Called when the game starts
-	virtual void BeginPlay() override;
-
-	AActor* m_owner;
-	UPROPERTY(EditAnywhere, Category = "PickUp")
-		float HeightOffset;
-public:	
-	bool *pickedUp;
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
@@ -37,5 +27,12 @@ public:
 
 	void CheckLocation(AActor *Player, FVector loc,AActor *target);
 
-	
+protected:
+	// Called when the game starts
+	virtual void BeginPlay() override;
+
+	AActor* m_owner;
+	UPROPERTY(EditAnywhere, Category = "PickUp")
+		float HeightOffset;
+
 };

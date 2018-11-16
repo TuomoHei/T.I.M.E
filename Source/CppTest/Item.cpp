@@ -1,31 +1,30 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "Item.h"
+#include "DemoGameBase.h"
 
+///most of the implementation and behaviour is set in blueprints
 
-// Sets default values
 AItem::AItem()
 {
- 	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
 	Tags.Add("PickUp");
 }
 
-// Called when the game starts or when spawned
-void AItem::BeginPlay()
+void AItem::Physics(float deltatime)
 {
-	Super::BeginPlay();
+	if (GetActorLocation().Z >= groundLevel)
+	{
+		FVector location = GetActorLocation();
+		location.Z -= 9.81 * deltatime * weight;
+		SetActorLocation(location);
+	}
 }
 
-// Called every frame
-void AItem::Tick(float DeltaTime)
+void AItem::Bounce(float deltatime)
 {
-	Super::Tick(DeltaTime);
+	FVector location = GetActorLocation();
+	location.Z += 9.81 * deltatime;
 }
 
-// Called to bind functionality to input
-void AItem::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
-{
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
-}
+
 

@@ -3,6 +3,7 @@
 #include "PickupComponent.h"
 #include "TestPlayerController.h"
 #include "DemoGameBase.h"
+#include "Item.h"
 
 // Sets default values for this component's properties
 UPickupComponent::UPickupComponent()
@@ -14,7 +15,6 @@ UPickupComponent::UPickupComponent()
 // Called when the game starts
 void UPickupComponent::BeginPlay()
 {
-	*pickedUp = true;
 	Super::BeginPlay();
 }
 
@@ -28,7 +28,7 @@ void UPickupComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 
 void UPickupComponent::Pickup(AActor *Player, FVector location, AActor *targetObj)
 {
-	if (Player && targetObj && !Cast<UPickupComponent>(targetObj->GetClass())->pickedUp)
+	if (Player && targetObj)
 	{
 		CheckLocation(Player, location, targetObj);
 	}
@@ -36,8 +36,8 @@ void UPickupComponent::Pickup(AActor *Player, FVector location, AActor *targetOb
 
 void UPickupComponent::DisEquip(AActor* targetObj)
 {
-	targetObj->DetachRootComponentFromParent();
-
+	FDetachmentTransformRules a(FDetachmentTransformRules::KeepWorldTransform); 
+	targetObj->DetachFromActor(a);
 }
 
 //Check the weapons location 

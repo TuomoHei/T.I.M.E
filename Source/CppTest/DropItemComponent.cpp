@@ -16,9 +16,6 @@ UDropItemComponent::UDropItemComponent()
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
 	
-	// Entry Item blueprints 
-	static ConstructorHelpers::FObjectFinder<UClass> FoundItemBP(TEXT("/Game/Blueprints/Weapon_BP.Weapon_BP_C"));
-	ItemBP = FoundItemBP.Object;
 }
 
 

@@ -16,20 +16,35 @@ ADemoGameBase::ADemoGameBase()
 	PrimaryActorTick.bCanEverTick = true;
 	timer = timerValue;
 	id = 0;
-
 	PlayerControllerClass = ATestPlayerController::StaticClass();
+}
 
 
-	static ConstructorHelpers::FObjectFinder<UBlueprint> EnemyBlueprint(TEXT("Class'/Game/Blueprints/BP_Enemy2D.BP_Enemy2D'"));
-	if (EnemyBlueprint.Object) 
+
+
+void ADemoGameBase::LoadEnemies()
+{
+	static ConstructorHelpers::FObjectFinder<UClass> UnarmedEnemyBlueprint(TEXT("Class'/Game/Blueprints/BP_UnarmedEnemy.BP_UnarmedEnemy_C'"));
+	if (UnarmedEnemyBlueprint.Object)
 	{
-		EnemyPrefab = (UClass*)EnemyBlueprint.Object->GeneratedClass;
+		EnemyPrefabs[0] = (UnarmedEnemyBlueprint.Object);
+
 	}
-	static ConstructorHelpers::FObjectFinder<UBlueprint> ItemBlueprint(TEXT("Class'/Game/Blueprints/BP_Item2.BP_Item2'"));
-	if (ItemBlueprint.Object)
+
+	static ConstructorHelpers::FObjectFinder<UClass> MeleeEnemyBlueprint(TEXT("Class'/Game/Blueprints/BP_MeleeEnemy.BP_MeleeEnemy_C'"));
+	if (MeleeEnemyBlueprint.Object)
 	{
-		PickUpPrefab = (UClass*)ItemBlueprint.Object->GeneratedClass;
+		EnemyPrefabs[1] = (MeleeEnemyBlueprint.Object);
+
 	}
+
+	static ConstructorHelpers::FObjectFinder<UClass> RangedEnemyBlueprint(TEXT("Class'/Game/Blueprints/BP_RangedEnemy.BP_RangedEnemy_C'"));
+	if (RangedEnemyBlueprint.Object)
+	{
+		EnemyPrefabs[2]= (RangedEnemyBlueprint.Object);
+
+	}
+
 }
 
 void ADemoGameBase::StartPlay()
@@ -71,13 +86,10 @@ void ADemoGameBase::CheckLevel()
 	FString CurrentLevelName = GetWorld()->GetMapName();
 }
 
-
 void ADemoGameBase::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
 	timer -= DeltaSeconds;
-
-	///Debugger(30, timer, FString("SpawnTimer :"));
 
 	if (EnemySpawns.Num() > 0)
 	{
@@ -91,37 +103,15 @@ void ADemoGameBase::Tick(float DeltaSeconds)
 
 void ADemoGameBase::SpawnEnemy()
 {
-	if (id >= 1000) id = 0;
-
-	if (!EnemyPrefab)
-	{
-		Debugger(1000, 0, FString("Disabled enemy spawning"));
-		return;
-	}
-
-
+	id = Increment(id);
 
 	FActorSpawnParameters SpawnInfo;
-	FString tempid;
-	tempid.AppendInt(id);
-	tempid += FString("Enemy");
-	SpawnInfo.Name = FName(*tempid);
-	AEnemy2D *temp = GetWorld()->SpawnActor<AEnemy2D>(EnemyPrefab.Get(), FVector::ZeroVector, FRotator(0.0f,90.0f,0.0f), SpawnInfo);
-	
-	if (ProbabilityChecker())
-	{
-		FActorSpawnParameters wSpawnInfo;
-		tempid.Empty();
-		tempid.AppendInt(id);
-		tempid += FString("Weapon");
-		SpawnInfo.Name = FName(*tempid);
-		AItem *wTemp = GetWorld()->SpawnActor<AItem>(PickUpPrefab.Get(), FVector::ZeroVector,FRotator::ZeroRotator, SpawnInfo);
-		temp->AssignWeapon(wTemp);
-
-	}
-	temp->Tags.Add(FName("Enemy"));
-	temp->SetActorLocation(EnemySpawns[0]);
-	id++;
+	SpawnInfo.Name = FName(*Entityname(FString("Enemy"), id));
+	UClass *a = EnemyFetcher();
+	a->Rename(*Entityname(FString("Enemy"), id));
+	AEnemy2D *b =  GetWorld()->SpawnActor<AEnemy2D>(a, FVector::ZeroVector, FRotator(0.0f, 90.0f, 0.0f), SpawnInfo);
+	b->Tags.Add("Enemy");
+	b->Rename(*Entityname(FString("Enemy"),id));
 }
 
 void ADemoGameBase::EndLevel()
@@ -130,7 +120,10 @@ void ADemoGameBase::EndLevel()
 	FName LevelToLoad = FName(*LevelString);
 }
 
-//debugger which includes GEngine : Level is priority of message, disp is a value that you need to be displayed
+/*debugger which includes GEngine
+@param Level is priority of message,
+@param disp is a value that you need to be displayed
+*/
 void ADemoGameBase::Debugger(int level = 0, int disp = 0, FString message = " ")
 {
 	FString temp;
@@ -146,7 +139,7 @@ void ADemoGameBase::OnPlayerDeath()
 {
 	TArray<AActor*> temp;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AEnemy2D::StaticClass(), temp);
-	
+
 	int i = 0;
 	for (int i = 0; i < temp.Num(); i++)
 	{
@@ -155,19 +148,20 @@ void ADemoGameBase::OnPlayerDeath()
 	}
 }
 
-bool ADemoGameBase::ProbabilityChecker()
+//Enemy prefab picker
+UClass *ADemoGameBase::EnemyFetcher()
 {
 	cumulative = 0.0f;
-	diceRoll = (double)FMath::RandRange(0.0f, 100.0f);
-	for (int i = 0; i < 2; i++)
+	diceRoll = FMath::RandRange(0.0f, 100.0f);
+	for (int i = 0; i < 3; i++)
 	{
-		cumulative += weaponEnemyChance;
+		cumulative += chances[i];
 
-		if (diceRoll < cumulative)
+		if (diceRoll <= cumulative)
 		{
-			return true;
+			return EnemyPrefabs[i];
 		}
 	}
 
-	return false;
+	return nullptr;
 }

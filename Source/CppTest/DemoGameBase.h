@@ -5,7 +5,8 @@
 #include "GameFramework/GameModeBase.h"
 #include "DemoGameBase.generated.h"
 
-
+static auto Increment = [=](int a) { if (a > 100) return 0; else return a+1; };
+static auto Entityname = [=](FString a, int b) { FString name; name.AppendInt(b); name += a; return name; };
 
 UCLASS()
 class CPPTEST_API ADemoGameBase : public AGameModeBase
@@ -15,35 +16,32 @@ class CPPTEST_API ADemoGameBase : public AGameModeBase
 public:
 	static void Debugger(int level, int disp, FString message);
 	void OnPlayerDeath();
-	TSubclassOf<class AEnemy2D> EnemyPrefab;
-	TSubclassOf<class AItem> PickUpPrefab;
-
+	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly,Category = EnemySpawn)
+		TArray<UClass*> EnemyPrefabs;
 
 private:
 
-	double diceRoll;
-	double cumulative;
 	ADemoGameBase();
+	void LoadEnemies();
 	void StartPlay() override;
-	bool ProbabilityChecker();
 	void CheckLevel();
 	void EndLevel();
 	void SpawnEnemy();
 	void Tick(float DeltaSeconds) override;
+
 	const float timerValue = 5.0f;
 	int id;
-
-
-	class AActor *enemy;
+	float diceRoll;
+	float cumulative;
 	float timer = 6;
-	int32 enemyCount;
-	TArray<FVector> EnemySpawns;
-
-	UPROPERTY(EditAnywhere, Category = "EnemySpawn")
-		int32 Spawnrate = 5;
-	UPROPERTY(EditAnywhere, Category = "EnemySpawn")
-		double weaponEnemyChance;
-
 	int32 currentLevelIndex;
+	TArray<FVector> EnemySpawns;
+	UClass* EnemyFetcher();
 	class APlayerController *Controller;
+
+	UPROPERTY(EditDefaultsOnly, Category = "EnemySpawn")
+		float chances[3];
+	UPROPERTY(EditDefaultsOnly, Category = "EnemySpawn")
+		int32 Spawnrate;
+
 };

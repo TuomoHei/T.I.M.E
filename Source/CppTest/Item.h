@@ -11,17 +11,25 @@ class CPPTEST_API AItem : public APawn
 	GENERATED_BODY()
 
 public:
-	// Sets default values for this pawn's properties
+
 	AItem();
+	UFUNCTION(BlueprintCallable)
+	void Physics(float deltatime);
+	UFUNCTION(BlueprintCallable)
+		void Bounce(float deltatime);
+
+	///Calls blueprint function attack
+	UFUNCTION(BlueprintImplementableEvent)
+		void UseWeapon();
 
 protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
 
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	UPROPERTY(BlueprintReadWrite)
+		float shoottime;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ranged")
+		float firerate;
+	UPROPERTY(EditAnywhere, Category = "CustomPhysics")
+		float weight;
+	UPROPERTY(EditAnywhere, Category = "CustomPhysics")
+		float groundLevel;
 };

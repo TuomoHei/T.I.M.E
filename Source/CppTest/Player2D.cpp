@@ -4,6 +4,7 @@
 #include "TestPlayerController.h"
 #include "PickUpComponent.h"
 #include "DemoGameBase.h"
+#include "Enemy2D.h"
 #include "Components/InputComponent.h"
 #include "Runtime/Engine/Classes/Components/BoxComponent.h"
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
@@ -92,7 +93,7 @@ void APlayer2D::PlayerDeath()
 	TArray<AActor*> gamemanager;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ADemoGameBase::StaticClass(), gamemanager);
 	ADemoGameBase *temp = nullptr;
-	temp = Cast<ADemoGameBase>(temp[0].GetClass());
+	temp = Cast<ADemoGameBase>(gamemanager[0]);
 	temp->OnPlayerDeath();
 }
 
@@ -107,20 +108,14 @@ void APlayer2D::PickUp(AActor *targetObj)
 
 void APlayer2D::UnEquip()
 {
+	if(item)
 	Cast<UPickupComponent>(item->GetClass())->DisEquip(item);
-	item = nullptr;
 }
 
 
 void APlayer2D::AttackEnemy(AActor *enemy)
 {
-
 	if (!enemy) return;
-
-	if (item)
-	{
-		UnEquip();
-	}
 
 	timeManager->DeactivateSlowmotion();
 

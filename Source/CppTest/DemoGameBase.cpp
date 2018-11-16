@@ -115,14 +115,13 @@ void ADemoGameBase::Tick(float DeltaSeconds)
 
 	int32 enemyCount = enemies.Num();
 	float playerPosX = Player->GetActorLocation().X;
-	//int firstEnemy;
 	int firstEnemyLeft = -1;
 	int firstEnemyRight = -1;
 
 	// Make enemy wait for enemies in front of him if condition are met.
 	for (int32 i = 0; i < enemyCount; i++)
 	{
-		if (IsValid(enemies[i]))
+		if (IsValid(enemies[i]))		
 		{
 			float enemyPosX = enemies[i]->GetActorLocation().X;
 			float enemyDistToPlayer = FMath::Abs(playerPosX - enemyPosX);
@@ -136,7 +135,9 @@ void ADemoGameBase::Tick(float DeltaSeconds)
 			else if (enemyPosX > playerPosX && enemyDistToPlayer < FMath::Abs(playerPosX - enemies[firstEnemyRight]->GetActorLocation().X))
 			{
 				//UE_LOG(LogTemp, Warning, TEXT("Found new Right head...."));
+				enemies[firstEnemyRight]->bIsHead = false;	// last first enemy is not first anymore
 				firstEnemyRight = i;
+				enemies[firstEnemyRight]->bIsHead = true;	// set head for new first enemy
 			}
 
 			// detect left head
@@ -147,7 +148,9 @@ void ADemoGameBase::Tick(float DeltaSeconds)
 			else if (enemyPosX < playerPosX && enemyDistToPlayer < FMath::Abs(playerPosX - enemies[firstEnemyLeft]->GetActorLocation().X))
 			{
 				//UE_LOG(LogTemp, Warning, TEXT("Found new Left head...."));
+				enemies[firstEnemyLeft]->bIsHead = false;
 				firstEnemyLeft = i;
+				enemies[firstEnemyLeft]->bIsHead = true;
 			}
 
 			for (int32 j = 0; j < enemyCount; j++)
@@ -197,12 +200,14 @@ void ADemoGameBase::SpawnEnemy()
 	//if (id >= 6) return;
 
 	FActorSpawnParameters SpawnInfo;
-SpawnInfo.Name = FName(*Entityname(FString("Enemy"), id));
+	SpawnInfo.Name = FName(*Entityname(FString("Enemy"), id));
 	UClass *a = EnemyFetcher();
 	a->Rename(*Entityname(FString("Enemy"), id));
 	AEnemy2D *b =  GetWorld()->SpawnActor<AEnemy2D>(a, FVector::ZeroVector, FRotator(0.0f, 90.0f, 0.0f), SpawnInfo);
 	b->Tags.Add("Enemy");
-	b->Rename(*Entityname(FString("Enemy"),id));}
+	b->Rename(*Entityname(FString("Enemy"),id));
+	enemies.Add(b);
+}
 
 void ADemoGameBase::EndLevel()
 {

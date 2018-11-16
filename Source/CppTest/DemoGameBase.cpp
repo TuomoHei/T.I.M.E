@@ -14,7 +14,7 @@
 ADemoGameBase::ADemoGameBase()
 {
 	PrimaryActorTick.bCanEverTick = true;
-	timer = timerValue;
+	timer = (float)Spawnrate; //timer = timerValue;
 	id = 0;
 	PlayerControllerClass = ATestPlayerController::StaticClass();
 }
@@ -79,6 +79,19 @@ void ADemoGameBase::StartPlay()
 
 	Controller->SetInputMode(Inputmode);
 	currentLevelIndex++;
+
+	// Find player
+	UWorld* GameWorld = this->GetWorld();
+	for (TActorIterator<APlayer2D> Itr(GameWorld); Itr; ++Itr)
+	{
+		// Filter out objects not contained in the target world.
+		if (Itr->GetWorld() != GameWorld)
+		{
+			continue;
+		}
+
+		Player = *Itr;
+	}
 }
 
 void ADemoGameBase::CheckLevel()
@@ -89,7 +102,7 @@ void ADemoGameBase::CheckLevel()
 void ADemoGameBase::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
-	timer -= DeltaSeconds;
+	timer -= DeltaSeconds*5;
 
 	if (EnemySpawns.Num() > 0)
 	{
@@ -99,20 +112,97 @@ void ADemoGameBase::Tick(float DeltaSeconds)
 			timer = timerValue;
 		}
 	}
+
+	int32 enemyCount = enemies.Num();
+	float playerPosX = Player->GetActorLocation().X;
+	//int firstEnemy;
+	int firstEnemyLeft = -1;
+	int firstEnemyRight = -1;
+
+	// Make enemy wait for enemies in front of him if condition are met.
+	for (int32 i = 0; i < enemyCount; i++)
+	{
+		if (IsValid(enemies[i]))
+		{
+			float enemyPosX = enemies[i]->GetActorLocation().X;
+			float enemyDistToPlayer = FMath::Abs(playerPosX - enemyPosX);
+			bool bShouldwait = false;
+
+			// detect right head
+			if (firstEnemyRight < 0 && enemyPosX > playerPosX)
+			{
+				firstEnemyRight = i;
+			}
+			else if (enemyPosX > playerPosX && enemyDistToPlayer < FMath::Abs(playerPosX - enemies[firstEnemyRight]->GetActorLocation().X))
+			{
+				//UE_LOG(LogTemp, Warning, TEXT("Found new Right head...."));
+				firstEnemyRight = i;
+			}
+
+			// detect left head
+			if (firstEnemyLeft < 0 && enemyPosX < playerPosX)
+			{
+				firstEnemyLeft = i;
+			}
+			else if (enemyPosX < playerPosX && enemyDistToPlayer < FMath::Abs(playerPosX - enemies[firstEnemyLeft]->GetActorLocation().X))
+			{
+				//UE_LOG(LogTemp, Warning, TEXT("Found new Left head...."));
+				firstEnemyLeft = i;
+			}
+
+			for (int32 j = 0; j < enemyCount; j++)
+			{
+				float otherEnemyPosX = enemies[j]->GetActorLocation().X;
+				float otherEnemyDistToPlayer = FMath::Abs(playerPosX - otherEnemyPosX);
+
+				// if not comparing with self
+				if (otherEnemyPosX != enemyPosX)
+				{
+					// if compared enemies are on same side of player
+					if ( (enemyPosX > playerPosX && otherEnemyPosX > playerPosX) || (enemyPosX < playerPosX && otherEnemyPosX < playerPosX))	
+					{
+						// if enemy is further from player than other enemy (we do not need to stop enemy that is in front of compared enemy)
+						if (enemyDistToPlayer > otherEnemyDistToPlayer)
+						{
+							// if enemy is less than 60cm apart
+							if (FMath::Abs(otherEnemyPosX - enemyPosX) < 60)
+							{
+								bShouldwait = true;
+								//UE_LOG(LogTemp, Warning, TEXT("Waiting...."));
+								//break;
+							}
+						}
+					}
+				}
+				enemies[i]->bIsWaiting = bShouldwait;
+			}
+		}
+	}
+
+	//// Debug stuff below
+	//if (enemies.Num()> 0 && firstEnemyLeft >= 0)
+	//{
+	//	UE_LOG(LogTemp, Warning, TEXT("First enemy LEFT is %s"), *enemies[firstEnemyLeft]->GetName());
+	//}
+
+	//if (enemies.Num() > 0 && firstEnemyRight >= 0)
+	//{
+	//	UE_LOG(LogTemp, Warning, TEXT("First enemy RIGHT is %s"), *enemies[firstEnemyRight]->GetName());
+	//}
 }
 
 void ADemoGameBase::SpawnEnemy()
 {
 	id = Increment(id);
+	//if (id >= 6) return;
 
 	FActorSpawnParameters SpawnInfo;
-	SpawnInfo.Name = FName(*Entityname(FString("Enemy"), id));
+SpawnInfo.Name = FName(*Entityname(FString("Enemy"), id));
 	UClass *a = EnemyFetcher();
 	a->Rename(*Entityname(FString("Enemy"), id));
 	AEnemy2D *b =  GetWorld()->SpawnActor<AEnemy2D>(a, FVector::ZeroVector, FRotator(0.0f, 90.0f, 0.0f), SpawnInfo);
 	b->Tags.Add("Enemy");
-	b->Rename(*Entityname(FString("Enemy"),id));
-}
+	b->Rename(*Entityname(FString("Enemy"),id));}
 
 void ADemoGameBase::EndLevel()
 {

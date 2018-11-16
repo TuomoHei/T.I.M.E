@@ -21,6 +21,8 @@ public:
 	///Calls blueprint function attack
 	UFUNCTION(BlueprintImplementableEvent)
 		void UseWeapon();
+	UPROPERTY(EditAnywhere, Category="Variables")
+		FTransform ItemOffset;
 
 protected:
 
@@ -32,4 +34,8 @@ protected:
 		float weight;
 	UPROPERTY(EditAnywhere, Category = "CustomPhysics")
 		float groundLevel;
+
+	// Default transform offset position when picked up
+
+	FTransform GetOffset() { return ItemOffset; }
 };

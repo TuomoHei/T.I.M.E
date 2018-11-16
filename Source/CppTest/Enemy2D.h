@@ -36,6 +36,9 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = BPClasses)
 		UClass *weaponPrefab;
 
+	UPROPERTY()
+		bool bIsWaiting = false;
+
 protected:
 
 

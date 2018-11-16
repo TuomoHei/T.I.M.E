@@ -36,13 +36,12 @@ void AEnemy2D::BeginPlay()
 	Super::BeginPlay();
 	UGameplayStatics::GetAllActorsWithTag(GetWorld(), FName("Player"), player);
 	timer = timerValue;
-	direction = player.Last()->GetActorLocation() - GetActorLocation();
-}
+	bIsWaiting = false;direction = player.Last()->GetActorLocation() - GetActorLocation();}
 
 void AEnemy2D::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	if (!bGameEnd)
+	if (!bGameEnd && !bIsWaiting)
 	{
 		AEnemy2D::Movement(walkSpeed, DeltaTime);
 	}

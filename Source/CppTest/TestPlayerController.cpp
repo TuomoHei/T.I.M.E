@@ -30,9 +30,9 @@ void ATestPlayerController::Touched(ETouchIndex::Type FingerIndex, FVector locat
 {
 	FHitResult *hit = new FHitResult();
 	GetHitResultUnderFingerByChannel(FingerIndex, UEngineTypes::ConvertToTraceType(ECC_Visibility), true, *hit);
-
+	
 	if (!hit) return;
-
+	
 
 		if (FMath::Abs((hit->ImpactPoint - RegPlayer2D->GetActorLocation()).X) <= RegPlayer2D->pickUpRange)
 		{
@@ -42,12 +42,12 @@ void ATestPlayerController::Touched(ETouchIndex::Type FingerIndex, FVector locat
 				FTimerDelegate a = FTimerDelegate::CreateLambda([=](void) 
 				{
 					RegPlayer2D->AttackEnemy(hit->GetActor());  
-				});
-
+				});		
+				
 				FTimerHandle handle;
 				GetWorldTimerManager().SetTimer(handle, a, RegPlayer2D->attackTime, false);
 				DrawDebugPoint(GetWorld(), hit->ImpactPoint, 25, FColor(0, 255, 0), false, 1.0f);
-
+				RegPlayer2D->bIsAttacking = true;
 			}
 
 			if (hit->GetActor()->ActorHasTag(FName("PickUp")))
@@ -62,6 +62,7 @@ void ATestPlayerController::Touched(ETouchIndex::Type FingerIndex, FVector locat
 			HitPos = hit->ImpactPoint;
 			DrawDebugPoint(GetWorld(), hit->ImpactPoint, 10, FColor(255, 0, 0), false, 1.0f);
 		}
+
 	
 }
 

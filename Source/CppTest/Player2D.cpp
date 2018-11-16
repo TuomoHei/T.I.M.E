@@ -53,6 +53,9 @@ void APlayer2D::Tick(float DeltaTime)
 		return;
 	}
 
+	if (PC->HitPos == FVector::ZeroVector) return;
+
+
 	if (FMath::Abs(PC->HitPos.X - GetActorLocation().X) < 20)
 	{
 		MovementInput = FVector::ZeroVector;
@@ -61,15 +64,15 @@ void APlayer2D::Tick(float DeltaTime)
 	{
 		MovementInput = PC->HitPos - GetActorLocation();
 		MovementInput.Normalize();
+		ADemoGameBase::Debugger(674, MovementInput.X, FString("ADSF"));
 	}
 
 
 	///Calculate the distance between click point and players location
-	if (PC->HitPos != FVector::ZeroVector)
-	{
+
 		newLoc.X += MovementInput.X * DeltaTime * moveSpeed;
 		SetActorLocation(newLoc);
-	}
+	
 
 
 	if (MovementInput != FVector::ZeroVector)
@@ -117,8 +120,9 @@ void APlayer2D::AttackEnemy(AActor *enemy)
 {
 	if (!enemy) return;
 
-	timeManager->DeactivateSlowmotion();
+	timeManager->DeactivateSlowmotion();	
 
+	bIsAttacking = false;
 	enemy->Destroy();
 }
 

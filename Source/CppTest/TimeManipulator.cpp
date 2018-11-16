@@ -28,7 +28,7 @@ void UTimeManipulator::BeginPlay()
 	//Position = GetOwner()->GetActorLocation();
 	//OldPosition = Position;
 	//pTimeManager = ATimeManager::GetInstance(this);
-
+	bIsSlow = true;
 	ActivateSlowmotion();
 }
 
@@ -109,6 +109,8 @@ void UTimeManipulator::ActivateSlowmotion()
 	GetWorld()->GetTimerManager().SetTimer(SlowTimeHandle, this, &UTimeManipulator::DeactivateSlowmotion, realSlowDuration, false);
 
 	UE_LOG(LogTemp, Warning, TEXT("ActivateSlowmotion()"));
+
+	bIsSlow = true;
 }
 
 // Deactivate slow motion for [defaultSpeedDuration] seconds
@@ -118,7 +120,8 @@ void UTimeManipulator::DeactivateSlowmotion()
 
 	ResetTimerHandle();
 	GetWorld()->GetTimerManager().SetTimer(SlowTimeHandle, this, &UTimeManipulator::ActivateSlowmotion, defaultSpeedDuration, false);
-
+	
+	bIsSlow = false;
 }
 
 // Deactivate slow motion until slowmo is called again manually	// Note: currently not used

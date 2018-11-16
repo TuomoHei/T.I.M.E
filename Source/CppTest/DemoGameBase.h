@@ -3,6 +3,8 @@
 #pragma once
 
 #include "GameFramework/GameModeBase.h"
+#include "Enemy2D.h"
+#include "Player2D.h"
 #include "DemoGameBase.generated.h"
 
 static auto Increment = [=](int a) { if (a > 100) return 0; else return a+1; };
@@ -18,7 +20,6 @@ public:
 	void OnPlayerDeath();
 	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly,Category = EnemySpawn)
 		TArray<UClass*> EnemyPrefabs;
-
 private:
 
 	ADemoGameBase();
@@ -44,4 +45,10 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "EnemySpawn")
 		int32 Spawnrate;
 
+
+	UPROPERTY()
+		TArray<AEnemy2D*> enemies;
+
+	UPROPERTY()
+		APlayer2D* Player;
 };

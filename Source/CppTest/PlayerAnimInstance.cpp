@@ -43,6 +43,7 @@ void UPlayerAnimInstance::NativeInitializeAnimation()
 	}
 
 	bIsAlive = true;	// set player alive
+	bIsMoving = false;
 
 	GLog->Log("Initialized animation instance");
 }
@@ -77,6 +78,7 @@ void UPlayerAnimInstance::UpdateAnimationProperties()
 		}
 
 		// ** Attacking **
+		bIsAttacking = PlayerClass->bIsAttacking;
 
 		// ** Crouching ** 
 

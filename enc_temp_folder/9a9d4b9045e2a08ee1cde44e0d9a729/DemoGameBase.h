@@ -48,8 +48,11 @@ private:
 		float chances[3];
 	UPROPERTY(EditDefaultsOnly, Category = "EnemySpawn")
 		int32 Spawnrate;
+
+
 	UPROPERTY()
 		TArray<AEnemy2D*> enemies;
+
 	UPROPERTY()
 		APlayer2D* Player;
 };

@@ -13,7 +13,6 @@
 
 APlayer2D::APlayer2D()
 {
-
 	PrimaryActorTick.bCanEverTick = true;
 	AutoPossessPlayer = EAutoReceiveInput::Player0;
 	base = CreateDefaultSubobject<UBoxComponent>(TEXT("ASDF"));

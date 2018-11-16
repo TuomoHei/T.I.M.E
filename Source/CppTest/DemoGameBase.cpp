@@ -22,7 +22,7 @@ ADemoGameBase::ADemoGameBase()
 
 
 
-void ADemoGameBase::LoadEnemies()
+/*void ADemoGameBase::LoadEnemies()
 {
 	static ConstructorHelpers::FObjectFinder<UClass> UnarmedEnemyBlueprint(TEXT("Class'/Game/Blueprints/BP_UnarmedEnemy.BP_UnarmedEnemy_C'"));
 	if (UnarmedEnemyBlueprint.Object)
@@ -45,7 +45,7 @@ void ADemoGameBase::LoadEnemies()
 
 	}
 
-}
+}*/
 
 void ADemoGameBase::StartPlay()
 {
@@ -94,10 +94,6 @@ void ADemoGameBase::StartPlay()
 	}
 }
 
-void ADemoGameBase::CheckLevel()
-{
-	FString CurrentLevelName = GetWorld()->GetMapName();
-}
 
 void ADemoGameBase::Tick(float DeltaSeconds)
 {
@@ -194,21 +190,15 @@ void ADemoGameBase::Tick(float DeltaSeconds)
 void ADemoGameBase::SpawnEnemy()
 {
 	id = Increment(id);
-	//if (id >= 6) return;
 
 	FActorSpawnParameters SpawnInfo;
-SpawnInfo.Name = FName(*Entityname(FString("Enemy"), id));
+	SpawnInfo.Name = FName(*Entityname(FString("Enemy"), id));
 	UClass *a = EnemyFetcher();
 	a->Rename(*Entityname(FString("Enemy"), id));
 	AEnemy2D *b =  GetWorld()->SpawnActor<AEnemy2D>(a, FVector::ZeroVector, FRotator(0.0f, 90.0f, 0.0f), SpawnInfo);
 	b->Tags.Add("Enemy");
 	b->Rename(*Entityname(FString("Enemy"),id));}
 
-void ADemoGameBase::EndLevel()
-{
-	FString LevelString = GetWorld()->GetMapName();
-	FName LevelToLoad = FName(*LevelString);
-}
 
 /*debugger which includes GEngine
 @param Level is priority of message,
@@ -225,6 +215,7 @@ void ADemoGameBase::Debugger(int level = 0, int disp = 0, FString message = " ")
 	}
 }
 
+//event handler for player death
 void ADemoGameBase::OnPlayerDeath()
 {
 	TArray<AActor*> temp;

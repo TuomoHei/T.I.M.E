@@ -43,8 +43,8 @@ void UPlayerAnimInstance::NativeInitializeAnimation()
 	}
 
 	bIsAlive = true;	// set player alive
-	bIsMoving = false;
-
+	bIsMoving = false;	
+	
 	GLog->Log("Initialized animation instance");
 }
 
@@ -87,12 +87,22 @@ void UPlayerAnimInstance::UpdateAnimationProperties()
 		// ** Dying **
 		//bIsAlive = PlayerClass-> // isAlive?
 
+
+		if (bIsAttacking)
+		{
+			//UE_LOG(LogTemp, Warning, TEXT("ATTACKING..."));
+		}		
+
+
 	}
 }
 
 void UPlayerAnimInstance::SetAttackAnimID()
 {
 	attackAnimID = rand() % 2;	// Set number to x-1 of x attack animations implemented
+	PlayerClass->bIsAttacking = false;
+
+	//UAnimInstance* animInstance = GetSkelMeshComponent()->GetAnimInstance()//
 }
 
 

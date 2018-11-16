@@ -5,6 +5,11 @@
 #include "GameFramework/Pawn.h"
 #include "Enemy2D.generated.h"
 
+enum CombatState
+{
+	CB_walking, CB_fighting
+};
+
 UCLASS()
 class CPPTEST_API AEnemy2D : public APawn
 {
@@ -12,58 +17,50 @@ class CPPTEST_API AEnemy2D : public APawn
 
 public:
 
-	// Sets default values for this pawn's properties
 	AEnemy2D();
-	~AEnemy2D();
-
 	//takes care of actions that need to happen upon players death
 	void PlayerDeath();
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-	
 	bool bGameEnd;
+	void StateChecker(float a, FVector b);
+
 	UPROPERTY(EditAnywhere, Category = "Combat")
 		float timerValue;
-
+	UPROPERTY(BlueprintReadOnly)
+		FVector direction;
 	UFUNCTION(BlueprintImplementableEvent)
 		void asdf(bool leftside);
-
-	FVector direction;
-	void AssignWeapon(class AActor *weapon);
+	UFUNCTION(BlueprintCallable)
+		void AddWeapon();
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = BPClasses)
+		UClass *weaponPrefab;
 
 	UPROPERTY()
 		bool bIsWaiting = false;
 
 protected:
-	enum CombatState
-	{
-		CB_walking, CB_fighting
-	};
 
-	class AActor *item;
 
-	class ATestPlayerController *controller;
 
-	TArray<AActor*> player;
 	CombatState state;
-
-	// Called when the game starts or when spawned
+	class ATestPlayerController *controller;
+	TArray<AActor*> player;
+	class AItem *item;
+	int id;
+	float timer;
 	virtual void BeginPlay() override;
-
-	// Called when actor is removed
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
-
-	UPROPERTY(EditAnywhere, Category = "Movement")
-		float walkSpeed;
-
-
 	virtual void Movement(float moveValue, float Deltatime);
 
+	UFUNCTION(BlueprintImplementableEvent)
+		void ShootEvent();
+	UFUNCTION(BlueprintCallable)
+		void Shoot();
+	UPROPERTY(EditAnywhere, Category = "Movement")
+		float walkSpeed;
 	UPROPERTY(EditAnywhere, Category = "Combat")
 		float maxDistance;
-
-	float timer;
 	UPROPERTY(VisibleAnywhere, Category = "Exterior")
 		class UBoxComponent *C_rootBox;
-
 };

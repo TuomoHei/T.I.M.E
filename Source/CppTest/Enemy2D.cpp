@@ -36,7 +36,9 @@ void AEnemy2D::BeginPlay()
 	Super::BeginPlay();
 	UGameplayStatics::GetAllActorsWithTag(GetWorld(), FName("Player"), player);
 	timer = timerValue;
-	bIsWaiting = false;direction = player.Last()->GetActorLocation() - GetActorLocation();}
+	bIsWaiting = false;
+	bIsHead = true;
+	direction = player.Last()->GetActorLocation() - GetActorLocation();}
 
 void AEnemy2D::Tick(float DeltaTime)
 {
@@ -85,8 +87,11 @@ void AEnemy2D::Movement(float moveValue, float Deltatime)
 		}
 		else
 		{
-			///Calls Blueprints shootevent
-			ShootEvent();
+			if (bIsHead)
+			{
+				///Calls Blueprints shootevent
+				ShootEvent();
+			}
 		}
 	}
 

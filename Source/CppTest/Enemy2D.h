@@ -38,6 +38,8 @@ public:
 
 	UPROPERTY()
 		bool bIsWaiting = false;
+	UPROPERTY()
+		bool bIsHead = false;
 
 protected:
 

@@ -48,7 +48,7 @@ void UPickupComponent::CheckLocation(AActor *Player, FVector location, AActor *t
 	AItem *offset = Cast<AItem>(targetObj);
 
 	a.ScaleRule = EAttachmentRule::KeepWorld;
-	//a.RotationRule = EAttachmentRule::KeepWorld;
+	a.RotationRule = EAttachmentRule::KeepWorld;
 	//a.LocationRule = EAttachmentRule::SnapToTarget;
 
 

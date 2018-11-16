@@ -43,6 +43,7 @@ void UPlayerAnimInstance::NativeInitializeAnimation()
 	}
 
 	bIsAlive = true;	// set player alive
+	bIsMoving = false;
 
 	GLog->Log("Initialized animation instance");
 }

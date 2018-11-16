@@ -110,57 +110,60 @@ void ADemoGameBase::Tick(float DeltaSeconds)
 	// Make enemy wait for enemies in front of him if condition are met.
 	for (int32 i = 0; i < enemyCount; i++)
 	{
-		float enemyPosX = enemies[i]->GetActorLocation().X;
-		float enemyDistToPlayer = FMath::Abs(playerPosX - enemyPosX);
-		bool bShouldwait = false;
+		if (IsValid(enemies[i]))
+		{
+			float enemyPosX = enemies[i]->GetActorLocation().X;
+			float enemyDistToPlayer = FMath::Abs(playerPosX - enemyPosX);
+			bool bShouldwait = false;
 
-		// detect right head
-		if (firstEnemyRight < 0 && enemyPosX > playerPosX)
-		{
-			firstEnemyRight = i;
-		}
-		else if (enemyPosX > playerPosX && enemyDistToPlayer < FMath::Abs(playerPosX - enemies[firstEnemyRight]->GetActorLocation().X))
-		{
-			UE_LOG(LogTemp, Warning, TEXT("Found new Right head...."));
-			firstEnemyRight = i;
-		}
-
-		// detect left head
-		if (firstEnemyLeft < 0 && enemyPosX < playerPosX)
-		{
-			firstEnemyLeft = i;
-		}
-		else if (enemyPosX < playerPosX && enemyDistToPlayer < FMath::Abs(playerPosX - enemies[firstEnemyLeft]->GetActorLocation().X))
-		{
-			UE_LOG(LogTemp, Warning, TEXT("Found new Left head...."));
-			firstEnemyLeft = i;
-		}
-
-		for (int32 j = 0; j < enemyCount; j++)
-		{
-			float otherEnemyPosX = enemies[j]->GetActorLocation().X;
-			float otherEnemyDistToPlayer = FMath::Abs(playerPosX - otherEnemyPosX);
-
-			// if not comparing with self
-			if (otherEnemyPosX != enemyPosX)
+			// detect right head
+			if (firstEnemyRight < 0 && enemyPosX > playerPosX)
 			{
-				// if compared enemies are on same side of player
-				if ( (enemyPosX > playerPosX && otherEnemyPosX > playerPosX) || (enemyPosX < playerPosX && otherEnemyPosX < playerPosX))	
+				firstEnemyRight = i;
+			}
+			else if (enemyPosX > playerPosX && enemyDistToPlayer < FMath::Abs(playerPosX - enemies[firstEnemyRight]->GetActorLocation().X))
+			{
+				//UE_LOG(LogTemp, Warning, TEXT("Found new Right head...."));
+				firstEnemyRight = i;
+			}
+
+			// detect left head
+			if (firstEnemyLeft < 0 && enemyPosX < playerPosX)
+			{
+				firstEnemyLeft = i;
+			}
+			else if (enemyPosX < playerPosX && enemyDistToPlayer < FMath::Abs(playerPosX - enemies[firstEnemyLeft]->GetActorLocation().X))
+			{
+				//UE_LOG(LogTemp, Warning, TEXT("Found new Left head...."));
+				firstEnemyLeft = i;
+			}
+
+			for (int32 j = 0; j < enemyCount; j++)
+			{
+				float otherEnemyPosX = enemies[j]->GetActorLocation().X;
+				float otherEnemyDistToPlayer = FMath::Abs(playerPosX - otherEnemyPosX);
+
+				// if not comparing with self
+				if (otherEnemyPosX != enemyPosX)
 				{
-					// if enemy is further from player than other enemy (we do not need to stop enemy that is in front of compared enemy)
-					if (enemyDistToPlayer > otherEnemyDistToPlayer)
+					// if compared enemies are on same side of player
+					if ( (enemyPosX > playerPosX && otherEnemyPosX > playerPosX) || (enemyPosX < playerPosX && otherEnemyPosX < playerPosX))	
 					{
-						// if enemy is less than 60cm apart
-						if (FMath::Abs(otherEnemyPosX - enemyPosX) < 60)
+						// if enemy is further from player than other enemy (we do not need to stop enemy that is in front of compared enemy)
+						if (enemyDistToPlayer > otherEnemyDistToPlayer)
 						{
-							bShouldwait = true;
-							//UE_LOG(LogTemp, Warning, TEXT("Waiting...."));
-							//break;
+							// if enemy is less than 60cm apart
+							if (FMath::Abs(otherEnemyPosX - enemyPosX) < 60)
+							{
+								bShouldwait = true;
+								//UE_LOG(LogTemp, Warning, TEXT("Waiting...."));
+								//break;
+							}
 						}
 					}
 				}
+				enemies[i]->bIsWaiting = bShouldwait;
 			}
-			enemies[i]->bIsWaiting = bShouldwait;
 		}
 	}
 

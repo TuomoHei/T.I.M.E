@@ -24,4 +24,10 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	// Default transform offset position when picked up
+	UPROPERTY(EditAnywhere, Category="Variables")
+		FTransform ItemOffset;
+
+	FTransform GetOffset() { return ItemOffset; }
 };

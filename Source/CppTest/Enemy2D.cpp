@@ -153,7 +153,7 @@ void AEnemy2D::AddWeapon()
 	item = GetWorld()->SpawnActor<AItem>(weaponPrefab, FVector::ZeroVector, FRotator::ZeroRotator, SpawnInfo);
 	item->Tags.Add(SpawnInfo.Name);
 	item->SetActorLocation(GetActorLocation());
-	if (!item)
+	if (item)
 		Cast<UPickupComponent>(item->GetClass())->Pickup(this, direction.GetSafeNormal(), item);
 
 }

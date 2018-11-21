@@ -101,7 +101,7 @@ void ADemoGameBase::StartPlay()
 void ADemoGameBase::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
-	timer -= DeltaSeconds*5;
+	timer -= DeltaSeconds * 5;
 
 	if (EnemySpawns.Num() > 0)
 	{
@@ -120,7 +120,7 @@ void ADemoGameBase::Tick(float DeltaSeconds)
 	// Make enemy wait for enemies in front of him if condition are met.
 	for (int32 i = 0; i < enemyCount; i++)
 	{
-		if (IsValid(enemies[i]))		
+		if (IsValid(enemies[i]))
 		{
 			float enemyPosX = enemies[i]->GetActorLocation().X;
 			float enemyDistToPlayer = FMath::Abs(playerPosX - enemyPosX);
@@ -154,6 +154,7 @@ void ADemoGameBase::Tick(float DeltaSeconds)
 
 			for (int32 j = 0; j < enemyCount; j++)
 			{
+				if (!IsValid(enemies[j])) return;
 				float otherEnemyPosX = enemies[j]->GetActorLocation().X;
 				float otherEnemyDistToPlayer = FMath::Abs(playerPosX - otherEnemyPosX);
 
@@ -161,7 +162,7 @@ void ADemoGameBase::Tick(float DeltaSeconds)
 				if (otherEnemyPosX != enemyPosX)
 				{
 					// if compared enemies are on same side of player
-					if ( (enemyPosX > playerPosX && otherEnemyPosX > playerPosX) || (enemyPosX < playerPosX && otherEnemyPosX < playerPosX))	
+					if ((enemyPosX > playerPosX && otherEnemyPosX > playerPosX) || (enemyPosX < playerPosX && otherEnemyPosX < playerPosX))
 					{
 						// if enemy is further from player than other enemy (we do not need to stop enemy that is in front of compared enemy)
 						if (enemyDistToPlayer > otherEnemyDistToPlayer)
@@ -200,11 +201,14 @@ void ADemoGameBase::SpawnEnemy()
 	FActorSpawnParameters SpawnInfo;
 	SpawnInfo.Name = FName(*Entityname(FString("Enemy"), id));
 	UClass *a = EnemyFetcher();
-	a->Rename(*Entityname(FString("Enemy"), id));
-	AEnemy2D *b =  GetWorld()->SpawnActor<AEnemy2D>(a, FVector::ZeroVector, FRotator(0.0f, 90.0f, 0.0f), SpawnInfo);
-	b->Tags.Add("Enemy");
-	b->Rename(*Entityname(FString("Enemy"),id));
-	enemies.Add(b);
+	AEnemy2D *b = GetWorld()->SpawnActor<AEnemy2D>(a, FVector::ZeroVector, FRotator(0.0f, 90.0f, 0.0f), SpawnInfo);
+	
+	if (b)
+	{
+		b->Tags.Add("Enemy");
+		b->Rename(*Entityname(FString("Enemy"), id));
+		enemies.Add(b);
+	}
 }
 
 

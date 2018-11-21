@@ -8,7 +8,6 @@
 
 
 
-
 UCLASS()
 class CPPTEST_API APlayer2D : public APawn
 {
@@ -20,7 +19,6 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	class AActor *item;
-
 private:
 	UPROPERTY(EditAnywhere)
 		UTimeManipulator* timeManager;
@@ -30,11 +28,12 @@ private:
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
+	class AActor *ItemGetter() { return item; };
+	
 	UFUNCTION(BlueprintCallable)
 		void PlayerDeath();
-	void AttackEnemy(AActor *enemy);
-	void PickUp(AActor *targetObj);
+	void AttackEnemy(class AActor *enemy);
+	void PickUp(class AActor *targetObj);
 	void UnEquip();
 	APlayer2D();
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
@@ -42,7 +41,7 @@ public:
 	bool bHoldingItem;
 	UPROPERTY(VisibleAnywhere)
 	bool bIsAttacking;
-
+	
 	///Values for pickups and attack ranges
 	UPROPERTY(EditAnywhere, Category = "Movement")
 		float moveRange;

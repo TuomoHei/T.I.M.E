@@ -5,6 +5,7 @@
 #include "PickUpComponent.h"
 #include "DemoGameBase.h"
 #include "Enemy2D.h"
+#include "Item.h"
 #include "Components/InputComponent.h"
 #include "Runtime/Engine/Classes/Components/BoxComponent.h"
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
@@ -46,7 +47,7 @@ void APlayer2D::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-///	if (!canMove) return; uncomment when enabling player death
+	///	if (!canMove) return; uncomment when enabling player death
 
 	if (!PC)
 	{
@@ -55,18 +56,17 @@ void APlayer2D::Tick(float DeltaTime)
 	}
 
 	if (PC->HitPos == FVector::ZeroVector) return;
-	FVector newLoc = GetActorLocation();
 
+	FVector newLoc = GetTransform().GetLocation();
 
-	if (FMath::Abs(PC->HitPos.X - GetActorLocation().X) < 20)
+	if (FMath::Abs(PC->HitPos.X - GetTransform().GetLocation().X) < 20)
 	{
 		MovementInput = FVector::ZeroVector;
 	}
 	else
 	{
-		MovementInput = PC->HitPos - GetActorLocation();
+		MovementInput = PC->HitPos - GetTransform().GetLocation().X;
 		MovementInput.Normalize();
-		ADemoGameBase::Debugger(674, MovementInput.X, FString("ADSF"));
 	}
 
 
@@ -81,7 +81,7 @@ void APlayer2D::Tick(float DeltaTime)
 	{
 		timeManager->DeactivateSlowmotion();
 		if (item)
-			Cast<UPickupComponent>(item->GetClass())->CheckLocation(this, MovementInput.GetSafeNormal(), item);
+			Cast<UPickupComponent>(item->GetClass())->CheckLocation(this, MovementInput, item);
 	}
 }
 
@@ -95,6 +95,7 @@ void APlayer2D::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 //Calls the gamemodebase method onplayerdeath 
 void APlayer2D::PlayerDeath()
 {
+	//DEBUG NEED TO REMOVE WHEN NOT NEEDED
 	return;
 	TArray<AActor*> gamemanager;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ADemoGameBase::StaticClass(), gamemanager);
@@ -127,7 +128,16 @@ void APlayer2D::AttackEnemy(AActor *enemy)
 	timeManager->DeactivateSlowmotion();
 
 	bIsAttacking = false;
-	enemy->Destroy();
+	if (item)
+	{
+		if (!Cast<AItem>(item)->meleeweapon) return;
+		Cast<AEnemy2D>(enemy)->TakeDamageEnemy(Cast<AItem>(item)->DamageGetter());
+	}
+	else
+	{
+		Cast<AEnemy2D>(enemy)->TakeDamageEnemy(1);
+	}
+
 }
 
 void APlayer2D::GetTimeManipulator()

@@ -92,7 +92,7 @@ void UPlayerAnimInstance::UpdateAnimationProperties()
 		{
 			//UE_LOG(LogTemp, Warning, TEXT("ATTACKING..."));
 		}		
-
+		
 
 	}
 }
@@ -102,7 +102,18 @@ void UPlayerAnimInstance::SetAttackAnimID()
 	attackAnimID = rand() % 2;	// Set number to x-1 of x attack animations implemented
 	PlayerClass->bIsAttacking = false;
 
-	//UAnimInstance* animInstance = GetSkelMeshComponent()->GetAnimInstance()//
+	GetAttackDuration();
 }
+
+float UPlayerAnimInstance::GetAttackDuration()
+{
+	float dur = attackAnims[attackAnimID]->GetPlayLength();	
+	PlayerClass->attackTime  = dur;
+	//UE_LOG(LogTemp, Warning, TEXT("Ainm lenght %f"), dur);
+
+	return dur;
+}
+
+
 
 

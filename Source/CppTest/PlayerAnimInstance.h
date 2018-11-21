@@ -19,7 +19,7 @@ protected:
 	UPROPERTY()
 		class APlayer2D* PlayerClass;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY()
 		USkeletalMeshComponent* skeletalMeshComp;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -42,10 +42,22 @@ protected:
 	
 	UFUNCTION(BlueprintCallable, Category = "UpdateAnimationProperties")
 		void UpdateAnimationProperties(); // Updates the above properties
+	
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	//	UAnimSequenceBase* attack1;
+	//
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	//	UAnimSequenceBase* attack2;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		TArray<UAnimSequenceBase*> attackAnims;
 
 public:
 
 	UFUNCTION(BlueprintCallable)
-		void SetAttackAnimID();
-		
+		void SetAttackAnimID();	
+
+	UFUNCTION()
+		float GetAttackDuration();
+
 };

@@ -118,7 +118,7 @@ void ADemoGameBase::Tick(float DeltaSeconds)
 	int firstEnemyLeft = -1;
 	int firstEnemyRight = -1;
 
-	// Make enemy wait for enemies in front of him if condition are met.
+	// Make enemy wait behind enemy in front of him if condition are met
 	for (int32 i = 0; i < enemyCount; i++)
 	{
 		if (IsValid(enemies[i]))		
@@ -127,32 +127,33 @@ void ADemoGameBase::Tick(float DeltaSeconds)
 			float enemyDistToPlayer = FMath::Abs(playerPosX - enemyPosX);
 			bool bShouldwait = false;
 
-			// detect right head
-			if (firstEnemyRight < 0 && enemyPosX > playerPosX)
+			// Detect right head
+			if (firstEnemyRight < 0 && enemyPosX > playerPosX)	// If first enemy is not set, use first index if right side of player
 			{
 				firstEnemyRight = i;
 			}
-			else if (enemyPosX > playerPosX && enemyDistToPlayer < FMath::Abs(playerPosX - enemies[firstEnemyRight]->GetActorLocation().X))
-			{
-				//UE_LOG(LogTemp, Warning, TEXT("Found new Right head...."));
+			else if (enemyPosX > playerPosX && enemyDistToPlayer < FMath::Abs(playerPosX - enemies[firstEnemyRight]->GetActorLocation().X))	// if enemy is to right and distance is closer than firstEnemy
+			{				
 				enemies[firstEnemyRight]->bIsHead = false;	// last first enemy is not first anymore
-				firstEnemyRight = i;
+				firstEnemyRight = i;						// This is new the index for new first enemy
 				enemies[firstEnemyRight]->bIsHead = true;	// set head for new first enemy
+				//UE_LOG(LogTemp, Warning, TEXT("Found new Right head...."));
 			}
 
-			// detect left head
+			// Detect left head
 			if (firstEnemyLeft < 0 && enemyPosX < playerPosX)
 			{
 				firstEnemyLeft = i;
 			}
 			else if (enemyPosX < playerPosX && enemyDistToPlayer < FMath::Abs(playerPosX - enemies[firstEnemyLeft]->GetActorLocation().X))
-			{
-				//UE_LOG(LogTemp, Warning, TEXT("Found new Left head...."));
+			{				
 				enemies[firstEnemyLeft]->bIsHead = false;
 				firstEnemyLeft = i;
 				enemies[firstEnemyLeft]->bIsHead = true;
+				//UE_LOG(LogTemp, Warning, TEXT("Found new Left head...."));
 			}
 
+			// Make each enemy behind head wait
 			for (int32 j = 0; j < enemyCount; j++)
 			{
 				float otherEnemyPosX = enemies[j]->GetActorLocation().X;
@@ -172,7 +173,6 @@ void ADemoGameBase::Tick(float DeltaSeconds)
 							{
 								bShouldwait = true;
 								//UE_LOG(LogTemp, Warning, TEXT("Waiting...."));
-								//break;
 							}
 						}
 					}
@@ -182,7 +182,7 @@ void ADemoGameBase::Tick(float DeltaSeconds)
 		}
 	}
 
-	//// Debug stuff below
+	//// Debug stuff below if problems occur
 	//if (enemies.Num()> 0 && firstEnemyLeft >= 0)
 	//{
 	//	UE_LOG(LogTemp, Warning, TEXT("First enemy LEFT is %s"), *enemies[firstEnemyLeft]->GetName());

@@ -5,6 +5,7 @@
 #include "GameFramework/Pawn.h"
 #include "Enemy2D.generated.h"
 
+UENUM()
 enum CombatState
 {
 	CB_walking, CB_fighting
@@ -41,11 +42,11 @@ public:
 	UPROPERTY()
 		bool bIsHead = false;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		TEnumAsByte<CombatState> state;
+
 protected:
-
-
-
-	CombatState state;
+	
 	class ATestPlayerController *controller;
 	TArray<AActor*> player;
 	class AItem *item;

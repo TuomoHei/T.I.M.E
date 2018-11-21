@@ -44,6 +44,8 @@ void UPlayerAnimInstance::NativeInitializeAnimation()
 
 	bIsAlive = true;	// set player alive
 	bIsMoving = false;	
+
+	SetAttackAnimID();	// set initial attack anim and feed lenght to player
 	
 	GLog->Log("Initialized animation instance");
 }
@@ -99,7 +101,8 @@ void UPlayerAnimInstance::UpdateAnimationProperties()
 
 void UPlayerAnimInstance::SetAttackAnimID()
 {
-	attackAnimID = rand() % 2;	// Set number to x-1 of x attack animations implemented
+	//attackAnimID = rand() % 2;	// Set number to x-1 of x attack animations implemented
+	attackAnimID = rand() % attackAnims.Num();
 	PlayerClass->bIsAttacking = false;
 
 	GetAttackDuration();

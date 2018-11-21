@@ -14,8 +14,6 @@ protected:
 
 	virtual void NativeInitializeAnimation() override;
 
-	//APawn * Player;
-
 	UPROPERTY()
 		class APlayer2D* PlayerClass;
 
@@ -42,12 +40,6 @@ protected:
 	
 	UFUNCTION(BlueprintCallable, Category = "UpdateAnimationProperties")
 		void UpdateAnimationProperties(); // Updates the above properties
-	
-	//UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	//	UAnimSequenceBase* attack1;
-	//
-	//UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	//	UAnimSequenceBase* attack2;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		TArray<UAnimSequenceBase*> attackAnims;

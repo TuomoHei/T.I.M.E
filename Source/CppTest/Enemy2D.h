@@ -5,6 +5,8 @@
 #include "GameFramework/Pawn.h"
 #include "Enemy2D.generated.h"
 
+static int indexWep = 0;
+
 enum CombatState
 {
 	CB_walking, CB_fighting
@@ -35,7 +37,6 @@ public:
 		void AddWeapon();
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = BPClasses)
 		UClass *weaponPrefab;
-
 	UPROPERTY()
 		bool bIsWaiting = false;
 	UPROPERTY()
@@ -54,7 +55,6 @@ protected:
 	virtual void BeginPlay() override;
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 	virtual void Movement(float moveValue, float Deltatime);
-
 	UFUNCTION(BlueprintImplementableEvent)
 		void ShootEvent();
 	UFUNCTION(BlueprintCallable)
@@ -66,3 +66,4 @@ protected:
 	UPROPERTY(VisibleAnywhere, Category = "Exterior")
 		class UBoxComponent *C_rootBox;
 };
+

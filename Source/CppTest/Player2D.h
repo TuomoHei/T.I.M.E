@@ -24,7 +24,7 @@ protected:
 private:
 	UPROPERTY(EditAnywhere)
 		UTimeManipulator* timeManager;
-
+	bool canMove;
 	void GetTimeManipulator();
 
 public:

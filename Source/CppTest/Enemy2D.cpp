@@ -15,7 +15,7 @@
 
 	///rest of the implementation relating to different enemy behaviour is done via BP
 
-static int indexWep = 0;
+
 
 AEnemy2D::AEnemy2D()
 {
@@ -38,6 +38,7 @@ void AEnemy2D::BeginPlay()
 	timer = timerValue;
 	bIsWaiting = false;
 	bIsHead = true;
+	if(player.Last())
 	direction = player.Last()->GetActorLocation() - GetActorLocation();}
 
 void AEnemy2D::Tick(float DeltaTime)
@@ -149,11 +150,9 @@ void AEnemy2D::AddWeapon()
 	indexWep = Increment(indexWep);
 	FActorSpawnParameters SpawnInfo;
 	SpawnInfo.Name = FName(*Entityname(FString("Weapons"), indexWep));
-	weaponPrefab->Rename(*Entityname(FString("Weapons"),indexWep));
 	item = GetWorld()->SpawnActor<AItem>(weaponPrefab, FVector::ZeroVector, FRotator::ZeroRotator, SpawnInfo);
 	item->Tags.Add(SpawnInfo.Name);
-	item->SetActorLocation(GetActorLocation());
-	if (!item)
+	if (item)
 		Cast<UPickupComponent>(item->GetClass())->Pickup(this, direction.GetSafeNormal(), item);
 
 }

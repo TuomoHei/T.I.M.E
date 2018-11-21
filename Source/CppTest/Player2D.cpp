@@ -18,6 +18,7 @@ APlayer2D::APlayer2D()
 	base = CreateDefaultSubobject<UBoxComponent>(TEXT("ASDF"));
 	RootComponent = Cast<USceneComponent>(base);
 	item = nullptr;
+	canMove = true;
 	///Tag if needed
 	Tags.Add("Player");
 }
@@ -45,7 +46,8 @@ void APlayer2D::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	FVector newLoc = GetActorLocation();
+///	if (!canMove) return; uncomment when enabling player death
+
 	if (!PC)
 	{
 		ADemoGameBase::Debugger(20, 0, FString("Player Controller undefined"));
@@ -53,6 +55,7 @@ void APlayer2D::Tick(float DeltaTime)
 	}
 
 	if (PC->HitPos == FVector::ZeroVector) return;
+	FVector newLoc = GetActorLocation();
 
 
 	if (FMath::Abs(PC->HitPos.X - GetActorLocation().X) < 20)
@@ -69,9 +72,9 @@ void APlayer2D::Tick(float DeltaTime)
 
 	///Calculate the distance between click point and players location
 
-		newLoc.X += MovementInput.X * DeltaTime * moveSpeed;
-		SetActorLocation(newLoc);
-	
+	newLoc.X += Movevalue(MovementInput) * DeltaTime * moveSpeed;
+	SetActorLocation(newLoc);
+
 
 
 	if (MovementInput != FVector::ZeroVector)
@@ -92,11 +95,13 @@ void APlayer2D::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 //Calls the gamemodebase method onplayerdeath 
 void APlayer2D::PlayerDeath()
 {
+	return;
 	TArray<AActor*> gamemanager;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ADemoGameBase::StaticClass(), gamemanager);
 	ADemoGameBase *temp = nullptr;
 	temp = Cast<ADemoGameBase>(gamemanager[0]);
 	temp->OnPlayerDeath();
+	canMove = false;
 }
 
 void APlayer2D::PickUp(AActor *targetObj)
@@ -110,8 +115,8 @@ void APlayer2D::PickUp(AActor *targetObj)
 
 void APlayer2D::UnEquip()
 {
-	if(item)
-	Cast<UPickupComponent>(item->GetClass())->DisEquip(item);
+	if (item)
+		Cast<UPickupComponent>(item->GetClass())->DisEquip(item);
 }
 
 
@@ -119,7 +124,7 @@ void APlayer2D::AttackEnemy(AActor *enemy)
 {
 	if (!enemy) return;
 
-	timeManager->DeactivateSlowmotion();	
+	timeManager->DeactivateSlowmotion();
 
 	bIsAttacking = false;
 	enemy->Destroy();

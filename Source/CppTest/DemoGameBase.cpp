@@ -19,7 +19,10 @@ ADemoGameBase::ADemoGameBase()
 	PlayerControllerClass = ATestPlayerController::StaticClass();
 }
 
-
+ADemoGameBase::~ADemoGameBase()
+{
+	indexWep = 0;
+}
 
 
 /*void ADemoGameBase::LoadEnemies()
@@ -239,8 +242,9 @@ UClass *ADemoGameBase::EnemyFetcher()
 {
 	cumulative = 0.0f;
 	diceRoll = FMath::RandRange(0.0f, 100.0f);
-	for (int i = 0; i < 3; i++)
+	for (int i = 0; i < EnemyPrefabs.Num(); i++)
 	{
+		//cumulative += chances[i];
 		cumulative += chances[i];
 
 		if (diceRoll <= cumulative)

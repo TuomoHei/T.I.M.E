@@ -18,24 +18,23 @@ void UPickupComponent::BeginPlay()
 	Super::BeginPlay();
 }
 
-
 // Called every frame
 void UPickupComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
 }
 
 void UPickupComponent::Pickup(AActor *Player, FVector location, AActor *targetObj)
 {
-	if (Player && targetObj)	{
+	if (Player && targetObj)
+	{
 		CheckLocation(Player, location, targetObj);
 	}
 }
 
 void UPickupComponent::DisEquip(AActor* targetObj)
 {
-	FDetachmentTransformRules a(FDetachmentTransformRules::KeepWorldTransform); 
+	FDetachmentTransformRules a(FDetachmentTransformRules::KeepWorldTransform);
 	targetObj->DetachFromActor(a);
 }
 
@@ -43,6 +42,7 @@ void UPickupComponent::DisEquip(AActor* targetObj)
 //Note: removes the previous attachment
 void UPickupComponent::CheckLocation(AActor *Player, FVector location, AActor *targetObj)
 {
+
 	FAttachmentTransformRules a = FAttachmentTransformRules::FAttachmentTransformRules(EAttachmentRule::SnapToTarget, false);
 
 	AItem *offset = Cast<AItem>(targetObj);
@@ -55,6 +55,17 @@ void UPickupComponent::CheckLocation(AActor *Player, FVector location, AActor *t
 	auto comp = (Player->GetActorLocation() - location).X > 0 ?
 		Player->GetComponentsByTag(UStaticMeshComponent::StaticClass(), FName("Right"))
 		: Player->GetComponentsByTag(UStaticMeshComponent::StaticClass(), FName("Left"));
+
+	if (Player->IsA(AEnemy2D::StaticClass()))
+	{
+		if (Cast<AEnemy2D>(Player)->item2 == Cast<AItem>(targetObj))
+		{
+			auto comp = (Player->GetActorLocation() - location).X < 0 ?
+				Player->GetComponentsByTag(UStaticMeshComponent::StaticClass(), FName("Right"))
+				: Player->GetComponentsByTag(UStaticMeshComponent::StaticClass(), FName("Left"));
+			targetObj->AttachToComponent(Cast<USceneComponent>(comp.Last()), a);
+		}
+	}
 
 	if (comp.Num() > 0)
 	{

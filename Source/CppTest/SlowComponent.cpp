@@ -35,13 +35,5 @@ void USlowComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 
 	// Change speed each actor
 	GetOwner()->CustomTimeDilation = SpeedRate;
-
-
-	GEngine->AddOnScreenDebugMessage(
-		-1,
-		GetWorld()->DeltaTimeSeconds,
-		FColor::Yellow,
-		"CurrentSpeed:" + FString::SanitizeFloat(SpeedRate)
-	);
 }
 

@@ -5,6 +5,8 @@
 #include "GameFramework/Pawn.h"
 #include "Enemy2D.generated.h"
 
+static int indexWep = 0;
+
 UENUM()
 enum CombatState
 {
@@ -33,29 +35,32 @@ public:
 	UFUNCTION(BlueprintImplementableEvent)
 		void asdf(bool leftside);
 	UFUNCTION(BlueprintCallable)
-		void AddWeapon();
+		void AddWeapon(int index);
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = BPClasses)
 		UClass *weaponPrefab;
-
 	UPROPERTY()
 		bool bIsWaiting = false;
 	UPROPERTY()
 		bool bIsHead = false;
+	UFUNCTION(BlueprintCallable)
+		void TakeDamageEnemy(float amount);
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		TEnumAsByte<CombatState> state;
 
+	class AItem *item;
+	class AItem *item2;
+
 protected:
-	
+
+	UPROPERTY(BlueprintReadWrite)
+	int health;
 	class ATestPlayerController *controller;
 	TArray<AActor*> player;
-	class AItem *item;
-	int id;
 	float timer;
 	virtual void BeginPlay() override;
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 	virtual void Movement(float moveValue, float Deltatime);
-
 	UFUNCTION(BlueprintImplementableEvent)
 		void ShootEvent();
 	UFUNCTION(BlueprintCallable)
@@ -67,3 +72,4 @@ protected:
 	UPROPERTY(VisibleAnywhere, Category = "Exterior")
 		class UBoxComponent *C_rootBox;
 };
+

@@ -1,5 +1,4 @@
 // Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "Animation/AnimInstance.h"
@@ -39,7 +38,7 @@ protected:
 		bool bIsAlive;
 	
 	UFUNCTION(BlueprintCallable, Category = "UpdateAnimationProperties")
-		void UpdateAnimationProperties(); // Updates the above properties
+		void UpdateAnimationProperties(); // Called in BP. Updates the above properties.
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		TArray<UAnimSequenceBase*> attackAnims;
@@ -52,4 +51,8 @@ public:
 	UFUNCTION()
 		float GetAttackDuration();
 
+private:
+	APlayer2D* GetPlayerClass();
+
+	USkeletalMeshComponent* GetSkeletalMeshComp();
 };

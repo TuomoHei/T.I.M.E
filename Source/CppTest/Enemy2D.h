@@ -43,7 +43,7 @@ public:
 	UPROPERTY()
 		bool bIsHead = false;
 	UFUNCTION(BlueprintCallable)
-		void TakeDamageEnemy(float amount);
+		void TakeDamageEnemy(bool weapon);
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		TEnumAsByte<CombatState> state;
@@ -53,8 +53,6 @@ public:
 
 protected:
 
-	UPROPERTY(BlueprintReadWrite)
-	int health;
 	class ATestPlayerController *controller;
 	TArray<AActor*> player;
 	float timer;

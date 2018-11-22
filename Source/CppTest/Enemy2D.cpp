@@ -23,20 +23,19 @@ AEnemy2D::AEnemy2D()
 
 	RootComponent = C_rootBox;
 	state = CB_walking;
-	health = 1;
 }
 
 void AEnemy2D::BeginPlay()
 {
 	bGameEnd = false;
-	Super::BeginPlay();
-
 	UGameplayStatics::GetAllActorsWithTag(GetWorld(), FName("Player"), player);
+	if (player.Last())
+		direction = player.Last()->GetTransform().GetLocation() - GetTransform().GetLocation();
 	timer = timerValue;
 	bIsWaiting = false;
 	bIsHead = true;
-	if (player.Last())
-		direction = player.Last()->GetTransform().GetLocation() - GetTransform().GetLocation();
+	Super::BeginPlay();
+
 }
 
 void AEnemy2D::Tick(float DeltaTime)
@@ -99,6 +98,11 @@ void AEnemy2D::Movement(float moveValue, float Deltatime)
 		{
 			Cast<UPickupComponent>(item->GetClass())->CheckLocation(this, direction, item);
 		}
+
+		if (item2)
+		{
+			Cast<UPickupComponent>(item->GetClass())->CheckLocation(this, direction, item);
+		}
 	}
 }
 
@@ -126,13 +130,12 @@ void AEnemy2D::PlayerDeath()
 	ADemoGameBase::Debugger(10, 0, FString("Game stopped for enemy"));
 }
 
-void AEnemy2D::TakeDamageEnemy(float amount)
+void AEnemy2D::TakeDamageEnemy(bool weapon)
 {
-	health -= amount;
-	if (health < 0)
-	{
+	if ((item || item2) && !weapon) return;
+
 		Destroy();
-	}
+	
 }
 
 void AEnemy2D::EndPlay(const EEndPlayReason::Type EndPlayReason)
@@ -165,14 +168,14 @@ void SpawnWeapon(AItem *&item, AActor *actor, UWorld *world, UClass *weaponPrefa
 //Generates weapon for the enemy based on its blueprint
 void AEnemy2D::AddWeapon(int index)
 {
-	if (index == 1)
+	if (index == 0)
 	{
 		SpawnWeapon(item, this, GetWorld(), weaponPrefab);
 		if (item)
 			Cast<UPickupComponent>(item)->Pickup(this, direction, item);
 	}
 
-	if (index == 2)
+	if (index == 1)
 	{
 		SpawnWeapon(item2, this, GetWorld(), weaponPrefab);
 		if (item2)

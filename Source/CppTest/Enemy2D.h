@@ -42,15 +42,13 @@ public:
 	UPROPERTY()
 		bool bIsHead = false;
 	UFUNCTION(BlueprintCallable)
-		void TakeDamageEnemy(float amount);
+		void TakeDamageEnemy(bool weapon);
 
 	class AItem *item;
 	class AItem *item2;
 
 protected:
 
-	UPROPERTY(BlueprintReadWrite)
-	int health;
 	CombatState state;
 	class ATestPlayerController *controller;
 	TArray<AActor*> player;

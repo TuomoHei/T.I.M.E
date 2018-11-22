@@ -25,36 +25,12 @@ ADemoGameBase::~ADemoGameBase()
 }
 
 
-/*void ADemoGameBase::LoadEnemies()
-{
-	static ConstructorHelpers::FObjectFinder<UClass> UnarmedEnemyBlueprint(TEXT("Class'/Game/Blueprints/BP_UnarmedEnemy.BP_UnarmedEnemy_C'"));
-	if (UnarmedEnemyBlueprint.Object)
-	{
-		EnemyPrefabs[0] = (UnarmedEnemyBlueprint.Object);
-
-	}
-
-	static ConstructorHelpers::FObjectFinder<UClass> MeleeEnemyBlueprint(TEXT("Class'/Game/Blueprints/BP_MeleeEnemy.BP_MeleeEnemy_C'"));
-	if (MeleeEnemyBlueprint.Object)
-	{
-		EnemyPrefabs[1] = (MeleeEnemyBlueprint.Object);
-
-	}
-
-	static ConstructorHelpers::FObjectFinder<UClass> RangedEnemyBlueprint(TEXT("Class'/Game/Blueprints/BP_RangedEnemy.BP_RangedEnemy_C'"));
-	if (RangedEnemyBlueprint.Object)
-	{
-		EnemyPrefabs[2]= (RangedEnemyBlueprint.Object);
-
-	}
-
-}*/
-
 void ADemoGameBase::StartPlay()
 {
 	Super::StartPlay();
 
 	//Contains iterators that populate lists declared in header
+
 #pragma region Listpopulators
 
 	TArray<AActor*> FoundPlayers;
@@ -198,15 +174,17 @@ void ADemoGameBase::SpawnEnemy()
 {
 	id = Increment(id);
 
+	///spawn parameters to enforce uniqueness
 	FActorSpawnParameters SpawnInfo;
 	SpawnInfo.Name = FName(*Entityname(FString("Enemy"), id));
-	UClass *a = EnemyFetcher();
+
+	UClass *a = EnemyFetcher(); ///Fetch enemy prefab
 	AEnemy2D *b = GetWorld()->SpawnActor<AEnemy2D>(a, FVector::ZeroVector, FRotator(0.0f, 90.0f, 0.0f), SpawnInfo);
 	
 	if (b)
 	{
-		b->Tags.Add("Enemy");
 		b->Rename(*Entityname(FString("Enemy"), id));
+		b->Tags.Add("Enemy");
 		enemies.Add(b);
 	}
 }

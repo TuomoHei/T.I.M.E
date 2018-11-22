@@ -7,8 +7,17 @@
 #include "Player2D.h"
 #include "DemoGameBase.generated.h"
 
-static auto Increment = [](int a) { if (a > 100) return 0; else return a+1; };
+//Increase the number by one /w safe proof
+static auto Increment = [](int a) { if (a > 10000) return 0; else return a+1; };
+
+//give name to the entity
 static auto Entityname = [](FString a, int b) { FString name; name.AppendInt(b); name += a; return name; };
+
+static auto Movevalue = [](FVector moveVector) {
+	if (moveVector.X > 0) return 1; 
+	else if (moveVector.X < 0) return -1;  
+	else return 0;
+};
 
 UCLASS()
 class CPPTEST_API ADemoGameBase : public AGameModeBase
@@ -16,17 +25,19 @@ class CPPTEST_API ADemoGameBase : public AGameModeBase
 	GENERATED_BODY()
 
 public:
+	//debugger with GE engine
 	static void Debugger(int level, int disp, FString message);
+
+	//Global method for player death event
 	void OnPlayerDeath();
+	//List containing enemyprefabs
 	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly,Category = EnemySpawn)
 		TArray<UClass*> EnemyPrefabs;
 private:
 
 	ADemoGameBase();
-	void LoadEnemies();
+	~ADemoGameBase();
 	void StartPlay() override;
-	void CheckLevel();
-	void EndLevel();
 	void SpawnEnemy();
 	void Tick(float DeltaSeconds) override;
 
@@ -44,11 +55,8 @@ private:
 		float chances[3];
 	UPROPERTY(EditDefaultsOnly, Category = "EnemySpawn")
 		int32 Spawnrate;
-
-
 	UPROPERTY()
 		TArray<AEnemy2D*> enemies;
-
 	UPROPERTY()
 		APlayer2D* Player;
 };

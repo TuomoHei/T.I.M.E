@@ -19,39 +19,18 @@ ADemoGameBase::ADemoGameBase()
 	PlayerControllerClass = ATestPlayerController::StaticClass();
 }
 
-
-
-
-void ADemoGameBase::LoadEnemies()
+ADemoGameBase::~ADemoGameBase()
 {
-	static ConstructorHelpers::FObjectFinder<UClass> UnarmedEnemyBlueprint(TEXT("Class'/Game/Blueprints/BP_UnarmedEnemy.BP_UnarmedEnemy_C'"));
-	if (UnarmedEnemyBlueprint.Object)
-	{
-		EnemyPrefabs[0] = (UnarmedEnemyBlueprint.Object);
-
-	}
-
-	static ConstructorHelpers::FObjectFinder<UClass> MeleeEnemyBlueprint(TEXT("Class'/Game/Blueprints/BP_MeleeEnemy.BP_MeleeEnemy_C'"));
-	if (MeleeEnemyBlueprint.Object)
-	{
-		EnemyPrefabs[1] = (MeleeEnemyBlueprint.Object);
-
-	}
-
-	static ConstructorHelpers::FObjectFinder<UClass> RangedEnemyBlueprint(TEXT("Class'/Game/Blueprints/BP_RangedEnemy.BP_RangedEnemy_C'"));
-	if (RangedEnemyBlueprint.Object)
-	{
-		EnemyPrefabs[2]= (RangedEnemyBlueprint.Object);
-
-	}
-
+	indexWep = 0;
 }
+
 
 void ADemoGameBase::StartPlay()
 {
 	Super::StartPlay();
 
 	//Contains iterators that populate lists declared in header
+
 #pragma region Listpopulators
 
 	TArray<AActor*> FoundPlayers;
@@ -94,15 +73,11 @@ void ADemoGameBase::StartPlay()
 	}
 }
 
-void ADemoGameBase::CheckLevel()
-{
-	FString CurrentLevelName = GetWorld()->GetMapName();
-}
 
 void ADemoGameBase::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
-	timer -= DeltaSeconds*5;
+	timer -= DeltaSeconds * 5;
 
 	if (EnemySpawns.Num() > 0)
 	{
@@ -116,45 +91,47 @@ void ADemoGameBase::Tick(float DeltaSeconds)
 	int32 enemyCount = enemies.Num();
 	float playerPosX = Player->GetActorLocation().X;
 	int firstEnemyLeft = -1;
-	int firstEnemyRight = -1;
+	int firstEnemyRight = -1;	
 
-	// Make enemy wait for enemies in front of him if condition are met.
+	// Make enemy wait behind enemy in front of him if condition are met
 	for (int32 i = 0; i < enemyCount; i++)
 	{
-		if (IsValid(enemies[i]))		
+		if (IsValid(enemies[i]))
 		{
 			float enemyPosX = enemies[i]->GetActorLocation().X;
 			float enemyDistToPlayer = FMath::Abs(playerPosX - enemyPosX);
 			bool bShouldwait = false;
 
-			// detect right head
-			if (firstEnemyRight < 0 && enemyPosX > playerPosX)
+			// Detect right head
+			if (firstEnemyRight < 0 && enemyPosX > playerPosX)	// If first enemy is not set, use first index if right side of player
 			{
 				firstEnemyRight = i;
 			}
-			else if (enemyPosX > playerPosX && enemyDistToPlayer < FMath::Abs(playerPosX - enemies[firstEnemyRight]->GetActorLocation().X))
-			{
-				//UE_LOG(LogTemp, Warning, TEXT("Found new Right head...."));
+			else if (enemyPosX > playerPosX && enemyDistToPlayer < FMath::Abs(playerPosX - enemies[firstEnemyRight]->GetActorLocation().X))	// if enemy is to right and distance is closer than firstEnemy
+			{				
 				enemies[firstEnemyRight]->bIsHead = false;	// last first enemy is not first anymore
-				firstEnemyRight = i;
+				firstEnemyRight = i;						// This is new the index for new first enemy
 				enemies[firstEnemyRight]->bIsHead = true;	// set head for new first enemy
+				//UE_LOG(LogTemp, Warning, TEXT("Found new Right head...."));
 			}
 
-			// detect left head
+			// Detect left head
 			if (firstEnemyLeft < 0 && enemyPosX < playerPosX)
 			{
 				firstEnemyLeft = i;
 			}
 			else if (enemyPosX < playerPosX && enemyDistToPlayer < FMath::Abs(playerPosX - enemies[firstEnemyLeft]->GetActorLocation().X))
-			{
-				//UE_LOG(LogTemp, Warning, TEXT("Found new Left head...."));
+			{				
 				enemies[firstEnemyLeft]->bIsHead = false;
 				firstEnemyLeft = i;
 				enemies[firstEnemyLeft]->bIsHead = true;
+				//UE_LOG(LogTemp, Warning, TEXT("Found new Left head...."));
 			}
 
+			// Make each enemy behind head wait
 			for (int32 j = 0; j < enemyCount; j++)
 			{
+				if (!IsValid(enemies[j])) break;
 				float otherEnemyPosX = enemies[j]->GetActorLocation().X;
 				float otherEnemyDistToPlayer = FMath::Abs(playerPosX - otherEnemyPosX);
 
@@ -162,7 +139,7 @@ void ADemoGameBase::Tick(float DeltaSeconds)
 				if (otherEnemyPosX != enemyPosX)
 				{
 					// if compared enemies are on same side of player
-					if ( (enemyPosX > playerPosX && otherEnemyPosX > playerPosX) || (enemyPosX < playerPosX && otherEnemyPosX < playerPosX))	
+					if ((enemyPosX > playerPosX && otherEnemyPosX > playerPosX) || (enemyPosX < playerPosX && otherEnemyPosX < playerPosX))
 					{
 						// if enemy is further from player than other enemy (we do not need to stop enemy that is in front of compared enemy)
 						if (enemyDistToPlayer > otherEnemyDistToPlayer)
@@ -172,7 +149,6 @@ void ADemoGameBase::Tick(float DeltaSeconds)
 							{
 								bShouldwait = true;
 								//UE_LOG(LogTemp, Warning, TEXT("Waiting...."));
-								//break;
 							}
 						}
 					}
@@ -180,9 +156,15 @@ void ADemoGameBase::Tick(float DeltaSeconds)
 				enemies[i]->bIsWaiting = bShouldwait;
 			}
 		}
+		else
+		{
+			enemies.RemoveAt(i, 1, true); // remove missing/destroyed element
+			enemyCount--;
+			i--; // removing shrinks array by one so we need to check same element again on next loop
+		}
 	}
 
-	//// Debug stuff below
+	//// Debug stuff below if problems occur
 	//if (enemies.Num()> 0 && firstEnemyLeft >= 0)
 	//{
 	//	UE_LOG(LogTemp, Warning, TEXT("First enemy LEFT is %s"), *enemies[firstEnemyLeft]->GetName());
@@ -192,28 +174,34 @@ void ADemoGameBase::Tick(float DeltaSeconds)
 	//{
 	//	UE_LOG(LogTemp, Warning, TEXT("First enemy RIGHT is %s"), *enemies[firstEnemyRight]->GetName());
 	//}
+
+	//for (int32 t = 0; t < enemies.Num(); t++)
+	//{
+	//	UE_LOG(LogTemp, Warning, TEXT("Enemies left: %s"), *enemies[t]->GetName());
+	//}
 }
 
 void ADemoGameBase::SpawnEnemy()
 {
-	id = Increment(id);
-	//if (id >= 6) return;
+	if (enemies.Num() > 2) return;
 
+	id = Increment(id);
+
+	///spawn parameters to enforce uniqueness
 	FActorSpawnParameters SpawnInfo;
 	SpawnInfo.Name = FName(*Entityname(FString("Enemy"), id));
-	UClass *a = EnemyFetcher();
-	a->Rename(*Entityname(FString("Enemy"), id));
-	AEnemy2D *b =  GetWorld()->SpawnActor<AEnemy2D>(a, FVector::ZeroVector, FRotator(0.0f, 90.0f, 0.0f), SpawnInfo);
-	b->Tags.Add("Enemy");
-	b->Rename(*Entityname(FString("Enemy"),id));
-	enemies.Add(b);
+
+	UClass *a = EnemyFetcher(); ///Fetch enemy prefab
+	AEnemy2D *b = GetWorld()->SpawnActor<AEnemy2D>(a, FVector::ZeroVector, FRotator(0.0f, 90.0f, 0.0f), SpawnInfo);
+	
+	if (b)
+	{
+		b->Rename(*Entityname(FString("Enemy"), id));
+		b->Tags.Add("Enemy");
+		enemies.Add(b);
+	}
 }
 
-void ADemoGameBase::EndLevel()
-{
-	FString LevelString = GetWorld()->GetMapName();
-	FName LevelToLoad = FName(*LevelString);
-}
 
 /*debugger which includes GEngine
 @param Level is priority of message,
@@ -230,6 +218,7 @@ void ADemoGameBase::Debugger(int level = 0, int disp = 0, FString message = " ")
 	}
 }
 
+//event handler for player death
 void ADemoGameBase::OnPlayerDeath()
 {
 	TArray<AActor*> temp;
@@ -248,8 +237,9 @@ UClass *ADemoGameBase::EnemyFetcher()
 {
 	cumulative = 0.0f;
 	diceRoll = FMath::RandRange(0.0f, 100.0f);
-	for (int i = 0; i < 3; i++)
+	for (int i = 0; i < EnemyPrefabs.Num(); i++)
 	{
+		//cumulative += chances[i];
 		cumulative += chances[i];
 
 		if (diceRoll <= cumulative)

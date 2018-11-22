@@ -15,8 +15,6 @@
 
 	///rest of the implementation relating to different enemy behaviour is done via BP
 
-static int indexWep = 0;
-
 AEnemy2D::AEnemy2D()
 {
 	PrimaryActorTick.bCanEverTick = true;
@@ -24,21 +22,21 @@ AEnemy2D::AEnemy2D()
 	C_rootBox = CreateDefaultSubobject<UBoxComponent>(TEXT("Lers"));
 
 	RootComponent = C_rootBox;
-	id = 0;
 	state = CB_walking;
-
 }
-
 
 void AEnemy2D::BeginPlay()
 {
 	bGameEnd = false;
-	Super::BeginPlay();
 	UGameplayStatics::GetAllActorsWithTag(GetWorld(), FName("Player"), player);
+	if (player.Last())
+		direction = player.Last()->GetTransform().GetLocation() - GetTransform().GetLocation();
 	timer = timerValue;
 	bIsWaiting = false;
 	bIsHead = true;
-	direction = player.Last()->GetActorLocation() - GetActorLocation();}
+	Super::BeginPlay();
+
+}
 
 void AEnemy2D::Tick(float DeltaTime)
 {
@@ -61,12 +59,12 @@ void AEnemy2D::Movement(float moveValue, float Deltatime)
 		return;
 	}
 
-	FVector newLoc = GetActorLocation();
-	FVector b = player.Last()->GetActorLocation();
-	FVector temp = b - GetActorLocation();
+	FVector newLoc = GetTransform().GetLocation();
+	FVector b = player.Last()->GetTransform().GetLocation();
+	FVector temp = b - GetTransform().GetLocation();
 	temp.Normalize();
 
-	StateChecker(Deltatime,b);
+	StateChecker(Deltatime, b);
 
 	///take action based on the current state
 	if (state == CB_walking)
@@ -81,8 +79,7 @@ void AEnemy2D::Movement(float moveValue, float Deltatime)
 		{
 			if (timer <= 0.0f)
 			{
-				bool side = direction.X > 0 ? true : false;
-				asdf(side);
+				asdf(direction.X > 0);
 			}
 		}
 		else
@@ -99,7 +96,12 @@ void AEnemy2D::Movement(float moveValue, float Deltatime)
 	{
 		if (item)
 		{
-			Cast<UPickupComponent>(item->GetClass())->CheckLocation(this, direction.GetSafeNormal(), item);
+			Cast<UPickupComponent>(item->GetClass())->CheckLocation(this, direction, item);
+		}
+
+		if (item2)
+		{
+			Cast<UPickupComponent>(item->GetClass())->CheckLocation(this, direction, item);
 		}
 	}
 }
@@ -128,10 +130,20 @@ void AEnemy2D::PlayerDeath()
 	ADemoGameBase::Debugger(10, 0, FString("Game stopped for enemy"));
 }
 
+void AEnemy2D::TakeDamageEnemy(bool weapon)
+{
+	if ((item || item2) && !weapon) return;
+
+		Destroy();
+	
+}
+
 void AEnemy2D::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
 	if (item)
 		Cast<UPickupComponent>(item->GetClass())->DisEquip(item);
+	if (item2)
+		item2->Destroy();
 	UScoreManager::AddPoints(100);
 	Super::EndPlay(EndPlayReason);
 
@@ -143,18 +155,32 @@ void AEnemy2D::Shoot()
 	item->UseWeapon();
 }
 
-//Generates weapon for the enemy based on its blueprint
-void AEnemy2D::AddWeapon()
+void SpawnWeapon(AItem *&item, AActor *actor, UWorld *world, UClass *weaponPrefab)
 {
 	indexWep = Increment(indexWep);
 	FActorSpawnParameters SpawnInfo;
 	SpawnInfo.Name = FName(*Entityname(FString("Weapons"), indexWep));
-	weaponPrefab->Rename(*Entityname(FString("Weapons"),indexWep));
-	item = GetWorld()->SpawnActor<AItem>(weaponPrefab, FVector::ZeroVector, FRotator::ZeroRotator, SpawnInfo);
+	item = world->SpawnActor<AItem>(weaponPrefab, FVector::ZeroVector, FRotator::ZeroRotator, SpawnInfo);
 	item->Tags.Add(SpawnInfo.Name);
-	item->SetActorLocation(GetActorLocation());
-	if (item)
-		Cast<UPickupComponent>(item->GetClass())->Pickup(this, direction.GetSafeNormal(), item);
+	item->SetActorLocation(actor->GetTransform().GetLocation());
+}
+
+//Generates weapon for the enemy based on its blueprint
+void AEnemy2D::AddWeapon(int index)
+{
+	if (index == 0)
+	{
+		SpawnWeapon(item, this, GetWorld(), weaponPrefab);
+		if (item)
+			Cast<UPickupComponent>(item)->Pickup(this, direction, item);
+	}
+
+	if (index == 1)
+	{
+		SpawnWeapon(item2, this, GetWorld(), weaponPrefab);
+		if (item2)
+			Cast<UPickupComponent>(item2)->Pickup(this, direction, item2);
+	}
 
 }
 

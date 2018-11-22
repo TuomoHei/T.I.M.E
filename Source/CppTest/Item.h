@@ -14,21 +14,26 @@ public:
 
 	AItem();
 	UFUNCTION(BlueprintCallable)
-	void Physics(float deltatime);
+		void Physics(float deltatime);
 	UFUNCTION(BlueprintCallable)
 		void Bounce(float deltatime);
 
 	///Calls blueprint function attack
 	UFUNCTION(BlueprintImplementableEvent)
 		void UseWeapon();
-	UPROPERTY(EditAnywhere, Category="Variables")
+	UPROPERTY(EditAnywhere, Category = "Variables")
 		FTransform ItemOffset;
+	UPROPERTY(EditDefaultsOnly, Category = Combat)
+		bool meleeweapon;
 
+	int DamageGetter() { if (!meleeweapon) return damage; else return 0; };
 protected:
 
+	UPROPERTY(EditDefaultsOnly, Category = Combat)
+		int damage;
 	UPROPERTY(BlueprintReadWrite)
 		float shoottime;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ranged")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Combat)
 		float firerate;
 	UPROPERTY(EditAnywhere, Category = "CustomPhysics")
 		float weight;

@@ -47,6 +47,8 @@ void ATestPlayerController::Touched(ETouchIndex::Type FingerIndex, FVector locat
 				FTimerHandle handle;
 				GetWorldTimerManager().SetTimer(handle, a, RegPlayer2D->attackTime, false);
 				DrawDebugPoint(GetWorld(), hit->ImpactPoint, 25, FColor(0, 255, 0), false, 1.0f);
+
+				if(RegPlayer2D->ItemGetter() == NULL || Cast<AItem>(RegPlayer2D->ItemGetter())->meleeweapon)
 				RegPlayer2D->bIsAttacking = true;
 			}
 

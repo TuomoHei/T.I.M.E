@@ -5,6 +5,7 @@
 #include "PickUpComponent.h"
 #include "DemoGameBase.h"
 #include "Enemy2D.h"
+#include "Item.h"
 #include "Components/InputComponent.h"
 #include "Runtime/Engine/Classes/Components/BoxComponent.h"
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
@@ -13,12 +14,12 @@
 
 APlayer2D::APlayer2D()
 {
-
 	PrimaryActorTick.bCanEverTick = true;
 	AutoPossessPlayer = EAutoReceiveInput::Player0;
 	base = CreateDefaultSubobject<UBoxComponent>(TEXT("ASDF"));
 	RootComponent = Cast<USceneComponent>(base);
 	item = nullptr;
+	canMove = true;
 	///Tag if needed
 	Tags.Add("Player");
 }
@@ -46,7 +47,8 @@ void APlayer2D::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	FVector newLoc = GetActorLocation();
+	///	if (!canMove) return; uncomment when enabling player death
+
 	if (!PC)
 	{
 		ADemoGameBase::Debugger(20, 0, FString("Player Controller undefined"));
@@ -55,31 +57,31 @@ void APlayer2D::Tick(float DeltaTime)
 
 	if (PC->HitPos == FVector::ZeroVector) return;
 
+	FVector newLoc = GetTransform().GetLocation();
 
-	if (FMath::Abs(PC->HitPos.X - GetActorLocation().X) < 20)
+	if (FMath::Abs(PC->HitPos.X - GetTransform().GetLocation().X) < 20)
 	{
 		MovementInput = FVector::ZeroVector;
 	}
 	else
 	{
-		MovementInput = PC->HitPos - GetActorLocation();
+		MovementInput = PC->HitPos - GetTransform().GetLocation().X;
 		MovementInput.Normalize();
-		ADemoGameBase::Debugger(674, MovementInput.X, FString("ADSF"));
 	}
 
 
 	///Calculate the distance between click point and players location
 
-		newLoc.X += MovementInput.X * DeltaTime * moveSpeed;
-		SetActorLocation(newLoc);
-	
+	newLoc.X += Movevalue(MovementInput) * DeltaTime * moveSpeed;
+	SetActorLocation(newLoc);
+
 
 
 	if (MovementInput != FVector::ZeroVector)
 	{
 		timeManager->DeactivateSlowmotion();
 		if (item)
-			Cast<UPickupComponent>(item->GetClass())->CheckLocation(this, MovementInput.GetSafeNormal(), item);
+			Cast<UPickupComponent>(item->GetClass())->CheckLocation(this, MovementInput, item);
 	}
 }
 
@@ -93,11 +95,14 @@ void APlayer2D::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 //Calls the gamemodebase method onplayerdeath 
 void APlayer2D::PlayerDeath()
 {
+	//DEBUG NEED TO REMOVE WHEN NOT NEEDED
+	return;
 	TArray<AActor*> gamemanager;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ADemoGameBase::StaticClass(), gamemanager);
 	ADemoGameBase *temp = nullptr;
 	temp = Cast<ADemoGameBase>(gamemanager[0]);
 	temp->OnPlayerDeath();
+	canMove = false;
 }
 
 void APlayer2D::PickUp(AActor *targetObj)
@@ -111,8 +116,8 @@ void APlayer2D::PickUp(AActor *targetObj)
 
 void APlayer2D::UnEquip()
 {
-	if(item)
-	Cast<UPickupComponent>(item->GetClass())->DisEquip(item);
+	if (item)
+		Cast<UPickupComponent>(item->GetClass())->DisEquip(item);
 }
 
 
@@ -120,10 +125,13 @@ void APlayer2D::AttackEnemy(AActor *enemy)
 {
 	if (!enemy) return;
 
-	timeManager->DeactivateSlowmotion();	
+	timeManager->DeactivateSlowmotion();
 
 	bIsAttacking = false;
-	enemy->Destroy();
+	if (!Cast<AItem>(item)->meleeweapon) return;
+	Cast<AEnemy2D>(enemy)->TakeDamageEnemy(item != nullptr);
+
+
 }
 
 void APlayer2D::GetTimeManipulator()

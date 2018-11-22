@@ -24,26 +24,6 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-//	UFUNCTION(BlueprintCallable, Category = "TimeManipulate")
-//	void Action();
-//
-//private:
-//
-//	UPROPERTY(EditAnyWhere)
-//		float BackSlowWait;
-//	float Speed;
-//	float OldSpeed;
-//	ATimeManager* pTimeManager;
-//
-//	FVector Position;
-//	FVector OldPosition;
-//	FTimerHandle TimeHandle;
-//	
-//private:
-//	void ChangeNormal();
-//	void ChangeSlow();
-//	void CangeForcedSlow();
-
 protected:
 	FTimerHandle SlowTimeHandle;
 	void ResetTimerHandle();
@@ -73,6 +53,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "TimeManager")
 		bool GetSlow() { return bIsSlow; }
+
+	//UPROPERTY(EditAnyWhere)
+	//	class USoundBase* sound;
 
 private:
 	bool bIsSlow;

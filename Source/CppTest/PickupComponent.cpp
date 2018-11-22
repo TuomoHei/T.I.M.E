@@ -43,7 +43,7 @@ void UPickupComponent::DisEquip(AActor* targetObj)
 //Note: removes the previous attachment
 void UPickupComponent::CheckLocation(AActor *Player, FVector location, AActor *targetObj)
 {
-	FAttachmentTransformRules a = FAttachmentTransformRules::FAttachmentTransformRules(EAttachmentRule::SnapToTarget, false);
+	FAttachmentTransformRules a = FAttachmentTransformRules(EAttachmentRule::SnapToTarget, false);
 
 	AItem *offset = Cast<AItem>(targetObj);
 

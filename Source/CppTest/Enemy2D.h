@@ -7,6 +7,7 @@
 
 static int indexWep = 0;
 
+UENUM()
 enum CombatState
 {
 	CB_walking, CB_fighting
@@ -44,12 +45,14 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void TakeDamageEnemy(bool weapon);
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		TEnumAsByte<CombatState> state;
+
 	class AItem *item;
 	class AItem *item2;
 
 protected:
 
-	CombatState state;
 	class ATestPlayerController *controller;
 	TArray<AActor*> player;
 	float timer;

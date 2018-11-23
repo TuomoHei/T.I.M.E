@@ -23,7 +23,7 @@ public:
 		void UseWeapon();
 	UPROPERTY(EditAnywhere, Category = "Variables")
 		FTransform ItemOffset;
-	UPROPERTY(EditDefaultsOnly, Category = Combat)
+	UPROPERTY(EditDefaultsOnly, Category = Combat, BlueprintReadWrite)
 		bool meleeweapon;
 	UPROPERTY(EditDefaultsOnly,BlueprintReadWrite, Category = Variables)
 	int endurance;

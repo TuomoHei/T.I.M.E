@@ -48,7 +48,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		TEnumAsByte<CombatState> state;
 
-	class AItem *item;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		class AItem *item;
 	class AItem *item2;
 
 protected:

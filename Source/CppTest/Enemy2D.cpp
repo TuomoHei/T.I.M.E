@@ -8,6 +8,7 @@
 #include "UObjectGlobals.h"
 #include "EngineUtils.h"
 #include "Player2D.h"
+#include "Engine/Engine.h"
 #include "TestPlayerController.h"
 #include "Item.h"
 #include "DemoGameBase.h"
@@ -17,9 +18,10 @@
 	///rest of the implementation relating to different enemy behaviour is done via BP
 static auto GeneralDestroyer = [](AActor *entity, UWorld *world) {if (!entity) return; 
 if (!entity->IsValidLowLevel())return; 
+entity->ConditionalBeginDestroy();
 entity->K2_DestroyActor();
 entity = NULL;  
-world->ForceGarbageCollection(true); 
+GEngine->ForceGarbageCollection(true);
 ADemoGameBase::Debugger(443, 0, FString("KILLEd")); 
 };
 
@@ -27,6 +29,7 @@ ADemoGameBase::Debugger(443, 0, FString("KILLEd"));
 
 AEnemy2D::AEnemy2D()
 {
+	
 	PrimaryActorTick.bCanEverTick = true;
 
 	C_rootBox = CreateDefaultSubobject<UBoxComponent>(TEXT("Lers"));

@@ -95,7 +95,7 @@ void ADemoGameBase::Tick(float DeltaSeconds)
 	enemyCount = enemies.Num();
 	float playerPosX = Player->GetActorLocation().X;
 	int firstEnemyLeft = -1;
-	int firstEnemyRight = -1;
+	int firstEnemyRight = -1;	
 
 	// Make enemy wait behind enemy in front of him if condition are met
 	for (int32 i = 0; i < enemyCount; i++)
@@ -135,7 +135,7 @@ void ADemoGameBase::Tick(float DeltaSeconds)
 			// Make each enemy behind head wait
 			for (int32 j = 0; j < enemyCount; j++)
 			{
-				if (!IsValid(enemies[j])) return;
+				if (!IsValid(enemies[j])) break;
 				float otherEnemyPosX = enemies[j]->GetActorLocation().X;
 				float otherEnemyDistToPlayer = FMath::Abs(playerPosX - otherEnemyPosX);
 
@@ -160,6 +160,12 @@ void ADemoGameBase::Tick(float DeltaSeconds)
 				enemies[i]->bIsWaiting = bShouldwait;
 			}
 		}
+		else
+		{
+			enemies.RemoveAt(i, 1, true); // remove missing/destroyed element
+			enemyCount--;
+			i--; // removing shrinks array by one so we need to check same element again on next loop
+		}
 	}
 
 	//// Debug stuff below if problems occur
@@ -172,10 +178,16 @@ void ADemoGameBase::Tick(float DeltaSeconds)
 	//{
 	//	UE_LOG(LogTemp, Warning, TEXT("First enemy RIGHT is %s"), *enemies[firstEnemyRight]->GetName());
 	//}
+
+	//for (int32 t = 0; t < enemies.Num(); t++)
+	//{
+	//	UE_LOG(LogTemp, Warning, TEXT("Enemies left: %s"), *enemies[t]->GetName());
+	//}
 }
 
 void ADemoGameBase::SpawnEnemy()
 {
+
 	if (enemies.Num() >= maxEnemies) return;
 	id = Increment(id);
 	enemyCount = Increment(enemyCount);

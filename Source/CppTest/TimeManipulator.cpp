@@ -100,14 +100,15 @@ void UTimeManipulator::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 // Activate slow motion for [slowSpeedDuration] seconds
 void UTimeManipulator::ActivateSlowmotion()
 {	
-	UGameplayStatics::SetGlobalTimeDilation(GetWorld(), slowGameSpeed);
+	UGameplayStatics::SetGlobalTimeDilation(GetWorld(), slowGameSpeed);	
 
 	ResetTimerHandle();
 
 	float realSlowDuration = slowSpeedDuration * slowGameSpeed;	// E.g. 2 seconds in 0.2 x game speed should actually last one fifth of 2 seconds
-
-	GetWorld()->GetTimerManager().SetTimer(SlowTimeHandle, this, &UTimeManipulator::DeactivateSlowmotion, realSlowDuration, false);
-
+	GetWorld()->GetTimerManager().SetTimer(SlowTimeHandle, this, &UTimeManipulator::DeactivateSlowmotion, realSlowDuration, false);		
+	UGameplayStatics::SetGlobalPitchModulation(GetWorld(), 0.01f, realSlowDuration);
+	//UGameplayStatics::PlaySoundAtLocation(GetWorld(), sound, GetOwner()->GetActorLocation());
+	
 	UE_LOG(LogTemp, Warning, TEXT("ActivateSlowmotion()"));
 
 	bIsSlow = true;

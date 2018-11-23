@@ -16,6 +16,7 @@ ADemoGameBase::ADemoGameBase()
 	PrimaryActorTick.bCanEverTick = true;
 	timer = (float)Spawnrate; //timer = timerValue;
 	id = 0;
+	enemyCount = 0;
 	PlayerControllerClass = ATestPlayerController::StaticClass();
 }
 
@@ -27,8 +28,11 @@ ADemoGameBase::~ADemoGameBase()
 
 void ADemoGameBase::StartPlay()
 {
-	Super::StartPlay();
 
+	auto PC = Cast<ATestPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
+	if (PC) PC->RegisterGameBase(this);
+	Super::StartPlay();
+	enemyCount = 0;
 	//Contains iterators that populate lists declared in header
 
 #pragma region Listpopulators
@@ -88,7 +92,7 @@ void ADemoGameBase::Tick(float DeltaSeconds)
 		}
 	}
 
-	int32 enemyCount = enemies.Num();
+	enemyCount = enemies.Num();
 	float playerPosX = Player->GetActorLocation().X;
 	int firstEnemyLeft = -1;
 	int firstEnemyRight = -1;
@@ -172,8 +176,10 @@ void ADemoGameBase::Tick(float DeltaSeconds)
 
 void ADemoGameBase::SpawnEnemy()
 {
+	if (enemies.Num() >= maxEnemies) return;
 	id = Increment(id);
-
+	enemyCount = Increment(enemyCount);
+	Debugger(220, enemies.Num(), FString("ADWFWA"));
 	///spawn parameters to enforce uniqueness
 	FActorSpawnParameters SpawnInfo;
 	SpawnInfo.Name = FName(*Entityname(FString("Enemy"), id));
@@ -203,6 +209,11 @@ void ADemoGameBase::Debugger(int level = 0, int disp = 0, FString message = " ")
 	{
 		GEngine->AddOnScreenDebugMessage(level, 5.f, FColor::Yellow, message + "  " + temp);
 	}
+}
+
+void ADemoGameBase::EnemyListRemover(AEnemy2D *enemy)
+{
+	enemies.Remove(enemy);
 }
 
 //event handler for player death

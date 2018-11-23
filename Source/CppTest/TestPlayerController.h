@@ -15,17 +15,14 @@ class CPPTEST_API ATestPlayerController : public APlayerController
 public:
 
 	FVector HitPos;
-
-	FVector2D previousTouchLocation;
-	FVector2D newTouchLocation;
-
 	class APlayer2D *RegPlayer2D;
-
+	class ADemoGameBase *RegGameBase;
 
 	//virtual void GetInputTouchState(ETouchIndex::Type FingerIndex, float &LocationX, float &LocationY, bool &bIsCurrentlyPressed) override;
 	virtual void SetupInputComponent() override;
 	void Touched(ETouchIndex::Type, FVector Location);
 	void RegisterPlayer2D(APlayer2D *actor);
+	void RegisterGameBase(class ADemoGameBase *base);
 
 
 	virtual void BeginPlay() override;

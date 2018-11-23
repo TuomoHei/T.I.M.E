@@ -3,6 +3,7 @@
 #include "PickupComponent.h"
 #include "TestPlayerController.h"
 #include "DemoGameBase.h"
+#include "Enemy2D.h"
 #include "Item.h"
 
 // Sets default values for this component's properties
@@ -35,6 +36,7 @@ void UPickupComponent::Pickup(AActor *Player, FVector location, AActor *targetOb
 void UPickupComponent::DisEquip(AActor* targetObj)
 {
 	FDetachmentTransformRules a(FDetachmentTransformRules::KeepWorldTransform);
+	a.ScaleRule = EDetachmentRule::KeepWorld;
 	targetObj->DetachFromActor(a);
 }
 
@@ -43,7 +45,7 @@ void UPickupComponent::DisEquip(AActor* targetObj)
 void UPickupComponent::CheckLocation(AActor *Player, FVector location, AActor *targetObj)
 {
 
-	FAttachmentTransformRules a = FAttachmentTransformRules::FAttachmentTransformRules(EAttachmentRule::SnapToTarget, false);
+	FAttachmentTransformRules a = FAttachmentTransformRules(EAttachmentRule::KeepWorld, false);
 
 	AItem *offset = Cast<AItem>(targetObj);
 
@@ -58,12 +60,12 @@ void UPickupComponent::CheckLocation(AActor *Player, FVector location, AActor *t
 
 	if (Player->IsA(AEnemy2D::StaticClass()))
 	{
-		if (Cast<AEnemy2D>(Player)->item2 == Cast<AItem>(targetObj))
+		if (Cast<AEnemy2D>(Player)->item2 != NULL)
 		{
 			auto comp = (Player->GetActorLocation() - location).X < 0 ?
 				Player->GetComponentsByTag(UStaticMeshComponent::StaticClass(), FName("Right"))
 				: Player->GetComponentsByTag(UStaticMeshComponent::StaticClass(), FName("Left"));
-			targetObj->AttachToComponent(Cast<USceneComponent>(comp.Last()), a);
+			Cast<AEnemy2D>(Player)->item2->AttachToComponent(Cast<USceneComponent>(comp.Last()), a);
 		}
 	}
 

@@ -18,7 +18,7 @@
 static auto GeneralDestroyer = [](AActor *entity, UWorld *world) {if (!entity) return; 
 if (!entity->IsValidLowLevel())return; 
 entity->K2_DestroyActor();
-entity = NULL;  
+entity = NULL;
 world->ForceGarbageCollection(true); 
 ADemoGameBase::Debugger(443, 0, FString("KILLEd")); 
 };

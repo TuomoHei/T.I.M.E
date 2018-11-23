@@ -14,8 +14,8 @@ void ATestPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 
-
 	bShowMouseCursor = true;
+	GetTimeManipulator();
 }
 
 void ATestPlayerController::SetupInputComponent()
@@ -33,6 +33,9 @@ void ATestPlayerController::Touched(ETouchIndex::Type FingerIndex, FVector locat
 
 	if (!hit) return;
 
+	timeManager->DeactivateSlowmotion();
+
+	if (hit->GetActor() == NULL) return;	
 
 	if (FMath::Abs((hit->ImpactPoint - RegPlayer2D->GetActorLocation()).X) <= RegPlayer2D->pickUpRange)
 	{
@@ -82,4 +85,13 @@ void ATestPlayerController::RegisterPlayer2D(APlayer2D *actor)
 void ATestPlayerController::RegisterGameBase(ADemoGameBase *base)
 {
 	RegGameBase = base;
+}
+
+void ATestPlayerController::GetTimeManipulator()
+{
+	timeManager = RegPlayer2D->FindComponentByClass<UTimeManipulator>();
+	if (timeManager)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Time Manipulator found"));
+	}
 }

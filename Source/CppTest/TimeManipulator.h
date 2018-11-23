@@ -1,9 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
-
 #include "Components/ActorComponent.h"
-#include "TimeManager.h"
 #include "TimeManipulator.generated.h"
 
 

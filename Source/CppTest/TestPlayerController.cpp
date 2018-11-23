@@ -36,24 +36,27 @@ void ATestPlayerController::Touched(ETouchIndex::Type FingerIndex, FVector locat
 
 	if (FMath::Abs((hit->ImpactPoint - RegPlayer2D->GetActorLocation()).X) <= RegPlayer2D->pickUpRange)
 	{
-		if (hit->GetActor()->ActorHasTag(FName("Enemy")))
+		if (IsValid(Cast<AEnemy2D>(hit->GetActor())))
 		{
 			if (IsValid(RegPlayer2D->ItemGetter()))
-				if (!Cast<AItem>(RegPlayer2D->ItemGetter())->meleeweapon) return;
+			{
+				if (!Cast<AItem>(RegPlayer2D->ItemGetter())->meleeweapon)
+					return;
+			}
 
 
 			///Delegate for the timer (Attacktime can be assigned via player BP
 			FTimerDelegate a = FTimerDelegate::CreateLambda([=](void)
 			{
-					RegPlayer2D->AttackEnemy(hit->GetActor());
+				RegPlayer2D->AttackEnemy(hit->GetActor());
 			});
 
 			FTimerHandle handle;
 			GetWorldTimerManager().SetTimer(handle, a, RegPlayer2D->attackTime, false);
-			DrawDebugPoint(GetWorld(), hit->ImpactPoint, 25, FColor(0, 255, 0), false, 1.0f);
+			DrawDebugPoint(GetWorld(), hit->ImpactPoint, 50, FColor(0, 255, 0), false, 3.0f);
 
-				RegPlayer2D->bIsAttacking = true;
-				return;
+			RegPlayer2D->bIsAttacking = true;
+			return;
 		}
 
 		if (hit->GetActor()->ActorHasTag(FName("PickUp")))
@@ -66,9 +69,8 @@ void ATestPlayerController::Touched(ETouchIndex::Type FingerIndex, FVector locat
 	if (FMath::Abs((hit->ImpactPoint - RegPlayer2D->GetActorLocation()).X) <= RegPlayer2D->moveRange)
 	{
 		HitPos = hit->ImpactPoint;
-		DrawDebugPoint(GetWorld(), hit->ImpactPoint, 10, FColor(255, 0, 0), false, 1.0f);
+		DrawDebugPoint(GetWorld(), hit->ImpactPoint, 50, FColor(255, 0, 0), false, 3.0f);
 	}
-
 
 }
 

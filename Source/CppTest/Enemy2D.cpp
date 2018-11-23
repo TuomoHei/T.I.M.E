@@ -161,7 +161,6 @@ void AEnemy2D::TakeDamageEnemy(bool weapon)
 	//check if dual wielding enemy
 	if (item2)
 	{
-		ADemoGameBase::Debugger(122, 0, FString("Hit second phase"));
 		GeneralDestroyer(item2,GetWorld());
 		item2 = nullptr;
 
@@ -169,13 +168,13 @@ void AEnemy2D::TakeDamageEnemy(bool weapon)
 	//drop the last item that enemy is holding
 	if (item)
 	{
-		ADemoGameBase::Debugger(122, 0, FString("Hit first phase"));
 
 		Cast<UPickupComponent>(item)->DisEquip(item);
+		item = nullptr;
 		return;
 	}
 
-	ADemoGameBase::Debugger(122, 0, FString(" destroy"));
+	ADemoGameBase::Debugger(122, 0, FString("destroy"));
 	Cast<APlayer2D>(player.Last())->PC->RegGameBase->EnemyListRemover(this);
 	//Add death animation and others here
 	GeneralDestroyer(this,GetWorld());

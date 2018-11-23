@@ -26,11 +26,8 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = Combat)
 		bool meleeweapon;
 
-	int DamageGetter() { if (!meleeweapon) return damage; else return 0; };
 protected:
 
-	UPROPERTY(EditDefaultsOnly, Category = Combat)
-		int damage;
 	UPROPERTY(BlueprintReadWrite)
 		float shoottime;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Combat)

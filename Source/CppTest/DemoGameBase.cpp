@@ -254,7 +254,7 @@ UClass *ADemoGameBase::EnemyFetcher()
 
 		if (diceRoll <= cumulative)
 		{
-			return EnemyPrefabs[0];
+			return EnemyPrefabs[i];
 		}
 	}
 

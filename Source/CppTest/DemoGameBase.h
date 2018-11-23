@@ -3,19 +3,17 @@
 #pragma once
 
 #include "GameFramework/GameModeBase.h"
-#include "Enemy2D.h"
-#include "Player2D.h"
 #include "DemoGameBase.generated.h"
 
 //Increase the number by one /w safe proof
-static auto Increment = [](int a) { if (a > 10000) return 0; else return a+1; };
+static auto Increment = [](int a) { if (a > 500 )return 0; else return a + 1;};
 
 //give name to the entity
 static auto Entityname = [](FString a, int b) { FString name; name.AppendInt(b); name += a; return name; };
 
 static auto Movevalue = [](FVector moveVector) {
-	if (moveVector.X > 0) return 1; 
-	else if (moveVector.X < 0) return -1;  
+	if (moveVector.X > 0) return 1;
+	else if (moveVector.X < 0) return -1;
 	else return 0;
 };
 
@@ -25,14 +23,19 @@ class CPPTEST_API ADemoGameBase : public AGameModeBase
 	GENERATED_BODY()
 
 public:
+	int32 enemyCount;
 	//debugger with GE engine
 	static void Debugger(int level, int disp, FString message);
-
+	void EnemyListRemover(class AEnemy2D *enemy);
 	//Global method for player death event
 	void OnPlayerDeath();
 	//List containing enemyprefabs
-	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly,Category = EnemySpawn)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = EnemySpawn)
 		TArray<UClass*> EnemyPrefabs;
+
+	UPROPERTY(EditAnywhere)
+		float enemyGap = 100.0f;
+
 private:
 
 	ADemoGameBase();
@@ -55,8 +58,10 @@ private:
 		float chances[3];
 	UPROPERTY(EditDefaultsOnly, Category = "EnemySpawn")
 		int32 Spawnrate;
+	UPROPERTY(EditDefaultsOnly, Category = "EnemySpawn")
+		int maxEnemies;
 	UPROPERTY()
-		TArray<AEnemy2D*> enemies;
+		TArray<class AEnemy2D*> enemies;
 	UPROPERTY()
-		APlayer2D* Player;
+		class APlayer2D* Player;
 };

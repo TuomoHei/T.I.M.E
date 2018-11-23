@@ -14,8 +14,8 @@ void ATestPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 
-
 	bShowMouseCursor = true;
+	GetTimeManipulator();
 }
 
 void ATestPlayerController::SetupInputComponent()
@@ -30,45 +30,68 @@ void ATestPlayerController::Touched(ETouchIndex::Type FingerIndex, FVector locat
 {
 	FHitResult *hit = new FHitResult();
 	GetHitResultUnderFingerByChannel(FingerIndex, UEngineTypes::ConvertToTraceType(ECC_Visibility), true, *hit);
-	
+
 	if (!hit) return;
-	
 
-		if (FMath::Abs((hit->ImpactPoint - RegPlayer2D->GetActorLocation()).X) <= RegPlayer2D->pickUpRange)
+	timeManager->DeactivateSlowmotion();
+
+	if (hit->GetActor() == NULL) return;	
+
+	if (FMath::Abs((hit->ImpactPoint - RegPlayer2D->GetActorLocation()).X) <= RegPlayer2D->pickUpRange)
+	{
+		if (IsValid(Cast<AEnemy2D>(hit->GetActor())))
 		{
-			if (hit->GetActor()->ActorHasTag(FName("Enemy")))
+			if (IsValid(RegPlayer2D->ItemGetter()))
 			{
-				///Delegate for the timer (Attacktime can be assigned via player BP
-				FTimerDelegate a = FTimerDelegate::CreateLambda([=](void) 
-				{
-					RegPlayer2D->AttackEnemy(hit->GetActor());  
-				});		
-				
-				FTimerHandle handle;
-				GetWorldTimerManager().SetTimer(handle, a, RegPlayer2D->attackTime, false);
-				DrawDebugPoint(GetWorld(), hit->ImpactPoint, 25, FColor(0, 255, 0), false, 1.0f);
-
-				if(RegPlayer2D->ItemGetter() == NULL || Cast<AItem>(RegPlayer2D->ItemGetter())->meleeweapon)
-				RegPlayer2D->bIsAttacking = true;
+				if (!Cast<AItem>(RegPlayer2D->ItemGetter())->meleeweapon)
+					return;
 			}
 
-			if (hit->GetActor()->ActorHasTag(FName("PickUp")))
+
+			///Delegate for the timer (Attacktime can be assigned via player BP
+			FTimerDelegate a = FTimerDelegate::CreateLambda([=](void)
 			{
-				if(!hit->GetActor()->GetAttachParentActor())
+				RegPlayer2D->AttackEnemy(hit->GetActor());
+			});
+
+			FTimerHandle handle;
+			GetWorldTimerManager().SetTimer(handle, a, RegPlayer2D->attackTime, false);
+			DrawDebugPoint(GetWorld(), hit->ImpactPoint, 50, FColor(0, 255, 0), false, 3.0f);
+
+			RegPlayer2D->bIsAttacking = true;
+			return;
+		}
+
+		if (hit->GetActor()->ActorHasTag(FName("PickUp")))
+		{
+			if (!hit->GetActor()->GetAttachParentActor())
 				RegPlayer2D->PickUp(hit->GetActor());
-			}
 		}
+	}
 
-		if (FMath::Abs((hit->ImpactPoint - RegPlayer2D->GetActorLocation()).X) <= RegPlayer2D->moveRange)
-		{
-			HitPos = hit->ImpactPoint;
-			DrawDebugPoint(GetWorld(), hit->ImpactPoint, 10, FColor(255, 0, 0), false, 1.0f);
-		}
+	if (FMath::Abs((hit->ImpactPoint - RegPlayer2D->GetActorLocation()).X) <= RegPlayer2D->moveRange)
+	{
+		HitPos = hit->ImpactPoint;
+		DrawDebugPoint(GetWorld(), hit->ImpactPoint, 50, FColor(255, 0, 0), false, 3.0f);
+	}
 
-	
 }
 
 void ATestPlayerController::RegisterPlayer2D(APlayer2D *actor)
 {
 	RegPlayer2D = actor;
+}
+
+void ATestPlayerController::RegisterGameBase(ADemoGameBase *base)
+{
+	RegGameBase = base;
+}
+
+void ATestPlayerController::GetTimeManipulator()
+{
+	timeManager = RegPlayer2D->FindComponentByClass<UTimeManipulator>();
+	if (timeManager)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Time Manipulator found"));
+	}
 }

@@ -101,7 +101,7 @@ void ATestPlayerController::RegisterGameBase(ADemoGameBase *base)
 
 void ATestPlayerController::GetTimeManipulator()
 {
-	if (RegPlayer2D) return;
+	if (!RegPlayer2D) return;
 	timeManager = RegPlayer2D->FindComponentByClass<UTimeManipulator>();
 	if (timeManager&& runDebug)
 	{

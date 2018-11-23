@@ -149,7 +149,7 @@ void ADemoGameBase::Tick(float DeltaSeconds)
 						if (enemyDistToPlayer > otherEnemyDistToPlayer)
 						{
 							// if enemy is less than 60cm apart
-							if (FMath::Abs(otherEnemyPosX - enemyPosX) < 60)
+							if (FMath::Abs(otherEnemyPosX - enemyPosX) < enemyGap)
 							{
 								bShouldwait = true;
 								//UE_LOG(LogTemp, Warning, TEXT("Waiting...."));

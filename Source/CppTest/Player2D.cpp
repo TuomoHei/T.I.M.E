@@ -79,7 +79,7 @@ void APlayer2D::Tick(float DeltaTime)
 
 	if (MovementInput != FVector::ZeroVector)
 	{
-		timeManager->DeactivateSlowmotion();
+		//timeManager->DeactivateSlowmotion();
 		if (item)
 			Cast<UPickupComponent>(item->GetClass())->CheckLocation(this, MovementInput, item);
 	}
@@ -125,7 +125,7 @@ void APlayer2D::AttackEnemy(AActor *enemy)
 {
 	if (!enemy) return;
 
-	timeManager->DeactivateSlowmotion();
+	//timeManager->DeactivateSlowmotion();
 	if (item)
 	{
 		if (!Cast<AItem>(item)->meleeweapon)return;

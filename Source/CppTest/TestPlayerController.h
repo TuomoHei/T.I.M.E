@@ -3,6 +3,7 @@
 #pragma once
 
 #include "GameFramework/PlayerController.h"
+#include "TimeManipulator.h"
 #include "TestPlayerController.generated.h"
 
 
@@ -27,5 +28,9 @@ public:
 
 	virtual void BeginPlay() override;
 	
-	
+private:
+	void GetTimeManipulator();
+
+	UPROPERTY(EditAnywhere)
+		UTimeManipulator* timeManager;
 };

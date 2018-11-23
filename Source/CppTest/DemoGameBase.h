@@ -5,9 +5,6 @@
 #include "GameFramework/GameModeBase.h"
 #include "DemoGameBase.generated.h"
 
-
-
-
 //Increase the number by one /w safe proof
 static auto Increment = [](int a) { if (a > 500 )return 0; else return a + 1;};
 
@@ -35,6 +32,10 @@ public:
 	//List containing enemyprefabs
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = EnemySpawn)
 		TArray<UClass*> EnemyPrefabs;
+
+	UPROPERTY(EditAnywhere)
+		float enemyGap = 100.0f;
+
 private:
 
 	ADemoGameBase();

@@ -59,10 +59,6 @@ protected:
 	virtual void BeginPlay() override;
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 	virtual void Movement(float moveValue, float Deltatime);
-	UFUNCTION(BlueprintImplementableEvent)
-		void ShootEvent();
-	UFUNCTION(BlueprintCallable)
-		void Shoot();
 	UPROPERTY(EditAnywhere, Category = "Movement")
 		float walkSpeed;
 	UPROPERTY(EditAnywhere, Category = "Combat")

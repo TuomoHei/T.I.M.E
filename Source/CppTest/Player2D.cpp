@@ -125,16 +125,20 @@ void APlayer2D::AttackEnemy(AActor *enemy)
 {
 	if (!enemy) return;
 
-	//timeManager->DeactivateSlowmotion();
 	if (item)
 	{
-		if (!Cast<AItem>(item)->meleeweapon)return;
+
 		Cast<AEnemy2D>(enemy)->TakeDamageEnemy(item != nullptr);
+		Cast<AItem>(item)->UseWeapon();
+
 		bIsAttacking = false;
+		return;
+
 	}
 	else
 	{
-		Cast<AEnemy2D>(item)->TakeDamageEnemy(item != nullptr);
+		Cast<AEnemy2D>(enemy)->TakeDamageEnemy(item != nullptr);
+		bIsAttacking = false;
 	}
 
 }

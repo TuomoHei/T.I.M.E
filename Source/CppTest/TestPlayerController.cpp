@@ -4,10 +4,16 @@
 #include "Runtime/Engine/Classes/Engine/LocalPlayer.h"
 #include "Player2D.h"
 #include "Enemy2D.h"
-#include "Runtime/Engine/Public/DrawDebugHelpers.h" //for debug
 #include "DemoGameBase.h"
 #include "Item.h"
 #include "TimerManager.h"
+
+#if !UE_BUILD_SHIPPING
+#include "Runtime/Engine/Public/DrawDebugHelpers.h" //for debug
+bool runDebug = true;
+#else
+ bool runDebug = false;
+#endif
 
 
 void ATestPlayerController::BeginPlay()
@@ -44,7 +50,10 @@ void ATestPlayerController::Touched(ETouchIndex::Type FingerIndex, FVector locat
 			if (IsValid(RegPlayer2D->ItemGetter()))
 			{
 				if (!Cast<AItem>(RegPlayer2D->ItemGetter())->meleeweapon)
+				{
+					Cast<AItem>(RegPlayer2D->ItemGetter())->UseWeapon();
 					return;
+				}
 			}
 
 
@@ -56,6 +65,8 @@ void ATestPlayerController::Touched(ETouchIndex::Type FingerIndex, FVector locat
 
 			FTimerHandle handle;
 			GetWorldTimerManager().SetTimer(handle, a, RegPlayer2D->attackTime, false);
+
+			if(runDebug)
 			DrawDebugPoint(GetWorld(), hit->ImpactPoint, 50, FColor(0, 255, 0), false, 3.0f);
 
 			RegPlayer2D->bIsAttacking = true;
@@ -72,6 +83,7 @@ void ATestPlayerController::Touched(ETouchIndex::Type FingerIndex, FVector locat
 	if (FMath::Abs((hit->ImpactPoint - RegPlayer2D->GetActorLocation()).X) <= RegPlayer2D->moveRange)
 	{
 		HitPos = hit->ImpactPoint;
+		if(runDebug)
 		DrawDebugPoint(GetWorld(), hit->ImpactPoint, 50, FColor(255, 0, 0), false, 3.0f);
 	}
 
@@ -89,8 +101,9 @@ void ATestPlayerController::RegisterGameBase(ADemoGameBase *base)
 
 void ATestPlayerController::GetTimeManipulator()
 {
+	if (RegPlayer2D) return;
 	timeManager = RegPlayer2D->FindComponentByClass<UTimeManipulator>();
-	if (timeManager)
+	if (timeManager&& runDebug)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Time Manipulator found"));
 	}

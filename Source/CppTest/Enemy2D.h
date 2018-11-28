@@ -3,6 +3,7 @@
 #pragma once
 
 #include "GameFramework/Pawn.h"
+#include "AudioPlayer.h"
 #include "Enemy2D.generated.h"
 
 static int indexWep = 0;
@@ -51,6 +52,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		class AItem *item;
 	class AItem *item2;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		AAudioPlayer *audioPlayer;
 
 protected:
 

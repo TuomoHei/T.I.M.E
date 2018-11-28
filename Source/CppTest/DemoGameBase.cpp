@@ -75,6 +75,12 @@ void ADemoGameBase::StartPlay()
 
 		Player = *Itr;
 	}
+
+	FVector SpawnPosition = FVector(0.f, 0.f, 0.f);
+	FActorSpawnParameters SpawnInfo;
+	SpawnInfo.Name = FName(*Entityname(FString("AudioPlayer"), 0));
+	//audioPlayer = GetWorld()->SpawnActor<AAudioPlayer>(AAudioPlayer::StaticClass(), SpawnPosition, FRotator::ZeroRotator, SpawnInfo);
+	audioPlayer = GetWorld()->SpawnActor<AAudioPlayer>(SpawnPosition, FRotator::ZeroRotator, SpawnInfo);
 }
 
 
@@ -202,6 +208,7 @@ void ADemoGameBase::SpawnEnemy()
 	{
 		b->Rename(*Entityname(FString("Enemy"), id));
 		b->Tags.Add("Enemy");
+		b->audioPlayer = audioPlayer;
 		enemies.Add(b);
 	}
 }

@@ -33,9 +33,17 @@ void ATestPlayerController::Touched(ETouchIndex::Type FingerIndex, FVector locat
 
 	if (!hit) return;
 
-	timeManager->DeactivateSlowmotion();
+	//timeManager->DeactivateSlowmotion();
 
-	if (hit->GetActor() == NULL) return;	
+	if (hit->GetActor() == NULL)
+	{
+		timeManager->DeactivateSlowmotion();
+		return;
+	}
+	else
+	{
+		timeManager->DeactivateSlowmotionPermanent();
+	}
 
 	if (FMath::Abs((hit->ImpactPoint - RegPlayer2D->GetActorLocation()).X) <= RegPlayer2D->pickUpRange)
 	{

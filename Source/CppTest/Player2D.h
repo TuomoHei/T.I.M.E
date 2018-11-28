@@ -32,6 +32,7 @@ public:
 		void PlayerDeath();
 	void AttackEnemy(class AActor *enemy);
 	void PickUp(class AActor *targetObj);
+	UFUNCTION(BlueprintCallable)
 	void UnEquip();
 	APlayer2D();
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;

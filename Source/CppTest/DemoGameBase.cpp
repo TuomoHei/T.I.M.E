@@ -191,7 +191,6 @@ void ADemoGameBase::SpawnEnemy()
 	if (enemies.Num() >= maxEnemies) return;
 	id = Increment(id);
 	enemyCount = Increment(enemyCount);
-	Debugger(220, enemies.Num(), FString("ADWFWA"));
 	///spawn parameters to enforce uniqueness
 	FActorSpawnParameters SpawnInfo;
 	SpawnInfo.Name = FName(*Entityname(FString("Enemy"), id));
@@ -249,7 +248,6 @@ UClass *ADemoGameBase::EnemyFetcher()
 	diceRoll = FMath::RandRange(0.0f, 100.0f);
 	for (int i = 0; i < EnemyPrefabs.Num(); i++)
 	{
-		//cumulative += chances[i];
 		cumulative += chances[i];
 
 		if (diceRoll <= cumulative)

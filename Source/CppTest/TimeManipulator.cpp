@@ -66,8 +66,8 @@ void UTimeManipulator::DeactivateSlowmotion()
 // Deactivate slow motion until slowmo is called again manually	// Note: currently not used
 void UTimeManipulator::DeactivateSlowmotionPermanent()
 {
+	ResetTimerHandle();
 	UGameplayStatics::SetGlobalTimeDilation(GetWorld(), defaultSpeed);
-
 }
 
 void UTimeManipulator::ResetTimerHandle()

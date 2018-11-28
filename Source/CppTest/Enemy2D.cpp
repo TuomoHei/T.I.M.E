@@ -8,6 +8,7 @@
 #include "UObjectGlobals.h"
 #include "EngineUtils.h"
 #include "Player2D.h"
+#include "Engine/Engine.h"
 #include "TestPlayerController.h"
 #include "Item.h"
 #include "DemoGameBase.h"
@@ -19,7 +20,7 @@ static auto GeneralDestroyer = [](AActor *entity, UWorld *world) {if (!entity) r
 if (!entity->IsValidLowLevel())return; 
 entity->K2_DestroyActor();
 entity = NULL;
-world->ForceGarbageCollection(true); 
+GEngine->ForceGarbageCollection(true);
 ADemoGameBase::Debugger(443, 0, FString("KILLEd")); 
 };
 
@@ -27,6 +28,7 @@ ADemoGameBase::Debugger(443, 0, FString("KILLEd"));
 
 AEnemy2D::AEnemy2D()
 {
+	
 	PrimaryActorTick.bCanEverTick = true;
 
 	C_rootBox = CreateDefaultSubobject<UBoxComponent>(TEXT("Lers"));
@@ -97,8 +99,7 @@ void AEnemy2D::Movement(float moveValue, float Deltatime)
 		{
 			if (bIsHead)
 			{
-				///Calls Blueprints shootevent
-				ShootEvent();
+				Cast<AItem>(item)->UseWeapon();
 			}
 		}
 	}
@@ -159,7 +160,7 @@ void AEnemy2D::TakeDamageEnemy(bool weapon)
 		return;
 	}
 	//check if dual wielding enemy
-	if (item2)
+	if (item2 != nullptr)
 	{
 		GeneralDestroyer(item2,GetWorld());
 		item2 = nullptr;
@@ -188,11 +189,7 @@ void AEnemy2D::EndPlay(const EEndPlayReason::Type EndPlayReason)
 
 }
 
-//Binded to blueprint 
-void AEnemy2D::Shoot()
-{
-	item->UseWeapon();
-}
+
 
 void SpawnWeapon(AItem *&item, AActor *actor, UWorld *world, UClass *weaponPrefab)
 {

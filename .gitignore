@@ -74,6 +74,7 @@ Plugins/*/Intermediate/*
 DerivedDataCache/*
 
 # StarterContent
+Content/StarterContent/2D/*
 Content/StarterContent/Architecture/*
 Content/StarterContent/Audio/*
 Content/StarterContent/Blueprints/*

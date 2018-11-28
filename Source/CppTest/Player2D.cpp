@@ -125,10 +125,22 @@ void APlayer2D::AttackEnemy(AActor *enemy)
 {
 	if (!enemy) return;
 
-	//timeManager->DeactivateSlowmotion();
+	if (item)
+	{
 
-	bIsAttacking = false;
-	Cast<AEnemy2D>(enemy)->TakeDamageEnemy(item != nullptr);
+		Cast<AEnemy2D>(enemy)->TakeDamageEnemy(item != nullptr);
+		Cast<AItem>(item)->UseWeapon();
+
+		bIsAttacking = false;
+		return;
+
+	}
+	else
+	{
+		Cast<AEnemy2D>(enemy)->TakeDamageEnemy(item != nullptr);
+		bIsAttacking = false;
+	}
+
 }
 
 void APlayer2D::GetTimeManipulator()

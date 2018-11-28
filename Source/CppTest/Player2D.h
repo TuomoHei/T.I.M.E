@@ -20,8 +20,6 @@ protected:
 	virtual void BeginPlay() override;
 	class AActor *item;
 private:
-	UPROPERTY(EditAnywhere)
-		UTimeManipulator* timeManager;
 	bool canMove;
 	void GetTimeManipulator();
 
@@ -34,6 +32,7 @@ public:
 		void PlayerDeath();
 	void AttackEnemy(class AActor *enemy);
 	void PickUp(class AActor *targetObj);
+	UFUNCTION(BlueprintCallable)
 	void UnEquip();
 	APlayer2D();
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
@@ -57,4 +56,7 @@ public:
 	class ATestPlayerController *PC;
 
 	FVector MovementInput;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		UTimeManipulator* timeManager;
 };

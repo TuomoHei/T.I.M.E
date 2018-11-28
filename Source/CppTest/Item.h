@@ -25,6 +25,8 @@ public:
 		FTransform ItemOffset;
 	UPROPERTY(EditDefaultsOnly, Category = Combat, BlueprintReadWrite)
 		bool meleeweapon;
+	UPROPERTY(EditDefaultsOnly,BlueprintReadWrite, Category = Variables)
+	int endurance;
 
 protected:
 

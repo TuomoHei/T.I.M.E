@@ -4,6 +4,7 @@
 
 #include "GameFramework/Pawn.h"
 #include "TimeManipulator.h"
+#include "AudioPlayer.h"
 #include "Player2D.generated.h"
 
 
@@ -22,6 +23,8 @@ protected:
 private:
 	bool canMove;
 	void GetTimeManipulator();
+	UPROPERTY()
+		AAudioPlayer *audioPlayer;
 
 public:
 	// Called every frame
@@ -59,4 +62,7 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		UTimeManipulator* timeManager;
+
+	UPROPERTY(EditAnywhere)
+		TSubclassOf<AAudioPlayer> audioPlayerBP;
 };

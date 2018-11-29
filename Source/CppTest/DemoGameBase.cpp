@@ -76,13 +76,12 @@ void ADemoGameBase::StartPlay()
 		Player = *Itr;
 	}
 
-	FVector SpawnPosition = FVector(0.f, 0.f, 0.f);
-	FActorSpawnParameters SpawnInfo;
-	SpawnInfo.Name = FName(*Entityname(FString("AudioPlayer"), 0));	
-	//audioPlayer = GetWorld()->SpawnActor<AAudioPlayer>(SpawnPosition, FRotator::ZeroRotator, SpawnInfo);
 	if (audioPlayerBP)
 	{
-		AAudioPlayer *audioPlayerRef = GetWorld()->SpawnActor<AAudioPlayer>(audioPlayerBP, SpawnPosition, FRotator::ZeroRotator, SpawnInfo);
+		FVector SpawnPosition = FVector(0.f, 0.f, 0.f);
+		FActorSpawnParameters SpawnInfo;
+		SpawnInfo.Name = FName(*Entityname(FString("AudioPlayer"), 0));
+		AAudioPlayer *audioPlayer = GetWorld()->SpawnActor<AAudioPlayer>(audioPlayerBP, SpawnPosition, FRotator::ZeroRotator, SpawnInfo);		
 	}	
 }
 

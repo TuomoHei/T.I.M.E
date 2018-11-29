@@ -11,9 +11,7 @@
 // Sets default values for this component's properties
 UTimeManipulator::UTimeManipulator()
 {
-	PrimaryComponentTick.bCanEverTick = true;
-
-	
+	PrimaryComponentTick.bCanEverTick = true;	
 }
 
 
@@ -23,7 +21,6 @@ void UTimeManipulator::BeginPlay()
 	Super::BeginPlay();
 
 	bIsSlow = true;
-	ActivateSlowmotion();
 }
 
 
@@ -46,6 +43,7 @@ void UTimeManipulator::ActivateSlowmotion()
 	GetWorld()->GetTimerManager().SetTimer(SlowTimeHandle, this, &UTimeManipulator::DeactivateSlowmotion, realSlowDuration, false);		
 	UGameplayStatics::SetGlobalPitchModulation(GetWorld(), 0.01f, realSlowDuration);
 	//UGameplayStatics::PlaySoundAtLocation(GetWorld(), sound, GetOwner()->GetActorLocation());
+	audioPlayer->PlaySound(5, GetWorld());
 	
 	UE_LOG(LogTemp, Warning, TEXT("ActivateSlowmotion()"));
 
@@ -59,7 +57,8 @@ void UTimeManipulator::DeactivateSlowmotion()
 
 	ResetTimerHandle();
 	GetWorld()->GetTimerManager().SetTimer(SlowTimeHandle, this, &UTimeManipulator::ActivateSlowmotion, defaultSpeedDuration, false);
-	
+	audioPlayer->PlaySound(6, GetWorld());
+
 	bIsSlow = false;
 }
 
@@ -68,6 +67,7 @@ void UTimeManipulator::DeactivateSlowmotionPermanent()
 {
 	ResetTimerHandle();
 	UGameplayStatics::SetGlobalTimeDilation(GetWorld(), defaultSpeed);
+	audioPlayer->PlaySound(6, GetWorld());
 }
 
 void UTimeManipulator::ResetTimerHandle()

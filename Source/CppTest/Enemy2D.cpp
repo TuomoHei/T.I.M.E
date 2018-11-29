@@ -176,6 +176,7 @@ void AEnemy2D::TakeDamageEnemy(bool weapon)
 		return;
 	}
 
+	audioPlayer->PlaySound(9, GetWorld());
 	ADemoGameBase::Debugger(122, 0, FString("destroy"));
 	Cast<APlayer2D>(player.Last())->PC->RegGameBase->EnemyListRemover(this);
 	//Add death animation and others here

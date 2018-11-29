@@ -27,10 +27,16 @@ public:
 	~UScoreManager() {}
 
 	static bool Paused();
+	UFUNCTION(BlueprintCallable, Category = "Score Manager")
 	static bool Paused(bool bPaused);
+
 	static void AddPoints(int points);
-	static void ResetCurrentScore();
 	static uint64 GetSessionHighScore();
+
+	UFUNCTION(BlueprintCallable, Category = "Score Manager")
+	static void ResetCurrentScore();
+
+	UFUNCTION(BlueprintCallable, Category = "Score Manager")
 	static void EndSession();
 
 private:

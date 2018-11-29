@@ -25,19 +25,21 @@ public:
 	//// Called every frame
 	//virtual void Tick(float DeltaTime) override;
 
-	//// Default location to play the sound (= center of screen)
-	//UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	//	FVector defaultLocation;
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		TArray<class USoundBase*> sounds;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		float testFloat;
 	
-	void PlaySound(int soundIndex);
-	void PlaySound(int soundIndex, FVector location);
+	void PlaySound(int soundIndex, UWorld * w);
+	void PlaySound(int soundIndex, FVector location, UWorld * w);
 
 private:
-	UPROPERTY()
-		UWorld *world;
+
+	FVector defaultLocation;
+
+	//UPROPERTY()
+	//	UWorld *world;
 
 	UPROPERTY()
 		class USoundBase* sound;

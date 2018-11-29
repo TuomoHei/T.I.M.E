@@ -2,7 +2,9 @@
 
 #include "AudioPlayer.h"
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
-
+#include "Engine/World.h"
+#include "Runtime/Engine/Classes/GameFramework/Controller.h"
+//#include "Runtime/Engine/Classes/GameFramework/Actor.h"
 
 // Sets default values
 AAudioPlayer::AAudioPlayer()
@@ -17,21 +19,24 @@ void AAudioPlayer::BeginPlay()
 {
 	Super::BeginPlay();
 
-	world = GetWorld();
+	//defaultLocation = GetWorld()->GetFirstPlayerController()->GetTransform().GetLocation();
+	defaultLocation = FVector::ZeroVector;
 }
 
-void AAudioPlayer::PlaySound(int soundIndex)
+void AAudioPlayer::PlaySound(int soundIndex, UWorld * w)
 {
+	// Play sound by index
 	sound = sounds[soundIndex];
-	
-	UGameplayStatics::PlaySoundAtLocation(world, sound, GetOwner()->GetActorLocation());
+
+	UGameplayStatics::PlaySoundAtLocation(w, sound, defaultLocation);
 }
 
-void AAudioPlayer::PlaySound(int soundIndex, FVector location)
+// Play sound at location by index
+void AAudioPlayer::PlaySound(int soundIndex, FVector location, UWorld * w)
 {
 	sound = sounds[soundIndex];
 
-	UGameplayStatics::PlaySoundAtLocation(world, sound, location);
+	UGameplayStatics::PlaySoundAtLocation(w, sound, location);
 }
 
 

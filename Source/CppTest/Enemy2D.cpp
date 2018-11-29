@@ -100,7 +100,7 @@ void AEnemy2D::Movement(float moveValue, float Deltatime)
 			if (bIsHead)
 			{
 				Cast<AItem>(item)->UseWeapon();
-				//audioPlayer->PlaySound(0);
+				//audioPlayer->PlaySound(0, GetWorld());
 			}
 		}
 	}

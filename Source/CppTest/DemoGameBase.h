@@ -37,8 +37,8 @@ public:
 	UPROPERTY(EditAnywhere)
 		float enemyGap = 100.0f;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		AAudioPlayer *audioPlayer;
+	UPROPERTY(EditAnywhere)
+		TSubclassOf<AAudioPlayer> audioPlayerBP;
 	
 private:
 

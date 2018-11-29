@@ -26,17 +26,23 @@ void AAudioPlayer::BeginPlay()
 void AAudioPlayer::PlaySound(int soundIndex, UWorld * w)
 {
 	// Play sound by index
-	sound = sounds[soundIndex];
+	if (sounds[soundIndex] == nullptr)
+	{
+		sound = sounds[soundIndex];
 
-	UGameplayStatics::PlaySoundAtLocation(w, sound, defaultLocation);
+		UGameplayStatics::PlaySoundAtLocation(w, sound, defaultLocation);
+	}
 }
 
 // Play sound at location by index
 void AAudioPlayer::PlaySound(int soundIndex, FVector location, UWorld * w)
 {
-	sound = sounds[soundIndex];
-
-	UGameplayStatics::PlaySoundAtLocation(w, sound, location);
+	if (sounds[soundIndex] == nullptr)
+	{
+		sound = sounds[soundIndex];
+	
+		UGameplayStatics::PlaySoundAtLocation(w, sound, location);
+	}
 }
 
 

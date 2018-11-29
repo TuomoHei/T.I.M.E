@@ -38,9 +38,6 @@ private:
 
 	FVector defaultLocation;
 
-	//UPROPERTY()
-	//	UWorld *world;
-
 	UPROPERTY()
 		class USoundBase* sound;
 };

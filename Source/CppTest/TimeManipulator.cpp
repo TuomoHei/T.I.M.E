@@ -43,7 +43,10 @@ void UTimeManipulator::ActivateSlowmotion()
 	GetWorld()->GetTimerManager().SetTimer(SlowTimeHandle, this, &UTimeManipulator::DeactivateSlowmotion, realSlowDuration, false);		
 	UGameplayStatics::SetGlobalPitchModulation(GetWorld(), 0.01f, realSlowDuration);
 	//UGameplayStatics::PlaySoundAtLocation(GetWorld(), sound, GetOwner()->GetActorLocation());
-	audioPlayer->PlaySound(5, GetWorld());
+	if (IsValid(audioPlayer))
+	{
+		audioPlayer->PlaySound(5, GetWorld());
+	}
 	
 	UE_LOG(LogTemp, Warning, TEXT("ActivateSlowmotion()"));
 
@@ -57,7 +60,12 @@ void UTimeManipulator::DeactivateSlowmotion()
 
 	ResetTimerHandle();
 	GetWorld()->GetTimerManager().SetTimer(SlowTimeHandle, this, &UTimeManipulator::ActivateSlowmotion, defaultSpeedDuration, false);
-	audioPlayer->PlaySound(6, GetWorld());
+	if (IsValid(audioPlayer))
+	{
+		audioPlayer->PlaySound(6, GetWorld());
+	}
+
+	UE_LOG(LogTemp, Warning, TEXT("DEactivateSlowmotion()"));
 
 	bIsSlow = false;
 }
@@ -67,7 +75,12 @@ void UTimeManipulator::DeactivateSlowmotionPermanent()
 {
 	ResetTimerHandle();
 	UGameplayStatics::SetGlobalTimeDilation(GetWorld(), defaultSpeed);
-	audioPlayer->PlaySound(6, GetWorld());
+	if (IsValid(audioPlayer))
+	{
+		audioPlayer->PlaySound(6, GetWorld());
+	}
+
+	UE_LOG(LogTemp, Warning, TEXT("DEactivateSlowmotion PERMANENT"));
 }
 
 void UTimeManipulator::ResetTimerHandle()

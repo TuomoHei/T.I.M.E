@@ -3,6 +3,7 @@
 #pragma once
 
 #include "GameFramework/GameModeBase.h"
+#include "AudioPlayer.h"
 #include "DemoGameBase.generated.h"
 
 //Increase the number by one /w safe proof
@@ -36,6 +37,9 @@ public:
 	UPROPERTY(EditAnywhere)
 		float enemyGap = 100.0f;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		AAudioPlayer *audioPlayer;
+	
 private:
 
 	ADemoGameBase();

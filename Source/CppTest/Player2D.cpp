@@ -44,6 +44,11 @@ void APlayer2D::BeginPlay()
 	}
 
 	GetTimeManipulator();
+
+	// Get audio player cpp parent class
+	audioPlayer = audioPlayerBP->GetDefaultObject<AAudioPlayer>();
+	timeManager->audioPlayer = audioPlayer; // Tell our component time manipulator how to find audioplayer
+	timeManager->ActivateSlowmotion();
 }
 
 // Called every frame
@@ -106,6 +111,7 @@ void APlayer2D::PlayerDeath()
 	temp = Cast<ADemoGameBase>(gamemanager[0]);
 	temp->OnPlayerDeath();
 	canMove = false;
+	audioPlayer->PlaySound(8, GetWorld());
 }
 
 void APlayer2D::PickUp(AActor *targetObj)
@@ -139,13 +145,19 @@ void APlayer2D::AttackEnemy(AActor *enemy)
 			Cast<AItem>(item)->UseWeapon(true);
 		}
 
-		bIsAttacking = false;
+		Cast<AEnemy2D>(enemy)->TakeDamageEnemy(item != nullptr);
+		Cast<AItem>(item)->UseWeapon();
+		//int32 swordSoundID = (rand() % 2) > 0 ? 3 : 4;
+		//audioPlayer->PlaySound(swordSoundID, GetWorld());
+		//audioPlayer->PlaySound(swordSoundID, GetWorld());		bIsAttacking = false;
 		return;
 
 	}
 	else
 	{
 		Cast<AEnemy2D>(enemy)->TakeDamageEnemy(item != nullptr);
+		//int32 punchSoundID = (rand() % 2) > 0 ? 1 : 2;
+		//audioPlayer->PlaySound(punchSoundID, GetWorld());
 		bIsAttacking = false;
 	}
 

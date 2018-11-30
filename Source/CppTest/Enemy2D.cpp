@@ -13,7 +13,7 @@
 #include "Item.h"
 #include "DemoGameBase.h"
 #include "PickupComponent.h"
-#include "ScoreManager.h"
+#include "SceneScoreActor.h"
 
 	///rest of the implementation relating to different enemy behaviour is done via BP
 
@@ -38,6 +38,7 @@ void AEnemy2D::BeginPlay()
 {
 	bGameEnd = false;
 	UGameplayStatics::GetAllActorsWithTag(GetWorld(), FName("Player"), player);
+	UGameplayStatics::GetAllActorsWithTag(GetWorld(), FName("ScoreActor"), scoreActor);
 	timer = timerValue;
 	bIsWaiting = false;
 	bIsHead = true;
@@ -97,6 +98,7 @@ void AEnemy2D::Movement(float moveValue, float Deltatime)
 			if (bIsHead)
 			{
 				Cast<AItem>(item)->UseWeapon(false);
+				//audioPlayer->PlaySound(0, GetWorld());
 			}
 		}
 	}
@@ -142,6 +144,9 @@ void AEnemy2D::PlayerDeath()
 
 void AEnemy2D::TakeDamageEnemy(bool weapon)
 {
+	audioPlayer->PlaySound(9, GetWorld());
+	bIsStaggering = true;
+
 	//check if player is holding weapon
 	if (weapon)
 	{
@@ -172,7 +177,7 @@ void AEnemy2D::TakeDamageEnemy(bool weapon)
 		item = nullptr;
 		return;
 	}
-
+	
 	ADemoGameBase::Debugger(122, 0, FString("destroy"));
 	Cast<APlayer2D>(player.Last())->PC->RegGameBase->EnemyListRemover(this);
 	//Add death animation and others here
@@ -181,8 +186,8 @@ void AEnemy2D::TakeDamageEnemy(bool weapon)
 
 void AEnemy2D::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
-
-	UScoreManager::AddPoints(100);
+	Cast<ASceneScoreActor>(scoreActor.Last())->AddPoints(100);
+	//UScoreManager::AddPoints(100);
 	Super::EndPlay(EndPlayReason);
 }
 

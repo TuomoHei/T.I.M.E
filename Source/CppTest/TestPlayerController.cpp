@@ -40,10 +40,17 @@ void ATestPlayerController::Touched(ETouchIndex::Type FingerIndex, FVector locat
 
 	if (!hit) return;
 
-	timeManager->DeactivateSlowmotion();
+	//timeManager->DeactivateSlowmotion();
 
-	if (hit->GetActor() == NULL) return;
-
+	if (hit->GetActor() == NULL)
+	{
+		timeManager->DeactivateSlowmotion();
+		return;
+	}
+	else
+	{
+		timeManager->DeactivateSlowmotionPermanent();
+	}
 	if (IsValid(RegPlayer2D->item)) val *= 2;
 
 	if (FMath::Abs((hit->ImpactPoint - RegPlayer2D->GetActorLocation()).X) <= val)

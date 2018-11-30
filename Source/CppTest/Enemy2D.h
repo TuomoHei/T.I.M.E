@@ -3,6 +3,7 @@
 #pragma once
 
 #include "GameFramework/Pawn.h"
+#include "AudioPlayer.h"
 #include "Enemy2D.generated.h"
 
 static int indexWep = 0;
@@ -40,6 +41,8 @@ public:
 		UClass *weaponPrefab;
 	UPROPERTY()
 		bool bIsWaiting = false;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		bool bIsStaggering = false;
 	UPROPERTY()
 		bool bIsHead = false;
 	UFUNCTION(BlueprintCallable)
@@ -52,10 +55,14 @@ public:
 		class AItem *item;
 	class AItem *item2;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		AAudioPlayer *audioPlayer;
+
 protected:
 
 	class ATestPlayerController *controller;
 	TArray<AActor*> player;
+	TArray<AActor*> scoreActor;
 	float timer;
 	virtual void BeginPlay() override;
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;

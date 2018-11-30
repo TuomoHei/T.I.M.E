@@ -147,6 +147,7 @@ void AEnemy2D::PlayerDeath()
 void AEnemy2D::TakeDamageEnemy(bool weapon)
 {
 	audioPlayer->PlaySound(9, GetWorld());
+	bIsStaggering = true;
 
 	//check if player is holding weapon
 	if (weapon)

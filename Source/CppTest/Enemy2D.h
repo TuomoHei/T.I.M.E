@@ -41,6 +41,8 @@ public:
 		UClass *weaponPrefab;
 	UPROPERTY()
 		bool bIsWaiting = false;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		bool bIsStaggering = false;
 	UPROPERTY()
 		bool bIsHead = false;
 	UFUNCTION(BlueprintCallable)

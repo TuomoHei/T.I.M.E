@@ -3,6 +3,7 @@
 #include "AudioPlayer.h"
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 #include "Engine/World.h"
+#include "Runtime/Engine/Public/TimerManager.h"
 #include "Runtime/Engine/Classes/GameFramework/Controller.h"
 //#include "Runtime/Engine/Classes/GameFramework/Actor.h"
 
@@ -33,17 +34,16 @@ void AAudioPlayer::PlaySound(int soundIndex, UWorld * w)
 	//UE_LOG(LogTemp, Warning, TEXT("Playing audio"));
 }
 
-void AAudioPlayer::PlaySound(int soundIndex, float delay, UWorld * w) // TODO finish this... problem: can't have two delays with same timer.. hmmm.... or can we?
+void AAudioPlayer::PlaySound(int soundIndex, float delay, UWorld * w) // problem: can't have two delays with same timer.. hmmm.... or can we?
 {
-	ResetTimerHandle(w);
-
-
 	// Play sound by index after delay
-	sound = sounds[soundIndex];
 
-	UGameplayStatics::PlaySoundAtLocation(w, sound, defaultLocation);
+	ResetTimerHandle(w);
+	//FTimerHandle DelayTimeHandle;
+	FTimerDelegate AudioDelayDelegate = FTimerDelegate::CreateUObject(this, &AAudioPlayer::PlaySound, soundIndex, w);
+	GetWorldTimerManager().SetTimer(DelayTimeHandle, AudioDelayDelegate, delay, false);
+	//w->GetTimerManager().SetTimer(DelayTimeHandle, this, &AAudioPlayer::PlaySound, defaultSpeedDuration, false);	
 
-	//UE_LOG(LogTemp, Warning, TEXT("Playing audio"));
 }
 
 // Play sound at location by index
@@ -59,7 +59,7 @@ void AAudioPlayer::PlaySound(int soundIndex, FVector location, UWorld * w)
 
 void AAudioPlayer::ResetTimerHandle(UWorld * world)
 {
-	GetWorld()->GetTimerManager().ClearTimer(DelayTimeHandle);
+	world->GetTimerManager().ClearTimer(DelayTimeHandle);
 }
 
 

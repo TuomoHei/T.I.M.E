@@ -136,8 +136,9 @@ void APlayer2D::AttackEnemy(AActor *enemy)
 
 		Cast<AEnemy2D>(enemy)->TakeDamageEnemy(item != nullptr);
 		Cast<AItem>(item)->UseWeapon();
-		int32 swordSoundID = (rand() % 2) > 0 ? 3 : 4;
-		audioPlayer->PlaySound(swordSoundID, GetWorld());
+		//int32 swordSoundID = (rand() % 2) > 0 ? 3 : 4;
+		//audioPlayer->PlaySound(swordSoundID, GetWorld());
+		//audioPlayer->PlaySound(swordSoundID, GetWorld());
 		bIsAttacking = false;
 		return;
 
@@ -145,8 +146,8 @@ void APlayer2D::AttackEnemy(AActor *enemy)
 	else
 	{
 		Cast<AEnemy2D>(enemy)->TakeDamageEnemy(item != nullptr);
-		int32 punchSoundID = (rand() % 2) > 0 ? 1 : 2;
-		audioPlayer->PlaySound(punchSoundID, GetWorld());
+		//int32 punchSoundID = (rand() % 2) > 0 ? 1 : 2;
+		//audioPlayer->PlaySound(punchSoundID, GetWorld());
 		bIsAttacking = false;
 	}
 

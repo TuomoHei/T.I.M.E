@@ -56,6 +56,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		AAudioPlayer *audioPlayer;
 
+	UPROPERTY(EditAnywhere)
+		float slowAudioPitch = 0.2f;
+
 	//UPROPERTY(EditAnyWhere)
 	//	class USoundBase* sound;
 

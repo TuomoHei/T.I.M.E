@@ -23,8 +23,6 @@ protected:
 private:
 	bool canMove;
 	void GetTimeManipulator();
-	UPROPERTY()
-		AAudioPlayer *audioPlayer;
 
 public:
 	// Called every frame
@@ -63,6 +61,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		UTimeManipulator* timeManager;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		TSubclassOf<AAudioPlayer> audioPlayerBP;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		AAudioPlayer *audioPlayer;
 };

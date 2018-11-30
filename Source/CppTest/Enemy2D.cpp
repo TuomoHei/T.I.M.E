@@ -100,7 +100,7 @@ void AEnemy2D::Movement(float moveValue, float Deltatime)
 			if (bIsHead)
 			{
 				Cast<AItem>(item)->UseWeapon();
-				//audioPlayer->PlaySound(0);
+				//audioPlayer->PlaySound(0, GetWorld());
 			}
 		}
 	}
@@ -146,6 +146,9 @@ void AEnemy2D::PlayerDeath()
 
 void AEnemy2D::TakeDamageEnemy(bool weapon)
 {
+	audioPlayer->PlaySound(9, GetWorld());
+	bIsStaggering = true;
+
 	//check if player is holding weapon
 	if (weapon)
 	{
@@ -175,7 +178,7 @@ void AEnemy2D::TakeDamageEnemy(bool weapon)
 		item = nullptr;
 		return;
 	}
-
+	
 	ADemoGameBase::Debugger(122, 0, FString("destroy"));
 	Cast<APlayer2D>(player.Last())->PC->RegGameBase->EnemyListRemover(this);
 	//Add death animation and others here

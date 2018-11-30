@@ -2,7 +2,10 @@
 
 #include "AudioPlayer.h"
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
-
+#include "Engine/World.h"
+#include "Runtime/Engine/Public/TimerManager.h"
+#include "Runtime/Engine/Classes/GameFramework/Controller.h"
+//#include "Runtime/Engine/Classes/GameFramework/Actor.h"
 
 // Sets default values
 AAudioPlayer::AAudioPlayer()
@@ -17,21 +20,46 @@ void AAudioPlayer::BeginPlay()
 {
 	Super::BeginPlay();
 
-	world = GetWorld();
+	//defaultLocation = GetWorld()->GetFirstPlayerController()->GetTransform().GetLocation();
+	defaultLocation = FVector::ZeroVector;
 }
 
-void AAudioPlayer::PlaySound(int soundIndex)
+void AAudioPlayer::PlaySound(int soundIndex, UWorld * w)
 {
+	// Play sound by index
 	sound = sounds[soundIndex];
+
+	UGameplayStatics::PlaySoundAtLocation(w, sound, defaultLocation);
+
+	//UE_LOG(LogTemp, Warning, TEXT("Playing audio"));
+}
+
+void AAudioPlayer::PlaySound(int soundIndex, float delay, UWorld * w) // problem: can't have two delays with same timer.. hmmm.... or can we?
+{
+	// Play sound by index after delay
+
+	ResetTimerHandle(w);
+	//FTimerHandle DelayTimeHandle;
+	FTimerDelegate AudioDelayDelegate = FTimerDelegate::CreateUObject(this, &AAudioPlayer::PlaySound, soundIndex, w);
+	GetWorldTimerManager().SetTimer(DelayTimeHandle, AudioDelayDelegate, delay, false);
+	//w->GetTimerManager().SetTimer(DelayTimeHandle, this, &AAudioPlayer::PlaySound, defaultSpeedDuration, false);	
+
+}
+
+// Play sound at location by index
+void AAudioPlayer::PlaySound(int soundIndex, FVector location, UWorld * w)
+{
+	if (sounds[soundIndex] == nullptr)
+	{
+		sound = sounds[soundIndex];
 	
-	UGameplayStatics::PlaySoundAtLocation(world, sound, GetOwner()->GetActorLocation());
+		UGameplayStatics::PlaySoundAtLocation(w, sound, location);
+	}
 }
 
-void AAudioPlayer::PlaySound(int soundIndex, FVector location)
+void AAudioPlayer::ResetTimerHandle(UWorld * world)
 {
-	sound = sounds[soundIndex];
-
-	UGameplayStatics::PlaySoundAtLocation(world, sound, location);
+	world->GetTimerManager().ClearTimer(DelayTimeHandle);
 }
 
 

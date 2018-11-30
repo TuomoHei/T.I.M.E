@@ -2,6 +2,7 @@
 
 #pragma once
 #include "Components/ActorComponent.h"
+#include "AudioPlayer.h"
 #include "TimeManipulator.generated.h"
 
 
@@ -52,10 +53,15 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void DeactivateSlowmotionPermanent();
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		AAudioPlayer *audioPlayer;
+
+	UPROPERTY(EditAnywhere)
+		float slowAudioPitch = 0.2f;
+
 	//UPROPERTY(EditAnyWhere)
 	//	class USoundBase* sound;
 
-private:
+	UPROPERTY(BlueprintReadOnly)
 	bool bIsSlow;
-
 };

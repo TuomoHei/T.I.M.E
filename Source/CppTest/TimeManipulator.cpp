@@ -11,9 +11,8 @@
 // Sets default values for this component's properties
 UTimeManipulator::UTimeManipulator()
 {
-	PrimaryComponentTick.bCanEverTick = true;
-
-	
+	PrimaryComponentTick.bCanEverTick = true;	
+	slowAudioPitch = 0.2f;
 }
 
 
@@ -22,8 +21,7 @@ void UTimeManipulator::BeginPlay()
 {
 	Super::BeginPlay();
 
-	bIsSlow = true;
-	ActivateSlowmotion();
+	bIsSlow = true;	
 }
 
 
@@ -44,8 +42,14 @@ void UTimeManipulator::ActivateSlowmotion()
 
 	float realSlowDuration = slowSpeedDuration * slowGameSpeed;	// E.g. 2 seconds in 0.2 x game speed should actually last one fifth of 2 seconds
 	GetWorld()->GetTimerManager().SetTimer(SlowTimeHandle, this, &UTimeManipulator::DeactivateSlowmotion, realSlowDuration, false);		
-	UGameplayStatics::SetGlobalPitchModulation(GetWorld(), 0.01f, realSlowDuration);
-	//UGameplayStatics::PlaySoundAtLocation(GetWorld(), sound, GetOwner()->GetActorLocation());
+	
+	UGameplayStatics::SetGlobalPitchModulation(GetWorld(), slowAudioPitch, 0.075f); // set global audio pitch modulation
+	
+	if (IsValid(audioPlayer))
+	{
+		audioPlayer->PlaySound(5, GetWorld());
+		//UE_LOG(LogTemp, Warning, TEXT("Start slow mo sound playing"));
+	}
 	
 	UE_LOG(LogTemp, Warning, TEXT("ActivateSlowmotion()"));
 
@@ -59,7 +63,13 @@ void UTimeManipulator::DeactivateSlowmotion()
 
 	ResetTimerHandle();
 	GetWorld()->GetTimerManager().SetTimer(SlowTimeHandle, this, &UTimeManipulator::ActivateSlowmotion, defaultSpeedDuration, false);
-	
+	if (IsValid(audioPlayer))
+	{
+		audioPlayer->PlaySound(6, GetWorld());
+	}
+
+	UE_LOG(LogTemp, Warning, TEXT("DEactivateSlowmotion()"));
+
 	bIsSlow = false;
 }
 
@@ -68,6 +78,14 @@ void UTimeManipulator::DeactivateSlowmotionPermanent()
 {
 	ResetTimerHandle();
 	UGameplayStatics::SetGlobalTimeDilation(GetWorld(), defaultSpeed);
+	if (IsValid(audioPlayer))
+	{
+		audioPlayer->PlaySound(6, GetWorld());
+	}
+
+	bIsSlow = false;
+
+	UE_LOG(LogTemp, Warning, TEXT("DEactivateSlowmotion PERMANENT"));
 }
 
 void UTimeManipulator::ResetTimerHandle()

@@ -21,23 +21,29 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	FTimerHandle DelayTimeHandle;
+	void ResetTimerHandle(UWorld * world);
+
 public:	
 	//// Called every frame
 	//virtual void Tick(float DeltaTime) override;
 
-	//// Default location to play the sound (= center of screen)
-	//UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	//	FVector defaultLocation;
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		TArray<class USoundBase*> sounds;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		float testFloat;
 	
-	void PlaySound(int soundIndex);
-	void PlaySound(int soundIndex, FVector location);
+	void PlaySound(int soundIndex, UWorld * w);
+	void PlaySound(int soundIndex, float delay, UWorld * w);
+	void PlaySound(int soundIndex, FVector location, UWorld * w);
+
+	UPROPERTY(VisibleAnywhere)
+		float gameSpeed;
 
 private:
-	UPROPERTY()
-		UWorld *world;
+
+	FVector defaultLocation;
 
 	UPROPERTY()
 		class USoundBase* sound;

@@ -4,6 +4,7 @@
 
 #include "GameFramework/Pawn.h"
 #include "TimeManipulator.h"
+#include "AudioPlayer.h"
 #include "Player2D.generated.h"
 
 
@@ -20,13 +21,15 @@ protected:
 	virtual void BeginPlay() override;
 	class AActor *item;
 private:
-	bool canMove;
 	void GetTimeManipulator();
 
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 	class AActor *ItemGetter() { return item; };
+
+	UPROPERTY(BlueprintReadOnly)
+		bool canMove;
 	
 	UFUNCTION(BlueprintCallable)
 		void PlayerDeath();
@@ -59,4 +62,10 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		UTimeManipulator* timeManager;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		TSubclassOf<AAudioPlayer> audioPlayerBP;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		AAudioPlayer *audioPlayer;
 };

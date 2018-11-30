@@ -59,6 +59,6 @@ public:
 	//UPROPERTY(EditAnyWhere)
 	//	class USoundBase* sound;
 
-private:
+	UPROPERTY(BlueprintReadOnly)
 	bool bIsSlow;
 };

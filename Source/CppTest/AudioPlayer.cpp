@@ -26,12 +26,24 @@ void AAudioPlayer::BeginPlay()
 void AAudioPlayer::PlaySound(int soundIndex, UWorld * w)
 {
 	// Play sound by index
-	if (sounds[soundIndex] == nullptr)
-	{
-		sound = sounds[soundIndex];
+	sound = sounds[soundIndex];
 
-		UGameplayStatics::PlaySoundAtLocation(w, sound, defaultLocation);
-	}
+	UGameplayStatics::PlaySoundAtLocation(w, sound, defaultLocation);
+
+	//UE_LOG(LogTemp, Warning, TEXT("Playing audio"));
+}
+
+void AAudioPlayer::PlaySound(int soundIndex, float delay, UWorld * w) // TODO finish this... problem: can't have two delays with same timer.. hmmm.... or can we?
+{
+	ResetTimerHandle(w);
+
+
+	// Play sound by index after delay
+	sound = sounds[soundIndex];
+
+	UGameplayStatics::PlaySoundAtLocation(w, sound, defaultLocation);
+
+	//UE_LOG(LogTemp, Warning, TEXT("Playing audio"));
 }
 
 // Play sound at location by index
@@ -43,6 +55,11 @@ void AAudioPlayer::PlaySound(int soundIndex, FVector location, UWorld * w)
 	
 		UGameplayStatics::PlaySoundAtLocation(w, sound, location);
 	}
+}
+
+void AAudioPlayer::ResetTimerHandle(UWorld * world)
+{
+	GetWorld()->GetTimerManager().ClearTimer(DelayTimeHandle);
 }
 
 

@@ -41,11 +41,12 @@ void UTimeManipulator::ActivateSlowmotion()
 
 	float realSlowDuration = slowSpeedDuration * slowGameSpeed;	// E.g. 2 seconds in 0.2 x game speed should actually last one fifth of 2 seconds
 	GetWorld()->GetTimerManager().SetTimer(SlowTimeHandle, this, &UTimeManipulator::DeactivateSlowmotion, realSlowDuration, false);		
-	UGameplayStatics::SetGlobalPitchModulation(GetWorld(), 0.01f, realSlowDuration);
-	//UGameplayStatics::PlaySoundAtLocation(GetWorld(), sound, GetOwner()->GetActorLocation());
+	UGameplayStatics::SetGlobalPitchModulation(GetWorld(), 0.7f, realSlowDuration);
+	//UGameplayStatics::PlaySoundAtLocation(GetWorld(), sound, GetOwner()->GetActorLocation()); // old
 	if (IsValid(audioPlayer))
 	{
 		audioPlayer->PlaySound(5, GetWorld());
+		UE_LOG(LogTemp, Warning, TEXT("Start slow mo sound playing"));
 	}
 	
 	UE_LOG(LogTemp, Warning, TEXT("ActivateSlowmotion()"));
@@ -79,6 +80,8 @@ void UTimeManipulator::DeactivateSlowmotionPermanent()
 	{
 		audioPlayer->PlaySound(6, GetWorld());
 	}
+
+	bIsSlow = false;
 
 	UE_LOG(LogTemp, Warning, TEXT("DEactivateSlowmotion PERMANENT"));
 }

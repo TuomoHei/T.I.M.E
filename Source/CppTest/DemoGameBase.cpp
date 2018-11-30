@@ -82,7 +82,8 @@ void ADemoGameBase::StartPlay()
 		FActorSpawnParameters SpawnInfo;
 		SpawnInfo.Name = FName(*Entityname(FString("AudioPlayer"), 0));
 		AAudioPlayer *audioPlayer = GetWorld()->SpawnActor<AAudioPlayer>(audioPlayerBP, SpawnPosition, FRotator::ZeroRotator, SpawnInfo);		
-	}	
+		audioPlayer->PlaySound(10, GetWorld());
+	}
 }
 
 

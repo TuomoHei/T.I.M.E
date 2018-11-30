@@ -16,6 +16,8 @@
 #include "ScoreManager.h"
 
 	///rest of the implementation relating to different enemy behaviour is done via BP
+
+
 static auto GeneralDestroyer = [](AActor *entity, UWorld *world) {if (!entity) return; 
 if (!entity->IsValidLowLevel())return; 
 entity->K2_DestroyActor();
@@ -28,12 +30,7 @@ ADemoGameBase::Debugger(443, 0, FString("KILLEd"));
 
 AEnemy2D::AEnemy2D()
 {
-	
 	PrimaryActorTick.bCanEverTick = true;
-
-	C_rootBox = CreateDefaultSubobject<UBoxComponent>(TEXT("Lers"));
-
-	RootComponent = C_rootBox;
 	state = CB_walking;
 }
 
@@ -50,7 +47,6 @@ void AEnemy2D::BeginPlay()
 
 void AEnemy2D::Tick(float DeltaTime)
 {
-	if (!this) return;
 	Super::Tick(DeltaTime);
 	if (!bGameEnd && !bIsWaiting)
 	{
@@ -93,13 +89,14 @@ void AEnemy2D::Movement(float moveValue, float Deltatime)
 			if (timer <= 0.0f)
 			{
 				asdf(direction.X > 0);
+				Cast<APlayer2D>(player.Last())->PlayerDeath();
 			}
 		}
 		else
 		{
 			if (bIsHead)
 			{
-				Cast<AItem>(item)->UseWeapon();
+				Cast<AItem>(item)->UseWeapon(false);
 			}
 		}
 	}
@@ -150,21 +147,22 @@ void AEnemy2D::TakeDamageEnemy(bool weapon)
 	{
 		if (item2 != nullptr)
 		{
+			Cast<UPickupComponent>(item2)->DisEquip(item2);
 			GeneralDestroyer(item2, GetWorld());
 			item2 = nullptr;
 		}
-		ADemoGameBase::Debugger(122, 0, FString("Melee weapon hit"));
-
+		Cast<UPickupComponent>(item)->DisEquip(item);
 		Cast<APlayer2D>(player.Last())->PC->RegGameBase->EnemyListRemover(this);
 		GeneralDestroyer(this,GetWorld());
 		return;
 	}
 	//check if dual wielding enemy
-	if (item2 != nullptr)
+	if (item2)
 	{
+		Cast<UPickupComponent>(item2)->DisEquip(item2);
 		GeneralDestroyer(item2,GetWorld());
 		item2 = nullptr;
-
+		return;
 	}
 	//drop the last item that enemy is holding
 	if (item)
@@ -186,7 +184,6 @@ void AEnemy2D::EndPlay(const EEndPlayReason::Type EndPlayReason)
 
 	UScoreManager::AddPoints(100);
 	Super::EndPlay(EndPlayReason);
-
 }
 
 

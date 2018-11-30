@@ -2,7 +2,6 @@
 
 #include "PickupComponent.h"
 #include "TestPlayerController.h"
-#include "DemoGameBase.h"
 #include "Enemy2D.h"
 #include "Item.h"
 
@@ -35,6 +34,7 @@ void UPickupComponent::Pickup(AActor *Player, FVector location, AActor *targetOb
 
 void UPickupComponent::DisEquip(AActor* targetObj)
 {
+	if (!targetObj) return;
 	FDetachmentTransformRules a(FDetachmentTransformRules::KeepWorldTransform);
 	a.ScaleRule = EDetachmentRule::KeepWorld;
 	targetObj->DetachFromActor(a);
@@ -44,10 +44,10 @@ void UPickupComponent::DisEquip(AActor* targetObj)
 //Note: removes the previous attachment
 void UPickupComponent::CheckLocation(AActor *Player, FVector location, AActor *targetObj)
 {
+	if (!IsValid(targetObj)) return;
 	FAttachmentTransformRules a = FAttachmentTransformRules(EAttachmentRule::KeepWorld, false);
-	AItem *offset = Cast<AItem>(targetObj);
 
-	a.ScaleRule = EAttachmentRule::KeepWorld;
+	//a.ScaleRule = EAttachmentRule::KeepWorld;
 	//a.RotationRule = EAttachmentRule::KeepWorld;
 	//a.LocationRule = EAttachmentRule::SnapToTarget;
 
@@ -55,6 +55,12 @@ void UPickupComponent::CheckLocation(AActor *Player, FVector location, AActor *t
 	auto comp = (Player->GetActorLocation() - location).X > 0 ?
 		Player->GetComponentsByTag(UStaticMeshComponent::StaticClass(), FName("Right"))
 		: Player->GetComponentsByTag(UStaticMeshComponent::StaticClass(), FName("Left"));
+
+	if (comp.Num() > 0)
+	{
+
+		targetObj->AttachToComponent(Cast<USceneComponent>(comp.Last()), a);
+	}
 
 	if (Player->IsA(AEnemy2D::StaticClass()))
 	{
@@ -67,15 +73,14 @@ void UPickupComponent::CheckLocation(AActor *Player, FVector location, AActor *t
 		}
 	}
 
-	if (comp.Num() > 0)
-	{
-		targetObj->AttachToComponent(Cast<USceneComponent>(comp.Last()), a);
-	}
 
-	if (offset != nullptr)
+	AItem *offset = Cast<AItem>(targetObj);
+	if (IsValid(offset))
 	{
-		targetObj->SetActorRelativeLocation(offset->ItemOffset.GetLocation());
+
 		targetObj->SetActorRelativeRotation(offset->ItemOffset.GetRotation());
+		targetObj->SetActorRelativeLocation(offset->ItemOffset.GetLocation());
+
 	}
 }
 

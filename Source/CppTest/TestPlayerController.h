@@ -19,13 +19,12 @@ public:
 	class APlayer2D *RegPlayer2D;
 	class ADemoGameBase *RegGameBase;
 
-	//virtual void GetInputTouchState(ETouchIndex::Type FingerIndex, float &LocationX, float &LocationY, bool &bIsCurrentlyPressed) override;
 	virtual void SetupInputComponent() override;
 	void Touched(ETouchIndex::Type, FVector Location);
 	void RegisterPlayer2D(APlayer2D *actor);
 	void RegisterGameBase(class ADemoGameBase *base);
-
-
+	void AttackEnemy(FHitResult *hit, bool Weapon);
+	bool WeaponCheck(FHitResult hit);
 	virtual void BeginPlay() override;
 	
 private:

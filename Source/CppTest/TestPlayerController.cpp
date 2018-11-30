@@ -12,7 +12,7 @@
 #include "Runtime/Engine/Public/DrawDebugHelpers.h" //for debug
 bool runDebug = true;
 #else
- bool runDebug = false;
+bool runDebug = false;
 #endif
 
 
@@ -34,6 +34,7 @@ void ATestPlayerController::SetupInputComponent()
 
 void ATestPlayerController::Touched(ETouchIndex::Type FingerIndex, FVector location)
 {
+	float val = RegPlayer2D->pickUpRange;
 	FHitResult *hit = new FHitResult();
 	GetHitResultUnderFingerByChannel(FingerIndex, UEngineTypes::ConvertToTraceType(ECC_Visibility), true, *hit);
 
@@ -41,39 +42,17 @@ void ATestPlayerController::Touched(ETouchIndex::Type FingerIndex, FVector locat
 
 	timeManager->DeactivateSlowmotion();
 
-	if (hit->GetActor() == NULL) return;	
+	if (hit->GetActor() == NULL) return;
 
-	if (FMath::Abs((hit->ImpactPoint - RegPlayer2D->GetActorLocation()).X) <= RegPlayer2D->pickUpRange)
+	if (IsValid(RegPlayer2D->item)) val *= 2;
+
+	if (FMath::Abs((hit->ImpactPoint - RegPlayer2D->GetActorLocation()).X) <= val)
 	{
-		if (IsValid(Cast<AEnemy2D>(hit->GetActor())))
-		{
-			if (IsValid(RegPlayer2D->ItemGetter()))
-			{
-				if (!Cast<AItem>(RegPlayer2D->ItemGetter())->meleeweapon)
-				{
-					Cast<AItem>(RegPlayer2D->ItemGetter())->UseWeapon();
-					return;
-				}
-			}
+		///enemy hit
+		AttackEnemy(hit, WeaponCheck(*hit));
 
-
-			///Delegate for the timer (Attacktime can be assigned via player BP
-			FTimerDelegate a = FTimerDelegate::CreateLambda([=](void)
-			{
-				RegPlayer2D->AttackEnemy(hit->GetActor());
-			});
-
-			FTimerHandle handle;
-			GetWorldTimerManager().SetTimer(handle, a, RegPlayer2D->attackTime, false);
-
-			if(runDebug)
-			DrawDebugPoint(GetWorld(), hit->ImpactPoint, 50, FColor(0, 255, 0), false, 3.0f);
-
-			RegPlayer2D->bIsAttacking = true;
-			return;
-		}
-
-		if (hit->GetActor()->ActorHasTag(FName("PickUp")))
+		///pickup hit 
+		if (IsValid(Cast<AItem>(hit->GetActor())) && !RegPlayer2D->item)
 		{
 			if (!hit->GetActor()->GetAttachParentActor())
 				RegPlayer2D->PickUp(hit->GetActor());
@@ -83,10 +62,40 @@ void ATestPlayerController::Touched(ETouchIndex::Type FingerIndex, FVector locat
 	if (FMath::Abs((hit->ImpactPoint - RegPlayer2D->GetActorLocation()).X) <= RegPlayer2D->moveRange)
 	{
 		HitPos = hit->ImpactPoint;
-		if(runDebug)
-		DrawDebugPoint(GetWorld(), hit->ImpactPoint, 50, FColor(255, 0, 0), false, 3.0f);
+		if (runDebug)
+			DrawDebugPoint(GetWorld(), hit->ImpactPoint, 8000, FColor(255, 0, 0), true, 3.0f);
 	}
+}
 
+bool ATestPlayerController::WeaponCheck(FHitResult hit)
+{
+	if (!RegPlayer2D->item)return false;
+
+	if (RegPlayer2D->item->IsActorBeingDestroyed()) return false;
+	Cast<AItem>(RegPlayer2D->item)->UseWeapon(IsValid(Cast<AEnemy2D>(hit.GetActor())));
+	return IsValid(Cast<AItem>(RegPlayer2D->item)) && !Cast<AItem>(RegPlayer2D->item)->meleeweapon;
+}
+
+void ATestPlayerController::AttackEnemy(FHitResult *hit, bool rangedweapon)
+{
+	if (!rangedweapon)
+	{
+		ADemoGameBase::Debugger(123, 0, hit->GetActor()->GetName());
+		if (!IsValid(Cast<AEnemy2D>(hit->GetActor())))return;
+		///Delegate for the timer (Attacktime can be assigned via player BP
+		FTimerDelegate a = FTimerDelegate::CreateLambda([=](void)
+		{
+			RegPlayer2D->AttackEnemy(hit->GetActor());
+		});
+
+		FTimerHandle handle;
+		GetWorldTimerManager().SetTimer(handle, a, RegPlayer2D->attackTime, false);
+
+		if (runDebug)
+			DrawDebugPoint(GetWorld(), hit->ImpactPoint, 5000, FColor(0, 255, 0), false, 3.0f);
+
+		RegPlayer2D->bIsAttacking = true;
+	}
 }
 
 void ATestPlayerController::RegisterPlayer2D(APlayer2D *actor)
@@ -101,7 +110,7 @@ void ATestPlayerController::RegisterGameBase(ADemoGameBase *base)
 
 void ATestPlayerController::GetTimeManipulator()
 {
-	if (RegPlayer2D) return;
+	if (!RegPlayer2D) return;
 	timeManager = RegPlayer2D->FindComponentByClass<UTimeManipulator>();
 	if (timeManager&& runDebug)
 	{

@@ -14,7 +14,7 @@
 ADemoGameBase::ADemoGameBase()
 {
 	PrimaryActorTick.bCanEverTick = true;
-	timer = (float)Spawnrate; //timer = timerValue;
+
 	id = 0;
 	enemyCount = 0;
 	PlayerControllerClass = ATestPlayerController::StaticClass();
@@ -28,7 +28,7 @@ ADemoGameBase::~ADemoGameBase()
 
 void ADemoGameBase::StartPlay()
 {
-
+	timer = Spawnrate;
 	auto PC = Cast<ATestPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
 	if (PC) PC->RegisterGameBase(this);
 	Super::StartPlay();
@@ -81,14 +81,14 @@ void ADemoGameBase::StartPlay()
 void ADemoGameBase::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
-	timer -= DeltaSeconds * 5;
+	timer -= DeltaSeconds;
 
 	if (EnemySpawns.Num() > 0)
 	{
 		if (timer <= 0)
 		{
 			SpawnEnemy();
-			timer = timerValue;
+			timer = Spawnrate;
 		}
 	}
 
@@ -194,9 +194,8 @@ void ADemoGameBase::SpawnEnemy()
 	///spawn parameters to enforce uniqueness
 	FActorSpawnParameters SpawnInfo;
 	SpawnInfo.Name = FName(*Entityname(FString("Enemy"), id));
-
 	UClass *a = EnemyFetcher(); ///Fetch enemy prefab
-	AEnemy2D *b = GetWorld()->SpawnActor<AEnemy2D>(a, FVector::ZeroVector, FRotator(0.0f, 90.0f, 0.0f), SpawnInfo);
+	AEnemy2D *b = GetWorld()->SpawnActor<AEnemy2D>(a, EnemySpawns[FMath::RandRange(0,1)], FRotator(0.0f, 90.0f, 0.0f), SpawnInfo);
 	
 	if (b)
 	{

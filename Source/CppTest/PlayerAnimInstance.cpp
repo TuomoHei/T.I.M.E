@@ -4,6 +4,7 @@
 #include "GameFramework/Actor.h"
 #include "Player2D.h"
 #include "EngineUtils.h"
+#include "Item.h"
 #include <stdlib.h>	// Needed for rand
 
 void UPlayerAnimInstance::NativeInitializeAnimation()
@@ -15,26 +16,36 @@ void UPlayerAnimInstance::NativeInitializeAnimation()
 
 	// Get skeletal mesh component
 	skeletalMeshComp = GetSkeletalMeshComp();
-	
+
 	bIsAlive = true;
-	bIsMoving = false;	
+	bIsMoving = false;
 
 	if (PlayerClass != nullptr)
 	{
 		SetAttackAnimID();	// Set initial attack anim and feed length to player
-	}	
+	}
 }
 
 void UPlayerAnimInstance::UpdateAnimationProperties()
 {
 	if (!PlayerClass)
-		return;	
-	
+		return;
+
 	// ** Moving **
-	float moveX = PlayerClass->MovementInput.X;		
+	float moveX = PlayerClass->MovementInput.X;
+
 	if (moveX != 0)
 	{
-		bIsMoving = true;
+
+		if (IsValid(PlayerClass->item))
+		{
+			bIsMoving = Cast<AItem>(PlayerClass->item)->meleeweapon;
+		}
+		else
+		{
+			bIsMoving = true;
+
+		}
 
 		if (moveX > 0 && skeletalMeshComp)
 		{
@@ -58,22 +69,22 @@ void UPlayerAnimInstance::UpdateAnimationProperties()
 	// ** Crouching ** 
 
 	// ** Sliding **
-		
+
 	// ** Dying **
 	//bIsAlive = PlayerClass-> // isAlive?	
 }
 
 void UPlayerAnimInstance::SetAttackAnimID()
 {
-	attackAnimID = rand() % attackAnims.Num();	
+	attackAnimID = rand() % attackAnims.Num();
 	PlayerClass->bIsAttacking = false;
-	GetAttackDuration();	
+	GetAttackDuration();
 }
 
 float UPlayerAnimInstance::GetAttackDuration()
 {
-	float dur = attackAnims[attackAnimID]->GetPlayLength();	
-	PlayerClass->attackTime  = dur;
+	float dur = attackAnims[attackAnimID]->GetPlayLength();
+	PlayerClass->attackTime = dur;
 	return dur;
 }
 
@@ -94,7 +105,7 @@ APlayer2D* UPlayerAnimInstance::GetPlayerClass()
 
 		player = *Itr;
 	}
-	
+
 	return player;
 }
 

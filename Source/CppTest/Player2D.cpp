@@ -10,17 +10,18 @@
 #include "Runtime/Engine/Classes/Components/BoxComponent.h"
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 
-
+static auto BulletDirectionL = [](FVector vector, FVector &retVector)
+{
+	if (vector.X > 0.1f)
+		retVector = FVector(1.0f, 0.0f, 0.0f);
+	else if (vector.X < -0.1f)
+		retVector = FVector(-1.0f, 0.0f, 0.0f);
+};
 
 APlayer2D::APlayer2D()
 {
 	PrimaryActorTick.bCanEverTick = true;
 	AutoPossessPlayer = EAutoReceiveInput::Player0;
-	base = CreateDefaultSubobject<UBoxComponent>(TEXT("ASDF"));
-	RootComponent = Cast<USceneComponent>(base);
-	item = nullptr;
-	canMove = true;
-	///Tag if needed
 	Tags.Add("Player");
 }
 
@@ -28,7 +29,10 @@ APlayer2D::APlayer2D()
 void APlayer2D::BeginPlay()
 {
 	Super::BeginPlay();
-
+	item = nullptr;
+	canMove = true;
+	BulletDirection,MovementInput = FVector::ZeroVector;
+	
 	///Find the players custom controller (testplayercontroller) and check if that exists
 	PC = Cast<ATestPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
 
@@ -65,24 +69,23 @@ void APlayer2D::Tick(float DeltaTime)
 	}
 	else
 	{
-		MovementInput = PC->HitPos - GetTransform().GetLocation().X;
-		MovementInput.Normalize();
+		MovementInput = PC->HitPos - GetTransform().GetLocation();
+	}
+	BulletDirectionL(MovementInput, BulletDirection);
+
+
+
+	//timeManager->DeactivateSlowmotion();
+	if (IsValid(item))
+	{
+		Cast<UPickupComponent>(item->GetClass())->CheckLocation(this, BulletDirection, item);
+		if (!Cast<AItem>(item)->meleeweapon)
+			return;
 	}
 
-
-	///Calculate the distance between click point and players location
-
-	newLoc.X += Movevalue(MovementInput) * DeltaTime * moveSpeed;
+	newLoc.X += Movevalue(MovementInput.GetSafeNormal()) * DeltaTime * moveSpeed;
 	SetActorLocation(newLoc);
 
-
-
-	if (MovementInput != FVector::ZeroVector)
-	{
-		//timeManager->DeactivateSlowmotion();
-		if (item)
-			Cast<UPickupComponent>(item->GetClass())->CheckLocation(this, MovementInput, item);
-	}
 }
 
 // Called to bind functionality to input
@@ -117,7 +120,10 @@ void APlayer2D::PickUp(AActor *targetObj)
 void APlayer2D::UnEquip()
 {
 	if (item)
+	{
 		Cast<UPickupComponent>(item->GetClass())->DisEquip(item);
+		item = nullptr;
+	}
 }
 
 
@@ -127,9 +133,11 @@ void APlayer2D::AttackEnemy(AActor *enemy)
 
 	if (item)
 	{
-
-		Cast<AEnemy2D>(enemy)->TakeDamageEnemy(item != nullptr);
-		Cast<AItem>(item)->UseWeapon();
+		if (Cast<AItem>(item)->meleeweapon)
+		{
+			Cast<AEnemy2D>(enemy)->TakeDamageEnemy(item != nullptr);
+			Cast<AItem>(item)->UseWeapon(true);
+		}
 
 		bIsAttacking = false;
 		return;

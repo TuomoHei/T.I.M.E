@@ -43,12 +43,10 @@ private:
 	void StartPlay() override;
 	void SpawnEnemy();
 	void Tick(float DeltaSeconds) override;
-
-	const float timerValue = 5.0f;
 	int id;
 	float diceRoll;
 	float cumulative;
-	float timer = 6;
+	float timer;
 	int32 currentLevelIndex;
 	TArray<FVector> EnemySpawns;
 	UClass* EnemyFetcher();
@@ -57,7 +55,7 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "EnemySpawn")
 		float chances[3];
 	UPROPERTY(EditDefaultsOnly, Category = "EnemySpawn")
-		int32 Spawnrate;
+		float Spawnrate;
 	UPROPERTY(EditDefaultsOnly, Category = "EnemySpawn")
 		int maxEnemies;
 	UPROPERTY()

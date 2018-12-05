@@ -143,10 +143,11 @@ void APlayer2D::AttackEnemy(AActor *enemy)
 		{
 			Cast<AEnemy2D>(enemy)->TakeDamageEnemy(item != nullptr);
 			Cast<AItem>(item)->UseWeapon(true);
+			return;
 		}
 
 		Cast<AEnemy2D>(enemy)->TakeDamageEnemy(item != nullptr);
-		Cast<AItem>(item)->UseWeapon();
+		Cast<AItem>(item)->UseWeapon(false);
 		//int32 swordSoundID = (rand() % 2) > 0 ? 3 : 4;
 		//audioPlayer->PlaySound(swordSoundID, GetWorld());
 		//audioPlayer->PlaySound(swordSoundID, GetWorld());		bIsAttacking = false;

@@ -25,15 +25,14 @@ private:
 public:
 	APlayer2D();
 	class AActor *item;
-	UPROPERTY(BlueprintReadOnly)
-	bool canMove;
+
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-class AActor *ItemGetter() { return item; };
+	class AActor *ItemGetter() { return item; };
 
 	UPROPERTY(BlueprintReadOnly)
 		bool canMove;
-		UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable)
 		void PlayerDeath();
 	UFUNCTION(BlueprintCallable)
 		void UnEquip();

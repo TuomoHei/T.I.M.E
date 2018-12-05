@@ -23,7 +23,7 @@ public:
 	void Touched(ETouchIndex::Type, FVector Location);
 	void RegisterPlayer2D(APlayer2D *actor);
 	void RegisterGameBase(class ADemoGameBase *base);
-	void AttackEnemy(FHitResult *hit, bool Weapon);
+	bool AttackEnemy(FHitResult *hit, bool Weapon);
 	bool WeaponCheck(FHitResult hit);
 	virtual void BeginPlay() override;
 	

@@ -56,7 +56,7 @@ void ATestPlayerController::Touched(ETouchIndex::Type FingerIndex, FVector locat
 	if (FMath::Abs((hit->ImpactPoint - RegPlayer2D->GetActorLocation()).X) <= val)
 	{
 		///enemy hit
-		AttackEnemy(hit, WeaponCheck(*hit));
+		if (AttackEnemy(hit, WeaponCheck(*hit))) return;
 
 		///pickup hit 
 		if (IsValid(Cast<AItem>(hit->GetActor())) && !RegPlayer2D->item)
@@ -83,12 +83,12 @@ bool ATestPlayerController::WeaponCheck(FHitResult hit)
 	return IsValid(Cast<AItem>(RegPlayer2D->item)) && !Cast<AItem>(RegPlayer2D->item)->meleeweapon;
 }
 
-void ATestPlayerController::AttackEnemy(FHitResult *hit, bool rangedweapon)
+bool ATestPlayerController::AttackEnemy(FHitResult *hit, bool rangedweapon)
 {
 	if (!rangedweapon)
 	{
 		ADemoGameBase::Debugger(123, 0, hit->GetActor()->GetName());
-		if (!IsValid(Cast<AEnemy2D>(hit->GetActor())))return;
+		if (!IsValid(Cast<AEnemy2D>(hit->GetActor())))return false;
 		///Delegate for the timer (Attacktime can be assigned via player BP
 		FTimerDelegate a = FTimerDelegate::CreateLambda([=](void)
 		{
@@ -102,7 +102,9 @@ void ATestPlayerController::AttackEnemy(FHitResult *hit, bool rangedweapon)
 			DrawDebugPoint(GetWorld(), hit->ImpactPoint, 5000, FColor(0, 255, 0), false, 3.0f);
 
 		RegPlayer2D->bIsAttacking = true;
+		return true;
 	}
+	return false;
 }
 
 void ATestPlayerController::RegisterPlayer2D(APlayer2D *actor)

@@ -19,31 +19,33 @@ protected:
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-	class AActor *item;
 private:
 	void GetTimeManipulator();
 
 public:
+	APlayer2D();
+	class AActor *item;
+
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 	class AActor *ItemGetter() { return item; };
 
 	UPROPERTY(BlueprintReadOnly)
 		bool canMove;
-	
 	UFUNCTION(BlueprintCallable)
 		void PlayerDeath();
+	UFUNCTION(BlueprintCallable)
+		void UnEquip();
+
 	void AttackEnemy(class AActor *enemy);
 	void PickUp(class AActor *targetObj);
-	UFUNCTION(BlueprintCallable)
-	void UnEquip();
-	APlayer2D();
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-	
-	bool bHoldingItem;
+
+	UPROPERTY(BlueprintReadOnly)
+		bool bPlayerDeath;
+
 	UPROPERTY(VisibleAnywhere)
-	bool bIsAttacking;
-	
+		bool bIsAttacking;
 	///Values for pickups and attack ranges
 	UPROPERTY(EditAnywhere, Category = "Movement")
 		float moveRange;
@@ -53,12 +55,13 @@ public:
 		float pickUpRange;
 	UPROPERTY(EditAnywhere, Category = "Attack")
 		float attackTime;
-
-	class UBoxComponent *base;
-
-	class ATestPlayerController *PC;
+	UPROPERTY(BlueprintReadOnly)
+		FVector BulletDirection;
 
 	FVector MovementInput;
+	bool bHoldingItem;
+	class UBoxComponent *base;
+	class ATestPlayerController *PC;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		UTimeManipulator* timeManager;

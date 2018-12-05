@@ -78,14 +78,18 @@ void UPlayerAnimInstance::SetAttackAnimID()
 {
 	attackAnimID = rand() % attackAnims.Num();
 	PlayerClass->bIsAttacking = false;
-	GetAttackDuration();
-}
+	GetAttackDuration();	}
 
-float UPlayerAnimInstance::GetAttackDuration()
+float UPlayerAnimInstance::SetAttackDuration()
 {
 	float dur = attackAnims[attackAnimID]->GetPlayLength();
 	PlayerClass->attackTime = dur;
 	return dur;
+}
+
+float UPlayerAnimInstance::GetAttackDuration()
+{
+	return attackAnims[attackAnimID]->GetPlayLength();
 }
 
 // Find and return player class

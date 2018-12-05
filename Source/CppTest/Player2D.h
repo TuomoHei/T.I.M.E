@@ -21,13 +21,15 @@ protected:
 	virtual void BeginPlay() override;
 	class AActor *item;
 private:
-	bool canMove;
 	void GetTimeManipulator();
 
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 	class AActor *ItemGetter() { return item; };
+
+	UPROPERTY(BlueprintReadOnly)
+		bool canMove;
 	
 	UFUNCTION(BlueprintCallable)
 		void PlayerDeath();

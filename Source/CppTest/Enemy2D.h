@@ -41,6 +41,8 @@ public:
 		UClass *weaponPrefab;
 	UPROPERTY()
 		bool bIsWaiting = false;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		bool bIsStaggering = false;
 	UPROPERTY()
 		bool bIsHead = false;
 	UFUNCTION(BlueprintCallable)
@@ -60,6 +62,7 @@ protected:
 
 	class ATestPlayerController *controller;
 	TArray<AActor*> player;
+	TArray<AActor*> scoreActor;
 	float timer;
 	virtual void BeginPlay() override;
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;

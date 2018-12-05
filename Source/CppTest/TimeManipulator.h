@@ -59,6 +59,9 @@ public:
 	UPROPERTY(EditAnywhere)
 		float slowAudioPitch = 0.2f;
 
+	UPROPERTY(EditAnywhere)
+		float audioPitchInterp = 0.075f;
+
 	//UPROPERTY(EditAnyWhere)
 	//	class USoundBase* sound;
 

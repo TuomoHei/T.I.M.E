@@ -43,7 +43,7 @@ void UTimeManipulator::ActivateSlowmotion()
 	float realSlowDuration = slowSpeedDuration * slowGameSpeed;	// E.g. 2 seconds in 0.2 x game speed should actually last one fifth of 2 seconds
 	GetWorld()->GetTimerManager().SetTimer(SlowTimeHandle, this, &UTimeManipulator::DeactivateSlowmotion, realSlowDuration, false);		
 	
-	UGameplayStatics::SetGlobalPitchModulation(GetWorld(), slowAudioPitch, 0.075f); // set global audio pitch modulation
+	UGameplayStatics::SetGlobalPitchModulation(GetWorld(), slowAudioPitch, audioPitchInterp); // set global audio pitch modulation
 	
 	if (IsValid(audioPlayer))
 	{

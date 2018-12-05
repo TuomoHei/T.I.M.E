@@ -26,13 +26,13 @@ void AAudioPlayer::BeginPlay()
 
 void AAudioPlayer::PlaySound(int soundIndex, UWorld * w)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Called PlayAudio. index = %d"), soundIndex);
+	//UE_LOG(LogTemp, Warning, TEXT("Called PlayAudio. index = %d"), soundIndex);
 	if (soundIndex >= 0 && soundIndex < sounds.Num())
 	{
 		// Play sound by index
 		sound = sounds[soundIndex];
 		UGameplayStatics::PlaySoundAtLocation(w, sound, defaultLocation);
-		UE_LOG(LogTemp, Warning, TEXT("Playing audio"));
+		//UE_LOG(LogTemp, Warning, TEXT("Playing audio"));
 	}
 }
 

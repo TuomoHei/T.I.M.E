@@ -87,7 +87,6 @@ bool ATestPlayerController::AttackEnemy(FHitResult *hit, bool rangedweapon)
 {
 	if (!rangedweapon)
 	{
-		ADemoGameBase::Debugger(123, 0, hit->GetActor()->GetName());
 		if (!IsValid(Cast<AEnemy2D>(hit->GetActor())))return false;
 		///Delegate for the timer (Attacktime can be assigned via player BP
 		FTimerDelegate a = FTimerDelegate::CreateLambda([=](void)

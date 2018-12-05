@@ -68,4 +68,7 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		AAudioPlayer *audioPlayer;
+
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	//	float testFloat = 13;
 };

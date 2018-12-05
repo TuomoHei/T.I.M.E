@@ -75,6 +75,7 @@ void UPlayerAnimInstance::UpdateAnimationProperties()
 		if (item->meleeweapon)
 		{
 			bIsMeleeing = true;
+			//UE_LOG(LogTemp, Warning, TEXT("is meleeing = true"));
 		}
 		else
 		{
@@ -94,9 +95,10 @@ void UPlayerAnimInstance::UpdateAnimationProperties()
 
 void UPlayerAnimInstance::SetAttackAnimID()
 {
-	attackAnimID = rand() % attackAnims.Num();
-	PlayerClass->bIsAttacking = false;
-	GetAttackDuration();	}
+	attackAnimID = rand() % attackAnims.Num();	
+	if (PlayerClass) { PlayerClass->bIsAttacking = false; }
+	attackAnims[attackAnimID]->GetPlayLength();
+}
 
 float UPlayerAnimInstance::SetAttackDuration()
 {

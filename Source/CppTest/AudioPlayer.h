@@ -1,7 +1,5 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-// Simpliest audio player possible in UE TM
-
 #pragma once
 
 #include "CoreMinimal.h"
@@ -30,16 +28,10 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		TArray<class USoundBase*> sounds;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		float testFloat;
 	
 	void PlaySound(int soundIndex, UWorld * w);
 	void PlaySound(int soundIndex, float delay, UWorld * w);
 	void PlaySound(int soundIndex, FVector location, UWorld * w);
-
-	UPROPERTY(VisibleAnywhere)
-		float gameSpeed;
 
 private:
 

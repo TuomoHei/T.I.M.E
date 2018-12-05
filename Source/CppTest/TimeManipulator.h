@@ -64,4 +64,7 @@ public:
 
 	UPROPERTY(BlueprintReadOnly)
 	bool bIsSlow;
+
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	//	float testFloat = 13;
 };

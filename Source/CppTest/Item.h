@@ -17,16 +17,20 @@ public:
 		void Physics(float deltatime);
 	UFUNCTION(BlueprintCallable)
 		void Bounce(float deltatime);
-
+	UFUNCTION(BlueprintCallable)
+		void DestroyFunc();
 	///Calls blueprint function attack
 	UFUNCTION(BlueprintImplementableEvent)
-		void UseWeapon(bool hitenemy,FVector direction);
+		void UseWeapon(bool hitenemy, FVector direction);
+	UFUNCTION()
+		void DestroyWeapon();
+
 	UPROPERTY(EditAnywhere, Category = "Variables")
 		FTransform ItemOffset;
 	UPROPERTY(EditDefaultsOnly, Category = Combat, BlueprintReadWrite)
 		bool meleeweapon;
-	UPROPERTY(EditDefaultsOnly,BlueprintReadWrite, Category = Variables)
-	int endurance;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Variables)
+		int endurance;
 
 protected:
 
@@ -38,6 +42,8 @@ protected:
 		float weight;
 	UPROPERTY(EditAnywhere, Category = "CustomPhysics")
 		float groundLevel;
+	UPROPERTY(EditDefaultsOnly, Category = "Variables")
+		float destroyTime;
 
 	// Default transform offset position when picked up
 

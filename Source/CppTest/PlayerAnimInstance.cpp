@@ -67,43 +67,51 @@ void UPlayerAnimInstance::UpdateAnimationProperties()
 
 	// ** Attacking **
 	bIsAttacking = PlayerClass->bIsAttacking;
+	//if (bIsAttacking)
+	//{
+	//	UE_LOG(LogTemp, Warning, TEXT("attacking"));
+	//}
+
 
 	AItem *item = Cast<AItem>(PlayerClass->item);	// todo: can optimize with local hasWeapon bool in player and check only that bool instead of casting every frame	
 
-	if (item != nullptr && bIsAttacking)
+	if (item != nullptr)
 	{
-		if (item->meleeweapon)
+		if (item->meleeweapon && bIsAttacking)
 		{
 			bIsMeleeing = true;
-			//UE_LOG(LogTemp, Warning, TEXT("is meleeing = true"));
+			UE_LOG(LogTemp, Warning, TEXT("is meleeing = true"));
 		}
-		else
+		else if (!item->meleeweapon)
 		{
 			bIsShooting = true;
+			UE_LOG(LogTemp, Warning, TEXT("Shooting"));
 		}
 	}
 	else
 	{
-		bIsShooting = bIsMeleeing = false;
+		bIsShooting = false;
+		bIsMeleeing = false;
 	}
 
 
 
 	// ** Dying **
-	//bIsAlive = PlayerClass-> // isAlive?	
+	bIsAlive = PlayerClass->canMove;
 }
 
 void UPlayerAnimInstance::SetAttackAnimID()
 {
 	attackAnimID = rand() % attackAnims.Num();	
-	if (PlayerClass) { PlayerClass->bIsAttacking = false; }
-	attackAnims[attackAnimID]->GetPlayLength();
+	//if (PlayerClass) { PlayerClass->bIsAttacking = false; }
+	//attackAnims[attackAnimID]->GetPlayLength();
 }
 
 float UPlayerAnimInstance::SetAttackDuration()
 {
 	float dur = attackAnims[attackAnimID]->GetPlayLength();
-	PlayerClass->attackTime = dur;
+	if (PlayerClass) { PlayerClass->attackTime = dur; }
+	else { UE_LOG(LogTemp, Warning, TEXT("Player class is NULL")); }
 	return dur;
 }
 

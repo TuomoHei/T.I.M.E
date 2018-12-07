@@ -51,7 +51,7 @@ void UTimeManipulator::ActivateSlowmotion()
 		//UE_LOG(LogTemp, Warning, TEXT("Start slow mo sound playing"));
 	}
 	
-	UE_LOG(LogTemp, Warning, TEXT("ActivateSlowmotion()"));
+	//UE_LOG(LogTemp, Warning, TEXT("ActivateSlowmotion()"));
 
 	bIsSlow = true;
 }
@@ -68,7 +68,7 @@ void UTimeManipulator::DeactivateSlowmotion()
 		audioPlayer->PlaySound(6, GetWorld());
 	}
 
-	UE_LOG(LogTemp, Warning, TEXT("DEactivateSlowmotion()"));
+	//UE_LOG(LogTemp, Warning, TEXT("DEactivateSlowmotion()"));
 
 	bIsSlow = false;
 }
@@ -85,7 +85,7 @@ void UTimeManipulator::DeactivateSlowmotionPermanent()
 
 	bIsSlow = false;
 
-	UE_LOG(LogTemp, Warning, TEXT("DEactivateSlowmotion PERMANENT"));
+	//UE_LOG(LogTemp, Warning, TEXT("DEactivateSlowmotion PERMANENT"));
 }
 
 void UTimeManipulator::ResetTimerHandle()

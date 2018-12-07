@@ -20,7 +20,7 @@ public:
 
 	///Calls blueprint function attack
 	UFUNCTION(BlueprintImplementableEvent)
-		void UseWeapon(bool hitenemy);
+		void UseWeapon(bool hitenemy,FVector direction);
 	UPROPERTY(EditAnywhere, Category = "Variables")
 		FTransform ItemOffset;
 	UPROPERTY(EditDefaultsOnly, Category = Combat, BlueprintReadWrite)

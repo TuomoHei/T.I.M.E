@@ -39,7 +39,7 @@ public:
 		void AddWeapon(int index);
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = BPClasses)
 		UClass *weaponPrefab;
-	UPROPERTY()
+	UPROPERTY(BlueprintReadOnly)
 		bool bIsWaiting = false;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		bool bIsStaggering = false;

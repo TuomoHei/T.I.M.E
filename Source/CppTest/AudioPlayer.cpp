@@ -33,8 +33,7 @@ void AAudioPlayer::PlaySound(int soundIndex, UWorld * w)
 		sound = sounds[soundIndex];
 		UGameplayStatics::PlaySoundAtLocation(w, sound, defaultLocation);
 		//UE_LOG(LogTemp, Warning, TEXT("Playing audio"));
-	}
-}
+	}}
 
 void AAudioPlayer::PlaySound(int soundIndex, float delay, UWorld * w) // problem: can't have two delays with same timer.. hmmm.... or can we?
 {

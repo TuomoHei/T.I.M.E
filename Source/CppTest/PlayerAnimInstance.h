@@ -54,7 +54,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void SetAttackAnimID();	
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 		float SetAttackDuration();
 	UFUNCTION(BlueprintCallable)
 		float GetAttackDuration();

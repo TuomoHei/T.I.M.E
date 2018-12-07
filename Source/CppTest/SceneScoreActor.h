@@ -32,9 +32,11 @@ public:
 	UPROPERTY(BlueprintReadOnly, Category = "Score Management/Scene Score Actor")
 		int ScoreMultiplier;
 
+	UPROPERTY(BlueprintReadOnly, Category = "Score Management/Scene Score Actor")
+		int CurrentScore;
+
 private:
 	bool bIsPaused;
-	int CurrentScore;
 	const float MultiplierTimerAddition = 5.0f;
 	
 };

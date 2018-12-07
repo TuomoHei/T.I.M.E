@@ -32,10 +32,23 @@ void UPlayerAnimInstance::UpdateAnimationProperties()
 		return;
 
 	// ** Moving **
-	float moveX = PlayerClass->BulletDirection.X;
-
+	float moveX = PlayerClass->MovementInput.X;
+	//UE_LOG(LogTemp, Warning, TEXT("move X %f"), moveX);
+	
 	if (moveX != 0)
 	{
+		bIsMoving = true;
+
+		//if (IsValid(PlayerClass->item))
+		//{
+		//	bIsMoving = Cast<AItem>(PlayerClass->item)->meleeweapon;
+		//}
+		//else
+		//{
+		//	bIsMoving = true;
+
+		//}
+
 		if (moveX > 0 && skeletalMeshComp)
 		{
 			// Moves right
@@ -45,41 +58,58 @@ void UPlayerAnimInstance::UpdateAnimationProperties()
 		{
 			// Moves left
 			skeletalMeshComp->SetWorldScale3D(FVector(1.0f, -1.0f, 1.0f));
-
 		}
-		bIsMoving = true;
-
-
 	}
 	else
 	{
 		bIsMoving = false;
 	}
 
-
-
 	// ** Attacking **
 	bIsAttacking = PlayerClass->bIsAttacking;
+	if (bIsAttacking)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("attacking"));
+	}
 
-	// ** Crouching ** 
 
-	// ** Sliding **
+	AItem *item = Cast<AItem>(PlayerClass->item);	// todo: can optimize with local hasWeapon bool in player and check only that bool instead of casting every frame	
+
+	if (item != nullptr && bIsAttacking)
+	{
+		if (item->meleeweapon)
+		{
+			bIsMeleeing = true;
+			//UE_LOG(LogTemp, Warning, TEXT("is meleeing = true"));
+		}
+		else
+		{
+			bIsShooting = true;
+		}
+	}
+	else
+	{
+		bIsShooting = bIsMeleeing = false;
+	}
+
+
 
 	// ** Dying **
-	//bIsAlive = PlayerClass->+ // isAlive?	
+	bIsAlive = !PlayerClass->bPlayerDeath;
 }
 
 void UPlayerAnimInstance::SetAttackAnimID()
 {
-	attackAnimID = rand() % attackAnims.Num();
-	PlayerClass->bIsAttacking = false;
-	GetAttackDuration();
+	attackAnimID = rand() % attackAnims.Num();	
+	//if (PlayerClass) { PlayerClass->bIsAttacking = false; }
+	//attackAnims[attackAnimID]->GetPlayLength();
 }
 
 float UPlayerAnimInstance::SetAttackDuration()
 {
 	float dur = attackAnims[attackAnimID]->GetPlayLength();
-	PlayerClass->attackTime = dur;
+	if (PlayerClass) { PlayerClass->attackTime = dur; }
+	else { UE_LOG(LogTemp, Warning, TEXT("Player class is NULL")); }
 	return dur;
 }
 

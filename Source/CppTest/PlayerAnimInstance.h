@@ -26,6 +26,12 @@ protected:
 		bool bIsAttacking;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		bool bIsShooting;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		bool bIsMeleeing;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		int32 attackAnimID;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -48,7 +54,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void SetAttackAnimID();	
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 		float SetAttackDuration();
 	UFUNCTION(BlueprintCallable)
 		float GetAttackDuration();

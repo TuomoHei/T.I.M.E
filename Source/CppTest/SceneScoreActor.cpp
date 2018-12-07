@@ -1,7 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "SceneScoreActor.h"
-#include <Runtime/Engine/Classes/Engine/Engine.h>
+//#include <Runtime/Engine/Classes/Engine/Engine.h>
+#include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 
 // Sets default values
 ASceneScoreActor::ASceneScoreActor()
@@ -27,10 +28,13 @@ void ASceneScoreActor::BeginPlay()
 void ASceneScoreActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	float gameSpeed = UGameplayStatics::GetGlobalTimeDilation(GetWorld());
+
+	if (gameSpeed == 0.0f) { gameSpeed = 1.0f; }
 
 	if (!bIsPaused && MultiplierTimer > 0.0f)
 	{
-		MultiplierTimer -= DeltaTime;
+		MultiplierTimer -= DeltaTime / gameSpeed;
 
 		if (MultiplierTimer < 0.0f)
 		{
@@ -54,7 +58,7 @@ void ASceneScoreActor::AddPoints(int points)
 {
 	CurrentScore += FMath::Abs(points * ScoreMultiplier++);
 	MultiplierTimer = MultiplierTimerAddition;
-	GEngine->AddOnScreenDebugMessage(70, 5.0f, FColor::Green, FString::Printf(TEXT("Current score: %i"), CurrentScore));
+	//GEngine->AddOnScreenDebugMessage(70, 5.0f, FColor::Green, FString::Printf(TEXT("Current score: %i"), CurrentScore));
 }
 
 void ASceneScoreActor::ResetCurrentScore()

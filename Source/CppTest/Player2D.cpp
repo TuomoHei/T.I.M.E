@@ -101,7 +101,7 @@ void APlayer2D::Movement()
 void APlayer2D::PlayerDeath()
 {
 	//DEBUG NEED TO REMOVE WHEN NOT NEEDED
-	//return;
+	return;
 	timeManager->bGameEnd = true;
 	TArray<AActor*> gamemanager;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ADemoGameBase::StaticClass(), gamemanager);

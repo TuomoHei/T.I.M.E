@@ -75,7 +75,7 @@ void APlayer2D::Tick(float DeltaTime)
 	}
 
 	if(AbleToMove)
-	if (FMath::Abs(PC->HitPos.X - GetTransform().GetLocation().X) > 20)
+	if (FMath::Abs(PC->HitPos.X - GetTransform().GetLocation().X) > 2)
 	{
 		newLoc.X += Movevalue(MovementInput.GetSafeNormal()) * DeltaTime * moveSpeed;
 		SetActorLocation(newLoc);
@@ -103,7 +103,8 @@ void APlayer2D::Movement()
 void APlayer2D::PlayerDeath()
 {
 	//DEBUG NEED TO REMOVE WHEN NOT NEEDED
-	return;
+	//return;
+	timeManager->bGameEnd = true;
 	TArray<AActor*> gamemanager;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ADemoGameBase::StaticClass(), gamemanager);
 	ADemoGameBase *temp = nullptr;

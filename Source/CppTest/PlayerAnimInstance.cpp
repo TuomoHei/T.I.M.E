@@ -34,9 +34,9 @@ void UPlayerAnimInstance::UpdateAnimationProperties()
 	// ** Moving **
 	float moveX = PlayerClass->MovementInput.X;
 	//float moveX = PlayerClass->BulletDirection.X;
-	//UE_LOG(LogTemp, Warning, TEXT("move X %f"), moveX);
-	
-	if (moveX != 0)
+	UE_LOG(LogTemp, Warning, TEXT("move X %f"), moveX);
+		
+	if (FMath::Abs(moveX) >= 2)
 	{
 		bIsMoving = true;
 

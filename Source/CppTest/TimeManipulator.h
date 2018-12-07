@@ -29,6 +29,8 @@ protected:
 
 public:
 
+	bool bGameEnd;
+
 	UPROPERTY(EditAnywhere, Category = "TimeDilation")
 		float slowGameSpeed = 0.2f;
 

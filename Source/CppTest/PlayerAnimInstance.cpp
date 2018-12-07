@@ -95,7 +95,7 @@ void UPlayerAnimInstance::UpdateAnimationProperties()
 
 
 	// ** Dying **
-	//bIsAlive = PlayerClass-> // isAlive?	
+	bIsAlive = !PlayerClass->bPlayerDeath;
 }
 
 void UPlayerAnimInstance::SetAttackAnimID()

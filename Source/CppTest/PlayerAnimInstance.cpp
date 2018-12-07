@@ -67,29 +67,31 @@ void UPlayerAnimInstance::UpdateAnimationProperties()
 
 	// ** Attacking **
 	bIsAttacking = PlayerClass->bIsAttacking;
-	if (bIsAttacking)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("attacking"));
-	}
+	//if (bIsAttacking)
+	//{
+	//	UE_LOG(LogTemp, Warning, TEXT("attacking"));
+	//}
 
 
 	AItem *item = Cast<AItem>(PlayerClass->item);	// todo: can optimize with local hasWeapon bool in player and check only that bool instead of casting every frame	
 
-	if (item != nullptr && bIsAttacking)
+	if (item != nullptr)
 	{
-		if (item->meleeweapon)
+		if (item->meleeweapon && bIsAttacking)
 		{
 			bIsMeleeing = true;
-			//UE_LOG(LogTemp, Warning, TEXT("is meleeing = true"));
+			UE_LOG(LogTemp, Warning, TEXT("is meleeing = true"));
 		}
-		else
+		else if (!item->meleeweapon)
 		{
 			bIsShooting = true;
+			UE_LOG(LogTemp, Warning, TEXT("Shooting"));
 		}
 	}
 	else
 	{
-		bIsShooting = bIsMeleeing = false;
+		bIsShooting = false;
+		bIsMeleeing = false;
 	}
 
 

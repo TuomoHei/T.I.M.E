@@ -140,6 +140,7 @@ void APlayer2D::AttackEnemy(AActor *enemy)
 		if (Cast<AItem>(item)->meleeweapon)
 		{
 			Cast<AEnemy2D>(enemy)->TakeDamageEnemy(item != nullptr);
+			bIsAttacking = false;
 			return;
 		}
 

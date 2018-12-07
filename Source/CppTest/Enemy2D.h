@@ -8,6 +8,13 @@
 
 static int indexWep = 0;
 
+static auto GeneralDestroyer = [](AActor *entity, UWorld *world) {if (!entity) return;
+if (!entity->IsValidLowLevel())return;
+entity->K2_DestroyActor();
+entity = NULL;
+GEngine->ForceGarbageCollection(true);
+};
+
 UENUM()
 enum CombatState
 {

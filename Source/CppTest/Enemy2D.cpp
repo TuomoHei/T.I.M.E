@@ -5,7 +5,6 @@
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 #include "Runtime/CoreUObject/Public/UObject/ConstructorHelpers.h"
 #include "Runtime/Core/Public/Math/Vector.h"
-#include "UObjectGlobals.h"
 #include "EngineUtils.h"
 #include "Player2D.h"
 #include "Engine/Engine.h"
@@ -14,18 +13,9 @@
 #include "DemoGameBase.h"
 #include "PickupComponent.h"
 #include "SceneScoreActor.h"
+#include "Runtime/Engine/Public/TimerManager.h"
 
 	///rest of the implementation relating to different enemy behaviour is done via BP
-
-
-static auto GeneralDestroyer = [](AActor *entity, UWorld *world) {if (!entity) return;
-if (!entity->IsValidLowLevel())return;
-entity->K2_DestroyActor();
-entity = NULL;
-GEngine->ForceGarbageCollection(true);
-};
-
-
 
 AEnemy2D::AEnemy2D()
 {
@@ -157,7 +147,10 @@ void AEnemy2D::TakeDamageEnemy(bool weapon)
 			item2 = nullptr;
 		}
 		Cast<UPickupComponent>(item)->DisEquip(item);
+		Cast<AItem>(item)->DestroyFunc();
 		Cast<APlayer2D>(player.Last())->PC->RegGameBase->EnemyListRemover(this);
+
+		
 		GeneralDestroyer(this, GetWorld());
 		return;
 	}
@@ -174,6 +167,7 @@ void AEnemy2D::TakeDamageEnemy(bool weapon)
 	{
 
 		Cast<UPickupComponent>(item)->DisEquip(item);
+		Cast<AItem>(item)->DestroyFunc();
 		item = nullptr;
 		return;
 	}

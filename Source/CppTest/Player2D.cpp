@@ -80,9 +80,7 @@ void APlayer2D::Tick(float DeltaTime)
 		newLoc.X += Movevalue(MovementInput.GetSafeNormal()) * DeltaTime * moveSpeed;
 		SetActorLocation(newLoc);
 	}
-	else
-	{
-	}
+
 	Super::Tick(DeltaTime);
 }
 

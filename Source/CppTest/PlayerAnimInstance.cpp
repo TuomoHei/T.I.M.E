@@ -33,6 +33,7 @@ void UPlayerAnimInstance::UpdateAnimationProperties()
 
 	// ** Moving **
 	float moveX = PlayerClass->MovementInput.X;
+	//float moveX = PlayerClass->BulletDirection.X;
 	//UE_LOG(LogTemp, Warning, TEXT("move X %f"), moveX);
 	
 	if (moveX != 0)
@@ -80,12 +81,12 @@ void UPlayerAnimInstance::UpdateAnimationProperties()
 		if (item->meleeweapon && bIsAttacking)
 		{
 			bIsMeleeing = true;
-			UE_LOG(LogTemp, Warning, TEXT("is meleeing = true"));
+			//UE_LOG(LogTemp, Warning, TEXT("is meleeing = true"));
 		}
 		else if (!item->meleeweapon)
 		{
 			bIsShooting = true;
-			UE_LOG(LogTemp, Warning, TEXT("Shooting"));
+			//UE_LOG(LogTemp, Warning, TEXT("Shooting"));
 		}
 	}
 	else
@@ -93,8 +94,6 @@ void UPlayerAnimInstance::UpdateAnimationProperties()
 		bIsShooting = false;
 		bIsMeleeing = false;
 	}
-
-
 
 	// ** Dying **
 	bIsAlive = PlayerClass->canMove;

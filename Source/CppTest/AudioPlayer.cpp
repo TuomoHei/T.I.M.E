@@ -27,9 +27,9 @@ void AAudioPlayer::BeginPlay()
 void AAudioPlayer::PlaySound(int soundIndex, UWorld * w)
 {
 	// Play sound by index
-	sound = sounds[soundIndex];
+//	sound = sounds[soundIndex];
 
-	UGameplayStatics::PlaySoundAtLocation(w, sound, defaultLocation);
+//	UGameplayStatics::PlaySoundAtLocation(w, sound, defaultLocation);
 
 	//UE_LOG(LogTemp, Warning, TEXT("Playing audio"));
 }

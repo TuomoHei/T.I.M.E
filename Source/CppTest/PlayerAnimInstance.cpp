@@ -32,21 +32,10 @@ void UPlayerAnimInstance::UpdateAnimationProperties()
 		return;
 
 	// ** Moving **
-	float moveX = PlayerClass->MovementInput.X;
+	float moveX = PlayerClass->BulletDirection.X;
 
 	if (moveX != 0)
 	{
-
-		if (IsValid(PlayerClass->item))
-		{
-			bIsMoving = Cast<AItem>(PlayerClass->item)->meleeweapon;
-		}
-		else
-		{
-			bIsMoving = true;
-
-		}
-
 		if (moveX > 0 && skeletalMeshComp)
 		{
 			// Moves right
@@ -56,12 +45,18 @@ void UPlayerAnimInstance::UpdateAnimationProperties()
 		{
 			// Moves left
 			skeletalMeshComp->SetWorldScale3D(FVector(1.0f, -1.0f, 1.0f));
+
 		}
+		bIsMoving = true;
+
+
 	}
 	else
 	{
 		bIsMoving = false;
 	}
+
+
 
 	// ** Attacking **
 	bIsAttacking = PlayerClass->bIsAttacking;
@@ -71,14 +66,15 @@ void UPlayerAnimInstance::UpdateAnimationProperties()
 	// ** Sliding **
 
 	// ** Dying **
-	//bIsAlive = PlayerClass-> // isAlive?	
+	//bIsAlive = PlayerClass->+ // isAlive?	
 }
 
 void UPlayerAnimInstance::SetAttackAnimID()
 {
 	attackAnimID = rand() % attackAnims.Num();
 	PlayerClass->bIsAttacking = false;
-	GetAttackDuration();	}
+	GetAttackDuration();
+}
 
 float UPlayerAnimInstance::SetAttackDuration()
 {

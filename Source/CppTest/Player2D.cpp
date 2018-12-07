@@ -9,14 +9,9 @@
 #include "Components/InputComponent.h"
 #include "Runtime/Engine/Classes/Components/BoxComponent.h"
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
+#include "Runtime/Engine/Public/TimerManager.h"
 
-static auto BulletDirectionL = [](FVector vector, FVector &retVector)
-{
-	if (vector.X > 0.1f)
-		retVector = FVector(1.0f, 0.0f, 0.0f);
-	else if (vector.X < -0.1f)
-		retVector = FVector(-1.0f, 0.0f, 0.0f);
-};
+
 
 APlayer2D::APlayer2D()
 {
@@ -29,11 +24,16 @@ APlayer2D::APlayer2D()
 void APlayer2D::BeginPlay()
 {
 	Super::BeginPlay();
+	FTimerDelegate Timerdel;
+	FTimerHandle TimerHandle;
+	BulletDirection, MovementInput = FVector::ZeroVector;
+
+	Timerdel.BindUFunction(this, FName("Movement"));
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, Timerdel, 0.01f, true);
 	item = nullptr;
 	canMove = true;
-	BulletDirection,MovementInput = FVector::ZeroVector;
-	
-	///Find the players custom controller (testplayercontroller) and check if that exists
+
+	///Find the players' custom controller (testplayercontroller) and check if that exists
 	PC = Cast<ATestPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
 
 	if (PC)
@@ -54,7 +54,6 @@ void APlayer2D::BeginPlay()
 // Called every frame
 void APlayer2D::Tick(float DeltaTime)
 {
-	Super::Tick(DeltaTime);
 
 	///	if (!canMove) return; uncomment when enabling player death
 
@@ -64,39 +63,39 @@ void APlayer2D::Tick(float DeltaTime)
 		return;
 	}
 
-	if (PC->HitPos == FVector::ZeroVector) return;
-
 	FVector newLoc = GetTransform().GetLocation();
-
-	if (FMath::Abs(PC->HitPos.X - GetTransform().GetLocation().X) < 20)
-	{
-		MovementInput = FVector::ZeroVector;
-	}
-	else
-	{
-		MovementInput = PC->HitPos - GetTransform().GetLocation();
-	}
-	BulletDirectionL(MovementInput, BulletDirection);
-
-
-
 	//timeManager->DeactivateSlowmotion();
 	if (IsValid(item))
 	{
 		Cast<UPickupComponent>(item->GetClass())->CheckLocation(this, BulletDirection, item);
 		if (!Cast<AItem>(item)->meleeweapon)
+		{
 			return;
+		}
 	}
 
-	newLoc.X += Movevalue(MovementInput.GetSafeNormal()) * DeltaTime * moveSpeed;
-	SetActorLocation(newLoc);
-
+	if(AbleToMove)
+	if (FMath::Abs(PC->HitPos.X - GetTransform().GetLocation().X) > 20)
+	{
+		newLoc.X += Movevalue(MovementInput.GetSafeNormal()) * DeltaTime * moveSpeed;
+		SetActorLocation(newLoc);
+	}
+	else
+	{
+	}
+	Super::Tick(DeltaTime);
 }
 
 // Called to bind functionality to input
 void APlayer2D::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
+}
+
+void APlayer2D::Movement()
+{
+	MovementInput = PC->HitPos - GetTransform().GetLocation();
+	BulletDirectionL(MovementInput);
 }
 
 
@@ -119,7 +118,7 @@ void APlayer2D::PickUp(AActor *targetObj)
 	if (!item)
 	{
 		item = targetObj;
-		Cast<UPickupComponent>(targetObj->GetClass())->Pickup(this, MovementInput, item);
+		Cast<UPickupComponent>(targetObj->GetClass())->Pickup(this, BulletDirection, item);
 	}
 }
 
@@ -132,7 +131,6 @@ void APlayer2D::UnEquip()
 	}
 }
 
-
 void APlayer2D::AttackEnemy(AActor *enemy)
 {
 	if (!enemy) return;
@@ -142,12 +140,9 @@ void APlayer2D::AttackEnemy(AActor *enemy)
 		if (Cast<AItem>(item)->meleeweapon)
 		{
 			Cast<AEnemy2D>(enemy)->TakeDamageEnemy(item != nullptr);
-			Cast<AItem>(item)->UseWeapon(true);
 			return;
 		}
 
-		Cast<AEnemy2D>(enemy)->TakeDamageEnemy(item != nullptr);
-		Cast<AItem>(item)->UseWeapon(false);
 		//int32 swordSoundID = (rand() % 2) > 0 ? 3 : 4;
 		//audioPlayer->PlaySound(swordSoundID, GetWorld());
 		//audioPlayer->PlaySound(swordSoundID, GetWorld());		bIsAttacking = false;

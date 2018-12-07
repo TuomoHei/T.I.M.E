@@ -18,12 +18,11 @@
 	///rest of the implementation relating to different enemy behaviour is done via BP
 
 
-static auto GeneralDestroyer = [](AActor *entity, UWorld *world) {if (!entity) return; 
-if (!entity->IsValidLowLevel())return; 
+static auto GeneralDestroyer = [](AActor *entity, UWorld *world) {if (!entity) return;
+if (!entity->IsValidLowLevel())return;
 entity->K2_DestroyActor();
 entity = NULL;
 GEngine->ForceGarbageCollection(true);
-ADemoGameBase::Debugger(443, 0, FString("KILLEd")); 
 };
 
 
@@ -85,20 +84,21 @@ void AEnemy2D::Movement(float moveValue, float Deltatime)
 	}
 	else
 	{
-		if (!item)
+		if (timer <= 0.0f)
 		{
-			if (timer <= 0.0f)
+			if (!item)
 			{
 				asdf(direction.X > 0);
 				Cast<APlayer2D>(player.Last())->PlayerDeath();
+				timer = timerValue;
 			}
-		}
-		else
-		{
-			if (bIsHead)
+			else
 			{
-				Cast<AItem>(item)->UseWeapon(false);
-				//audioPlayer->PlaySound(0, GetWorld());
+				if (bIsHead)
+				{
+					Cast<AItem>(item)->UseWeapon(false,direction);
+					//audioPlayer->PlaySound(0, GetWorld());
+				}
 			}
 		}
 	}
@@ -158,14 +158,14 @@ void AEnemy2D::TakeDamageEnemy(bool weapon)
 		}
 		Cast<UPickupComponent>(item)->DisEquip(item);
 		Cast<APlayer2D>(player.Last())->PC->RegGameBase->EnemyListRemover(this);
-		GeneralDestroyer(this,GetWorld());
+		GeneralDestroyer(this, GetWorld());
 		return;
 	}
 	//check if dual wielding enemy
 	if (item2)
 	{
 		Cast<UPickupComponent>(item2)->DisEquip(item2);
-		GeneralDestroyer(item2,GetWorld());
+		GeneralDestroyer(item2, GetWorld());
 		item2 = nullptr;
 		return;
 	}
@@ -177,11 +177,10 @@ void AEnemy2D::TakeDamageEnemy(bool weapon)
 		item = nullptr;
 		return;
 	}
-	
-	ADemoGameBase::Debugger(122, 0, FString("destroy"));
+
 	Cast<APlayer2D>(player.Last())->PC->RegGameBase->EnemyListRemover(this);
 	//Add death animation and others here
-	GeneralDestroyer(this,GetWorld());
+	GeneralDestroyer(this, GetWorld());
 }
 
 void AEnemy2D::EndPlay(const EEndPlayReason::Type EndPlayReason)

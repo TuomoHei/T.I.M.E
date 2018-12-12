@@ -33,6 +33,7 @@ void ADemoGameBase::StartPlay()
 	if (PC) PC->RegisterGameBase(this);
 	Super::StartPlay();
 	enemyCount = 0;
+	SpawnEnemies = true;
 	//Contains iterators that populate lists declared in header
 
 #pragma region Listpopulators
@@ -94,7 +95,7 @@ void ADemoGameBase::Tick(float DeltaSeconds)
 
 	if (EnemySpawns.Num() > 0)
 	{
-		if (timer <= 0)
+		if (timer <= 0&& SpawnEnemies)
 		{
 			SpawnEnemy();
 			timer = Spawnrate;
@@ -239,6 +240,7 @@ void ADemoGameBase::EnemyListRemover(AEnemy2D *enemy)
 //event handler for player death
 void ADemoGameBase::OnPlayerDeath()
 {
+	SpawnEnemies = false;
 	TArray<AActor*> temp;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AEnemy2D::StaticClass(), temp);
 

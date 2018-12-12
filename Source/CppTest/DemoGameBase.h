@@ -51,6 +51,7 @@ private:
 	float diceRoll;
 	float cumulative;
 	float timer;
+	bool SpawnEnemies;
 	int32 currentLevelIndex;
 	TArray<FVector> EnemySpawns;
 	UClass* EnemyFetcher();

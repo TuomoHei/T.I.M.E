@@ -92,6 +92,7 @@ void AEnemy2D::Movement(float moveValue, float Deltatime)
 				if (bIsHead)
 				{
 					Cast<AItem>(item)->UseWeapon(false,direction);
+					Cast<APlayer2D>(player.Last())->PlayerDeath();
 					//audioPlayer->PlaySound(0, GetWorld());
 				}
 			}

@@ -44,7 +44,7 @@ protected:
 		float groundLevel;
 	UPROPERTY(EditDefaultsOnly, Category = "Variables")
 		float destroyTime;
-
+	float lastSpeed;
 	// Default transform offset position when picked up
 
 	FTransform GetOffset() { return ItemOffset; }

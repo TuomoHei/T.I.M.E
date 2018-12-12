@@ -61,7 +61,7 @@ void ATestPlayerController::Touched(ETouchIndex::Type FingerIndex, FVector locat
 		///pickup hit 
 		if (IsValid(Cast<AItem>(hit->GetActor())) && !RegPlayer2D->item)
 		{
-			if (!hit->GetActor()->GetAttachParentActor())
+			if (IsValid(hit->GetActor()) && !hit->GetActor()->GetAttachParentActor())
 				RegPlayer2D->PickUp(hit->GetActor());
 		}
 	}

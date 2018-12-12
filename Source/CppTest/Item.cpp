@@ -10,6 +10,7 @@
 AItem::AItem()
 {
 	Tags.Add("PickUp");
+	lastSpeed = 0;
 }
 
 void AItem::Physics(float deltatime)
@@ -17,7 +18,7 @@ void AItem::Physics(float deltatime)
 	if (GetActorLocation().Z >= groundLevel)
 	{
 		FVector location = GetActorLocation();
-		location.Z -= 9.81 * deltatime * weight;
+		lastSpeed = location.Z = lastSpeed - 9.81 * deltatime * weight;
 		SetActorLocation(location);
 	}
 }
@@ -30,8 +31,7 @@ void AItem::Bounce(float deltatime)
 
 void AItem::DestroyFunc()
 {
-
-	if (this->GetAttachParentActor()) return;
+	if (!this) return;
 	FTimerHandle a;
 	FTimerDelegate weaponDel;
 	weaponDel.BindUFunction(this, FName("DestroyWeapon"));
@@ -40,7 +40,7 @@ void AItem::DestroyFunc()
 
 void AItem::DestroyWeapon()
 {
-	if (!this->GetAttachParentActor())
+	if (IsValid(this) && !this->GetAttachParentActor())
 	{
 		GeneralDestroyer(this, GetWorld());
 	}

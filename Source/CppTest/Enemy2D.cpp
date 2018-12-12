@@ -149,8 +149,6 @@ void AEnemy2D::TakeDamageEnemy(bool weapon)
 		Cast<UPickupComponent>(item)->DisEquip(item);
 		Cast<AItem>(item)->DestroyFunc();
 		Cast<APlayer2D>(player.Last())->PC->RegGameBase->EnemyListRemover(this);
-
-		
 		GeneralDestroyer(this, GetWorld());
 		return;
 	}

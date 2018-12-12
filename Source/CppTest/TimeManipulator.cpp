@@ -36,24 +36,27 @@ void UTimeManipulator::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 // Activate slow motion for [slowSpeedDuration] seconds
 void UTimeManipulator::ActivateSlowmotion()
 {	
-	UGameplayStatics::SetGlobalTimeDilation(GetWorld(), slowGameSpeed);	
-
-	ResetTimerHandle();
-
-	float realSlowDuration = slowSpeedDuration * slowGameSpeed;	// E.g. 2 seconds in 0.2 x game speed should actually last one fifth of 2 seconds
-	GetWorld()->GetTimerManager().SetTimer(SlowTimeHandle, this, &UTimeManipulator::DeactivateSlowmotion, realSlowDuration, false);		
-	
-	UGameplayStatics::SetGlobalPitchModulation(GetWorld(), slowAudioPitch, audioPitchInterp); // set global audio pitch modulation
-	
-	if (IsValid(audioPlayer))
+	if (!bGameEnd)
 	{
-		audioPlayer->PlaySound(5, GetWorld());
-		//UE_LOG(LogTemp, Warning, TEXT("Start slow mo sound playing"));
-	}
-	
-	//UE_LOG(LogTemp, Warning, TEXT("ActivateSlowmotion()"));
+		UGameplayStatics::SetGlobalTimeDilation(GetWorld(), slowGameSpeed);
 
-	bIsSlow = true;
+		ResetTimerHandle();
+
+		float realSlowDuration = slowSpeedDuration * slowGameSpeed;	// E.g. 2 seconds in 0.2 x game speed should actually last one fifth of 2 seconds
+		GetWorld()->GetTimerManager().SetTimer(SlowTimeHandle, this, &UTimeManipulator::DeactivateSlowmotion, realSlowDuration, false);
+
+		UGameplayStatics::SetGlobalPitchModulation(GetWorld(), slowAudioPitch, audioPitchInterp); // set global audio pitch modulation
+
+		if (IsValid(audioPlayer))
+		{
+			audioPlayer->PlaySound(5, GetWorld());
+			//UE_LOG(LogTemp, Warning, TEXT("Start slow mo sound playing"));
+		}
+
+		//UE_LOG(LogTemp, Warning, TEXT("ActivateSlowmotion()"));
+
+		bIsSlow = true;
+	}
 }
 
 // Deactivate slow motion for [defaultSpeedDuration] seconds

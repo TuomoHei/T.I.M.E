@@ -35,20 +35,10 @@ void UPlayerAnimInstance::UpdateAnimationProperties()
 	float moveX = PlayerClass->MovementInput.X;
 	//float moveX = PlayerClass->BulletDirection.X;
 	//UE_LOG(LogTemp, Warning, TEXT("move X %f"), moveX);
-	
-	if (moveX != 0)
+		
+	if (FMath::Abs(moveX) >= 2)
 	{
 		bIsMoving = true;
-
-		//if (IsValid(PlayerClass->item))
-		//{
-		//	bIsMoving = Cast<AItem>(PlayerClass->item)->meleeweapon;
-		//}
-		//else
-		//{
-		//	bIsMoving = true;
-
-		//}
 
 		if (moveX > 0 && skeletalMeshComp)
 		{
@@ -72,7 +62,6 @@ void UPlayerAnimInstance::UpdateAnimationProperties()
 	//{
 	//	UE_LOG(LogTemp, Warning, TEXT("attacking"));
 	//}
-
 
 	AItem *item = Cast<AItem>(PlayerClass->item);	// todo: can optimize with local hasWeapon bool in player and check only that bool instead of casting every frame	
 

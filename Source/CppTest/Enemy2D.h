@@ -33,6 +33,7 @@ public:
 	void PlayerDeath();
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+	UPROPERTY(BlueprintReadOnly)
 	bool bGameEnd;
 	void StateChecker(float a, FVector b);
 

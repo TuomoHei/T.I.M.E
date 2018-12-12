@@ -12,11 +12,6 @@ static auto Increment = [](int a) { if (a > 500 )return 0; else return a + 1;};
 //give name to the entity
 static auto Entityname = [](FString a, int b) { FString name; name.AppendInt(b); name += a; return name; };
 
-static auto Movevalue = [](FVector moveVector) {
-	if (moveVector.X > 0) return 1;
-	else if (moveVector.X < 0) return -1;
-	else return 0;
-};
 
 UCLASS()
 class CPPTEST_API ADemoGameBase : public AGameModeBase

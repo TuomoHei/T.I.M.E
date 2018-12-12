@@ -55,7 +55,7 @@ void APlayer2D::BeginPlay()
 void APlayer2D::Tick(float DeltaTime)
 {
 
-	///	if (!canMove) return; uncomment when enabling player death
+	if (!canMove) return; 
 
 	if (!PC)
 	{
@@ -75,15 +75,14 @@ void APlayer2D::Tick(float DeltaTime)
 	}
 
 	if(AbleToMove)
-	if (FMath::Abs(PC->HitPos.X - GetTransform().GetLocation().X) > 2)
+	if (FMath::Abs(PC->HitPos.X - GetTransform().GetLocation().X) >= 2)
 	{
-		newLoc.X += Movevalue(MovementInput.GetSafeNormal()) * DeltaTime * moveSpeed;
+		newLoc.X += BulletDirection.X * DeltaTime * moveSpeed;
 		SetActorLocation(newLoc);
 	}
-
-	if (canMove)
+	else
 	{
-		//UE_LOG(LogTemp, Warning, TEXT("CAN MOVEEEEEEEEEEEE!"));
+		BulletDirection = FVector::ZeroVector;
 	}
 
 	Super::Tick(DeltaTime);
@@ -105,8 +104,7 @@ void APlayer2D::Movement()
 //Calls the gamemodebase method onplayerdeath 
 void APlayer2D::PlayerDeath()
 {
-	//DEBUG NEED TO REMOVE WHEN NOT NEEDED
-	//return;
+
 	if (!bCanDie) { return; }
 	timeManager->bGameEnd = true;
 	TArray<AActor*> gamemanager;

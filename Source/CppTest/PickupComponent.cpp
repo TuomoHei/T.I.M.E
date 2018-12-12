@@ -2,6 +2,7 @@
 
 #include "PickupComponent.h"
 #include "TestPlayerController.h"
+#include "DemoGameBase.h"
 #include "Enemy2D.h"
 #include "Item.h"
 
@@ -47,23 +48,19 @@ void UPickupComponent::CheckLocation(AActor *Player, FVector location, AActor *t
 	if (!IsValid(targetObj)) return;
 	FAttachmentTransformRules a = FAttachmentTransformRules(EAttachmentRule::KeepWorld, false);
 
-	//a.ScaleRule = EAttachmentRule::KeepWorld;
-	//a.RotationRule = EAttachmentRule::KeepWorld;
-	//a.LocationRule = EAttachmentRule::SnapToTarget;
+	
+	auto comp = Player->GetComponentsByTag(UStaticMeshComponent::StaticClass(), FName("Right"));
 
-
-	auto comp = (Player->GetActorLocation() - location).X > 0 ?
-		Player->GetComponentsByTag(UStaticMeshComponent::StaticClass(), FName("Right"))
-		: Player->GetComponentsByTag(UStaticMeshComponent::StaticClass(), FName("Left"));
-
-	if (comp.Num() > 0)
+	if (comp.Num() > 0 && location.X != 0)
 	{
-
 		targetObj->AttachToComponent(Cast<USceneComponent>(comp.Last()), a);
 	}
 
 	if (Player->IsA(AEnemy2D::StaticClass()))
 	{
+		auto comp = location.X > 0 ?
+			Player->GetComponentsByTag(UStaticMeshComponent::StaticClass(), FName("Right"))
+			: Player->GetComponentsByTag(UStaticMeshComponent::StaticClass(), FName("Left"));
 		if (Cast<AEnemy2D>(Player)->item2 != NULL)
 		{
 			auto comp = (Player->GetActorLocation() - location).X < 0 ?

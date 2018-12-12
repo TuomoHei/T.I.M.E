@@ -34,6 +34,8 @@ void ATestPlayerController::SetupInputComponent()
 
 void ATestPlayerController::Touched(ETouchIndex::Type FingerIndex, FVector location)
 {
+	if (!RegPlayer2D->canMove) return;
+
 	float val = RegPlayer2D->pickUpRange;
 	FHitResult *hit = new FHitResult();
 	GetHitResultUnderFingerByChannel(FingerIndex, UEngineTypes::ConvertToTraceType(ECC_Visibility), true, *hit);

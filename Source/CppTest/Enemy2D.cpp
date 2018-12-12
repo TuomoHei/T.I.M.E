@@ -111,7 +111,7 @@ void AEnemy2D::Movement(float moveValue, float Deltatime)
 void AEnemy2D::StateChecker(float Deltatime, FVector b)
 {
 	///Distance checker
-	if (FMath::Abs(FVector::Distance(GetActorLocation(), b)) > maxDistance)
+	if (FMath::Abs(b.X - GetTransform().GetLocation().X) > maxDistance)
 	{
 		if (state != CB_walking) state = CB_walking;
 

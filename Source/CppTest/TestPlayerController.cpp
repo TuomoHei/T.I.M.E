@@ -41,7 +41,7 @@ void ATestPlayerController::Touched(ETouchIndex::Type FingerIndex, FVector locat
 	if (!hit) return;
 
 	//timeManager->DeactivateSlowmotion();
-	HitPos = hit->ImpactPoint;
+
 	if (hit->GetActor() == NULL)
 	{
 		timeManager->DeactivateSlowmotion();
@@ -56,7 +56,11 @@ void ATestPlayerController::Touched(ETouchIndex::Type FingerIndex, FVector locat
 	if (FMath::Abs((hit->ImpactPoint - RegPlayer2D->GetActorLocation()).X) <= val)
 	{
 		///enemy hit
-		if (AttackEnemy(hit, WeaponCheck(*hit))) return;
+		if (AttackEnemy(hit, WeaponCheck(*hit)))
+		{
+			HitPos = FVector::ZeroVector;
+			return;
+		}
 
 		///pickup hit 
 		if (IsValid(Cast<AItem>(hit->GetActor())) && !RegPlayer2D->item)
@@ -69,6 +73,7 @@ void ATestPlayerController::Touched(ETouchIndex::Type FingerIndex, FVector locat
 	if (FMath::Abs((hit->ImpactPoint - RegPlayer2D->GetActorLocation()).X) <= RegPlayer2D->moveRange)
 	{
 		RegPlayer2D->AbleToMove = true;
+		HitPos = hit->ImpactPoint;
 		if (runDebug)
 			DrawDebugPoint(GetWorld(), hit->ImpactPoint, 8000, FColor(255, 0, 0), true, 3.0f);
 	}
@@ -79,7 +84,7 @@ bool ATestPlayerController::WeaponCheck(FHitResult hit)
 	if (!RegPlayer2D->item)return false;
 
 	if (RegPlayer2D->item->IsActorBeingDestroyed()) return false;
-	RegPlayer2D->Movement();
+	//RegPlayer2D->Movement();
 	Cast<AItem>(RegPlayer2D->item)->UseWeapon(IsValid(Cast<AEnemy2D>(hit.GetActor())),RegPlayer2D->BulletDirection);
 	return IsValid(Cast<AItem>(RegPlayer2D->item)) && !Cast<AItem>(RegPlayer2D->item)->meleeweapon;
 }
@@ -104,7 +109,7 @@ bool ATestPlayerController::AttackEnemy(FHitResult *hit, bool rangedweapon)
 		RegPlayer2D->bIsAttacking = true;
 		return true;
 	}
-	return false;
+	return true;
 }
 
 void ATestPlayerController::RegisterPlayer2D(APlayer2D *actor)

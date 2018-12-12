@@ -81,6 +81,11 @@ void APlayer2D::Tick(float DeltaTime)
 		SetActorLocation(newLoc);
 	}
 
+	if (canMove)
+	{
+		//UE_LOG(LogTemp, Warning, TEXT("CAN MOVEEEEEEEEEEEE!"));
+	}
+
 	Super::Tick(DeltaTime);
 }
 
@@ -101,7 +106,8 @@ void APlayer2D::Movement()
 void APlayer2D::PlayerDeath()
 {
 	//DEBUG NEED TO REMOVE WHEN NOT NEEDED
-	return;
+	//return;
+	if (!bCanDie) { return; }
 	timeManager->bGameEnd = true;
 	TArray<AActor*> gamemanager;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ADemoGameBase::StaticClass(), gamemanager);

@@ -44,6 +44,8 @@ public:
 
 	UPROPERTY(BlueprintReadOnly)
 		bool canMove;
+	UPROPERTY(EditAnywhere)
+		bool bCanDie;
 	UFUNCTION(BlueprintCallable)
 		void PlayerDeath();
 	UFUNCTION(BlueprintCallable)

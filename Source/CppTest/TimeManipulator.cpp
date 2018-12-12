@@ -22,6 +22,7 @@ void UTimeManipulator::BeginPlay()
 	Super::BeginPlay();
 
 	bIsSlow = true;	
+	bGameEnd = false;
 }
 
 

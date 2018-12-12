@@ -67,7 +67,7 @@ void APlayer2D::Tick(float DeltaTime)
 	//timeManager->DeactivateSlowmotion();
 	if (IsValid(item))
 	{
-		Cast<UPickupComponent>(item->GetClass())->CheckLocation(this, BulletDirection, item);
+		Cast<UPickupComponent>(item->GetClass())->CheckLocation(this, -BulletDirection, item);
 		if (!Cast<AItem>(item)->meleeweapon)
 		{
 			return;
@@ -173,4 +173,3 @@ void APlayer2D::GetTimeManipulator()
 		UE_LOG(LogTemp, Warning, TEXT("Time Manipulator found"));
 	}
 }
-

@@ -36,7 +36,7 @@ void UPlayerAnimInstance::UpdateAnimationProperties()
 	//float moveX = PlayerClass->BulletDirection.X;
 	//UE_LOG(LogTemp, Warning, TEXT("move X %f"), moveX);
 	ADemoGameBase::Debugger(767, (int)moveX, FString("Movement"));
-	if (FMath::Abs(moveX) >= 2 && PlayerClass->AbleToMove)
+	if (FMath::Abs(moveX) >= 2 && (PlayerClass->AbleToMove||(PlayerClass->item && !Cast<AItem>(PlayerClass->item)->meleeweapon)))
 	{
 		bIsMoving = true;
 

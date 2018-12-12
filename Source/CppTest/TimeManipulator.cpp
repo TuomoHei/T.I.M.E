@@ -30,8 +30,8 @@ void UTimeManipulator::BeginPlay()
 void UTimeManipulator::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	// Debug timer for slow motion
-	float timeToDilation = GetWorld()->GetTimerManager().GetTimerRemaining(SlowTimeHandle);	// -1 = infinite
-	GEngine->AddOnScreenDebugMessage(1, 5.f, FColor::Red, FString::Printf(TEXT("Time to next speed change = %f"), timeToDilation));
+	//float timeToDilation = GetWorld()->GetTimerManager().GetTimerRemaining(SlowTimeHandle);	// -1 = infinite
+	//GEngine->AddOnScreenDebugMessage(1, 5.f, FColor::Red, FString::Printf(TEXT("Time to next speed change = %f"), timeToDilation));
 }
 
 // Activate slow motion for [slowSpeedDuration] seconds

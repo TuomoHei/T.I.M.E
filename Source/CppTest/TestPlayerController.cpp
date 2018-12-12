@@ -102,7 +102,9 @@ bool ATestPlayerController::AttackEnemy(FHitResult *hit, bool rangedweapon)
 		});
 
 		FTimerHandle handle;
-		GetWorldTimerManager().SetTimer(handle, a, RegPlayer2D->attackTime, false);
+		float attackTime = RegPlayer2D->attackTime - 0.25f;
+		GetWorldTimerManager().SetTimer(handle, a, attackTime, false);
+		//GetWorldTimerManager().SetTimer(handle, a, RegPlayer2D->attackTime, false);
 
 		if (runDebug)
 			DrawDebugPoint(GetWorld(), hit->ImpactPoint, 5000, FColor(0, 255, 0), false, 3.0f);

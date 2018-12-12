@@ -42,6 +42,8 @@ void AEnemy2D::Tick(float DeltaTime)
 	{
 		AEnemy2D::Movement(walkSpeed, DeltaTime);
 	}
+
+	//UE_LOG(LogTemp, Warning, TEXT("timer = %f"), timer);
 }
 
 void AEnemy2D::Movement(float moveValue, float Deltatime)
@@ -76,11 +78,14 @@ void AEnemy2D::Movement(float moveValue, float Deltatime)
 	{
 		if (timer <= 0.0f)
 		{
+			bRunAttackRoutine = true;
+			timer = timerValue;
+			
 			if (!item)
 			{
-				asdf(direction.X > 0);
+				asdf(direction.X > 0);				
 				Cast<APlayer2D>(player.Last())->PlayerDeath();
-				timer = timerValue;
+				//timer = timerValue;
 			}
 			else
 			{
@@ -136,7 +141,7 @@ void AEnemy2D::PlayerDeath()
 void AEnemy2D::TakeDamageEnemy(bool weapon)
 {
 	if (audioPlayer) { audioPlayer->PlaySound(9, GetWorld()); }
-	bIsStaggering = true;
+	bIsStaggering = true;	
 
 	//check if player is holding weapon
 	if (weapon)

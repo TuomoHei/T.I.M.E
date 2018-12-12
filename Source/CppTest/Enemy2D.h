@@ -47,6 +47,8 @@ public:
 		void AddWeapon(int index);
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = BPClasses)
 		UClass *weaponPrefab;
+	UPROPERTY(BlueprintReadWrite)
+		bool bRunAttackRoutine;
 	UPROPERTY(BlueprintReadOnly)
 		bool bIsWaiting = false;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)

@@ -59,7 +59,7 @@ public:
 		AAudioPlayer *audioPlayer;
 
 	UPROPERTY(EditAnywhere)
-		float slowAudioPitch = 0.2f;
+		float slowAudioPitch = 0.7f;
 
 	UPROPERTY(EditAnywhere)
 		float audioPitchInterp = 0.075f;

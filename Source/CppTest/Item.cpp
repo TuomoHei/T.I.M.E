@@ -30,7 +30,6 @@ void AItem::Bounce(float deltatime)
 
 void AItem::DestroyFunc()
 {
-	if (this) return;
 
 	if (this->GetAttachParentActor()) return;
 	FTimerHandle a;
@@ -46,10 +45,3 @@ void AItem::DestroyWeapon()
 		GeneralDestroyer(this, GetWorld());
 	}
 }
-
-
-
-
-
-
-

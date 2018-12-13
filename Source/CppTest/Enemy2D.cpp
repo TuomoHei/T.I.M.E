@@ -134,7 +134,6 @@ void AEnemy2D::StateChecker(float Deltatime, FVector b)
 void AEnemy2D::PlayerDeath()
 {
 	bGameEnd = true;
-	ADemoGameBase::Debugger(10, 0, FString("Game stopped for enemy"));
 }
 
 

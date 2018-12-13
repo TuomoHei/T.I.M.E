@@ -74,15 +74,17 @@ void APlayer2D::Tick(float DeltaTime)
 		}
 	}
 
-	if(AbleToMove)
-	if (FMath::Abs(PC->HitPos.X - GetTransform().GetLocation().X) >= 2)
+	if (AbleToMove)
 	{
-		newLoc.X += BulletDirection.X * DeltaTime * moveSpeed;
-		SetActorLocation(newLoc);
-	}
-	else
-	{
-		BulletDirection = FVector::ZeroVector;
+		if (FMath::Abs(PC->HitPos.X - GetTransform().GetLocation().X) >= 2)
+		{
+			newLoc.X += BulletDirection.X * DeltaTime * moveSpeed;
+			SetActorLocation(newLoc);
+		}
+		else
+		{
+			BulletDirection = FVector::ZeroVector;
+		}
 	}
 
 	Super::Tick(DeltaTime);

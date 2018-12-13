@@ -8,12 +8,7 @@
 #include "Item.h"
 #include "TimerManager.h"
 
-#if !UE_BUILD_SHIPPING
-#include "Runtime/Engine/Public/DrawDebugHelpers.h" //for debug
-bool runDebug = true;
-#else
-bool runDebug = false;
-#endif
+
 
 
 void ATestPlayerController::BeginPlay()
@@ -75,8 +70,7 @@ void ATestPlayerController::Touched(ETouchIndex::Type FingerIndex, FVector locat
 	if (FMath::Abs((hit->ImpactPoint - RegPlayer2D->GetActorLocation()).X) <= RegPlayer2D->moveRange)
 	{
 		RegPlayer2D->AbleToMove = true;
-		if (runDebug)
-			DrawDebugPoint(GetWorld(), hit->ImpactPoint, 8000, FColor(255, 0, 0), true, 3.0f);
+
 	}
 }
 
@@ -106,8 +100,7 @@ bool ATestPlayerController::AttackEnemy(FHitResult *hit, bool rangedweapon)
 		GetWorldTimerManager().SetTimer(handle, a, attackTime, false);
 		//GetWorldTimerManager().SetTimer(handle, a, RegPlayer2D->attackTime, false);
 
-		if (runDebug)
-			DrawDebugPoint(GetWorld(), hit->ImpactPoint, 5000, FColor(0, 255, 0), false, 3.0f);
+
 
 		RegPlayer2D->bIsAttacking = true;
 		return true;
@@ -129,7 +122,7 @@ void ATestPlayerController::GetTimeManipulator()
 {
 	if (!RegPlayer2D) return;
 	timeManager = RegPlayer2D->FindComponentByClass<UTimeManipulator>();
-	if (timeManager&& runDebug)
+	if (timeManager)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Time Manipulator found"));
 	}

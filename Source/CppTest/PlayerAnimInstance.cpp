@@ -33,7 +33,7 @@ void UPlayerAnimInstance::UpdateAnimationProperties()
 
 	// ** Moving **
 	float moveX = PlayerClass->MovementInput.X;
-
+	//UE_LOG(LogTemp, Warning, TEXT("move x = %f"), moveX);
 	if (FMath::Abs(moveX) >= 2 && (PlayerClass->AbleToMove||(PlayerClass->item && !Cast<AItem>(PlayerClass->item)->meleeweapon)))
 	{
 		bIsMoving = true;
